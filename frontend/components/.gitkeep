@@ -1,0 +1,15 @@
+# Components directory
+#
+# Responsibilities:
+# - Reusable UI components
+# - Organized by feature or atomic design (atoms, molecules, organisms)
+#
+# Suggested structure:
+# - ui/          - Generic UI components (Button, Input, Modal)
+# - layout/      - Layout components (Header, Sidebar, Footer)
+# - features/    - Feature-specific components (JourneyCard, AppletRenderer)
+#
+# Each component should be in its own directory with:
+# - ComponentName.tsx    - Component implementation
+# - ComponentName.test.tsx - Tests (optional)
+# - index.ts             - Re-export

@@ -1,0 +1,12 @@
+{
+  "name": "learning-platform",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "dev:backend": "bun run --cwd backend dev",
+    "dev:frontend": "bun run --cwd frontend dev",
+    "build:backend": "bun run --cwd backend build",
+    "build:frontend": "bun run --cwd frontend build",
+    "dev": "bun run dev:backend & bun run dev:frontend"
+  }
+}
