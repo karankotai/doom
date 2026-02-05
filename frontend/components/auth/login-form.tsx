@@ -10,10 +10,8 @@ import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiClientError } from "@/lib/api";
@@ -49,17 +47,16 @@ export function LoginForm() {
   };
 
   return (
-    <Card>
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-        <CardDescription>
-          Enter your credentials to access your account
-        </CardDescription>
+    <Card className="border-2">
+      <CardHeader className="space-y-4 text-center pb-2">
+        <h1 className="text-2xl font-extrabold text-foreground">Log in</h1>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-sm font-bold uppercase tracking-wide text-muted-foreground">
+              Email
+            </Label>
             <Input
               id="email"
               type="email"
@@ -71,10 +68,13 @@ export function LoginForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="text-sm font-bold uppercase tracking-wide text-muted-foreground">
+              Password
+            </Label>
             <Input
               id="password"
               type="password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -82,16 +82,25 @@ export function LoginForm() {
             />
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Signing in..." : "Sign in"}
+        <CardFooter className="flex flex-col space-y-4 pt-2">
+          <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+            {isSubmitting ? "Signing in..." : "Log in"}
           </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-primary hover:underline">
-              Sign up
-            </Link>
-          </p>
+
+          <div className="relative w-full">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground font-semibold">
+                or
+              </span>
+            </div>
+          </div>
+
+          <Button variant="outline" className="w-full" size="lg" asChild>
+            <Link href="/register">Create an account</Link>
+          </Button>
         </CardFooter>
       </form>
     </Card>

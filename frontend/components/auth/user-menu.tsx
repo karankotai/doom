@@ -37,31 +37,44 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
-            <AvatarFallback className="bg-primary text-primary-foreground">
+        <Button variant="ghost" className="relative h-11 w-11 rounded-2xl p-0 hover:bg-muted">
+          <Avatar className="h-11 w-11 rounded-2xl">
+            <AvatarFallback className="bg-primary text-primary-foreground font-bold text-base rounded-2xl">
               {initials}
             </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.name}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
-            </p>
+      <DropdownMenuContent className="w-60 rounded-2xl border-2 p-2" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal px-3 py-2">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10 rounded-xl">
+              <AvatarFallback className="bg-primary text-primary-foreground font-bold rounded-xl">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <p className="text-sm font-bold leading-none">{user.name}</p>
+              <p className="text-xs leading-none text-muted-foreground mt-1">
+                {user.email}
+              </p>
+            </div>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push("/profile")}>
-          <User className="mr-2 h-4 w-4" />
+        <DropdownMenuSeparator className="my-2" />
+        <DropdownMenuItem
+          onClick={() => router.push("/profile")}
+          className="rounded-xl px-3 py-2.5 font-semibold cursor-pointer"
+        >
+          <User className="mr-3 h-5 w-5" />
           <span>Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
+        <DropdownMenuSeparator className="my-2" />
+        <DropdownMenuItem
+          onClick={handleLogout}
+          className="rounded-xl px-3 py-2.5 font-semibold cursor-pointer text-destructive focus:text-destructive"
+        >
+          <LogOut className="mr-3 h-5 w-5" />
           <span>Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

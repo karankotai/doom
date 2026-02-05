@@ -10,9 +10,17 @@
  */
 
 import type { Metadata } from "next";
+import { Nunito } from "next/font/google";
 import { AuthProvider } from "@/lib/context/auth-context";
 import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
+
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-nunito",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Learning Platform",
@@ -25,8 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen antialiased">
+    <html lang="en" className={nunito.variable}>
+      <body className="min-h-screen antialiased font-sans">
         <AuthProvider>
           {children}
           <Toaster />
