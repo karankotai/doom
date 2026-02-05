@@ -26,4 +26,26 @@ export interface UpdateUserInput {
   email?: string;
 }
 
-// Add more user-related types as needed
+export interface UserProfile {
+  id: string;
+  userId: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  level: number;
+  xp: number;
+  xpToNextLevel: number;
+  title: string;
+  bio: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface UpdateProfileInput {
+  displayName?: string;
+  avatarUrl?: string;
+  bio?: string;
+}
+
+export interface UserWithProfile extends User {
+  profile: UserProfile | null;
+}

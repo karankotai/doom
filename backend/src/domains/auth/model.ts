@@ -10,7 +10,10 @@
 export interface Session {
   id: string;
   userId: string;
+  refreshTokenHash: string;
   expiresAt: Date;
+  createdAt: Date;
+  lastUsedAt: Date;
 }
 
 export interface TokenPayload {
@@ -20,4 +23,34 @@ export interface TokenPayload {
   exp: number;
 }
 
-// Add more auth-related types as needed
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+export interface RegisterInput {
+  email: string;
+  name: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+  accessToken: string;
+  expiresAt: number; // Unix timestamp when access token expires
+}
+
+export interface RefreshResponse {
+  accessToken: string;
+  expiresAt: number; // Unix timestamp when access token expires
+}
+
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+  name: string;
+}

@@ -1,52 +1,77 @@
-/**
- * Global styles.
- *
- * Responsibilities:
- * - CSS reset / normalize
- * - CSS custom properties (design tokens)
- * - Global typography and layout rules
- *
- * Keep this file minimal. Component-specific styles should be colocated.
- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* CSS Reset */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  :root {
+    /* Yellowish/Amber theme */
+    --background: 48 100% 98%; /* Warm off-white/cream */
+    --foreground: 30 10% 10%; /* Dark warm brown */
+
+    --card: 48 60% 97%;
+    --card-foreground: 30 10% 10%;
+
+    --popover: 48 60% 97%;
+    --popover-foreground: 30 10% 10%;
+
+    --primary: 45 96% 50%; /* Amber-500 */
+    --primary-foreground: 30 10% 10%;
+
+    --secondary: 48 50% 92%;
+    --secondary-foreground: 30 10% 20%;
+
+    --muted: 48 30% 92%;
+    --muted-foreground: 30 10% 45%;
+
+    --accent: 40 100% 60%; /* Golden highlight */
+    --accent-foreground: 30 10% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 48 30% 85%;
+    --input: 48 30% 85%;
+    --ring: 45 96% 50%; /* Amber ring */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 30 10% 8%;
+    --foreground: 48 30% 95%;
+
+    --card: 30 10% 10%;
+    --card-foreground: 48 30% 95%;
+
+    --popover: 30 10% 10%;
+    --popover-foreground: 48 30% 95%;
+
+    --primary: 45 96% 50%;
+    --primary-foreground: 30 10% 10%;
+
+    --secondary: 30 10% 15%;
+    --secondary-foreground: 48 30% 95%;
+
+    --muted: 30 10% 20%;
+    --muted-foreground: 48 30% 60%;
+
+    --accent: 40 100% 50%;
+    --accent-foreground: 30 10% 10%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 10% 20%;
+    --input: 30 10% 20%;
+    --ring: 45 96% 50%;
+  }
 }
 
-/* Design tokens */
-:root {
-  /* Colors - TODO: Define color palette */
-  --color-primary: #0070f3;
-  --color-background: #ffffff;
-  --color-foreground: #171717;
-
-  /* Typography */
-  --font-sans: system-ui, -apple-system, sans-serif;
-  --font-mono: ui-monospace, monospace;
-
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
-
-/* Base styles */
-html {
-  font-family: var(--font-sans);
-  line-height: 1.5;
-  color: var(--color-foreground);
-  background-color: var(--color-background);
-}
-
-body {
-  min-height: 100vh;
-}
-
-/* TODO: Add more global styles as needed */

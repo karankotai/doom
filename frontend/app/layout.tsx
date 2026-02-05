@@ -10,6 +10,8 @@
  */
 
 import type { Metadata } from "next";
+import { AuthProvider } from "@/lib/context/auth-context";
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -24,9 +26,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        {/* TODO: Add providers here (auth, theme, etc.) */}
-        {children}
+      <body className="min-h-screen antialiased">
+        <AuthProvider>
+          {children}
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );

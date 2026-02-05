@@ -25,6 +25,21 @@ export const env = {
   NODE_ENV: getEnvOrDefault("NODE_ENV", "development"),
   PORT: parseInt(getEnvOrDefault("PORT", "3001"), 10),
   DATABASE_URL: getEnvOrThrow("DATABASE_URL"),
+
+  // Auth configuration
+  JWT_SECRET: getEnvOrThrow("JWT_SECRET"),
+  REFRESH_TOKEN_EXPIRY_DAYS: parseInt(
+    getEnvOrDefault("REFRESH_TOKEN_EXPIRY_DAYS", "7"),
+    10
+  ),
+  ACCESS_TOKEN_EXPIRY_MINUTES: parseInt(
+    getEnvOrDefault("ACCESS_TOKEN_EXPIRY_MINUTES", "15"),
+    10
+  ),
+
+  // CORS
+  FRONTEND_URL: getEnvOrDefault("FRONTEND_URL", "http://localhost:3000"),
+
   // Add AI provider keys here when implementing AI domain
   // OPENAI_API_KEY: getEnvOrThrow("OPENAI_API_KEY"),
 } as const;
