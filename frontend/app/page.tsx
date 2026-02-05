@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/context/auth-context";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -37,11 +38,9 @@ export default function HomePage() {
       </div>
 
       <div className="relative max-w-2xl text-center space-y-10">
-        {/* Mascot placeholder - you can add an owl icon/image here */}
+        {/* Logo */}
         <div className="flex justify-center">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary text-5xl shadow-duo-primary">
-            <span role="img" aria-label="owl">🦉</span>
-          </div>
+          <Logo size="xl" showText={false} />
         </div>
 
         <div className="space-y-6">

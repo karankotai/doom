@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/context/auth-context";
+import { Logo } from "@/components/ui/logo";
 
 export default function AuthLayout({
   children,
@@ -37,13 +38,8 @@ export default function AuthLayout({
     <div className="flex min-h-screen flex-col bg-background">
       {/* Header with logo */}
       <header className="flex items-center justify-center py-8">
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-2xl shadow-duo-primary transition-transform group-hover:scale-105">
-            <span role="img" aria-label="owl">🦉</span>
-          </div>
-          <span className="text-3xl font-extrabold text-primary tracking-tight">
-            learn
-          </span>
+        <Link href="/">
+          <Logo size="lg" />
         </Link>
       </header>
 

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { UserMenu } from "@/components/auth/user-menu";
+import { Logo } from "@/components/ui/logo";
 
 export default function ProtectedLayout({
   children,
@@ -16,13 +17,8 @@ export default function ProtectedLayout({
         <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-background">
           <div className="container flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/dashboard" className="flex items-center gap-3 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-xl shadow-duo-primary transition-transform group-hover:scale-105">
-                <span role="img" aria-label="owl">🦉</span>
-              </div>
-              <span className="text-2xl font-extrabold text-primary tracking-tight">
-                learn
-              </span>
+            <Link href="/dashboard">
+              <Logo size="md" />
             </Link>
 
             {/* Navigation - can be expanded */}

@@ -5,7 +5,14 @@
       "WebFetch(domain:brandpalettes.com)",
       "WebFetch(domain:www.designpieces.com)",
       "Bash(bun run build)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "WebFetch(domain:www.svgrepo.com)",
+      "WebFetch(domain:uxwing.com)",
+      "WebFetch(domain:icons8.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:unpkg.com)",
+      "WebFetch(domain:www.iconbolt.com)",
+      "WebFetch(domain:game-icons.net)"
     ]
   }
 }
