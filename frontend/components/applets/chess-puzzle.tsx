@@ -472,27 +472,5 @@ export function ChessPuzzle({
   );
 }
 
-// Example puzzle presets
-export const SAMPLE_PUZZLES = [
-  {
-    id: "mate-in-1-back-rank",
-    question: "White to move - Find the checkmate!",
-    hint: "The rook can deliver checkmate on the back rank.",
-    initialPosition: "bKg8,bPf7,bPg7,bPh7,wRa1,wKg1",
-    correctMove: { from: { row: 7, col: 0 }, to: { row: 0, col: 0 } }, // Ra1-a8#
-  },
-  {
-    id: "mate-in-1-queen",
-    question: "White to move - Deliver checkmate!",
-    hint: "The queen can attack the king with no escape.",
-    initialPosition: "bKh8,bPg7,bPh7,wQf6,wKg1",
-    correctMove: { from: { row: 2, col: 5 }, to: { row: 0, col: 5 } }, // Qf6-h8#
-  },
-  {
-    id: "fork-knight",
-    question: "White to move - Win material with a fork!",
-    hint: "The knight can attack two pieces at once.",
-    initialPosition: "bKe8,bQd8,bRa8,wNc3,wKe1",
-    correctMove: { from: { row: 2, col: 5 }, to: { row: 3, col: 3 } }, // Nc3-d5 (threatens Ne7+ forking K and Q)
-  },
-];
+// Note: Puzzle content is now stored in the database.
+// Use the API to fetch puzzles: GET /applets?type=chess

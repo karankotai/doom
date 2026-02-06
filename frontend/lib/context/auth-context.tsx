@@ -31,7 +31,7 @@ interface AuthContextType extends AuthState {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 // Refresh token 2 minutes before expiry
-const REFRESH_BUFFER_MS = 2 * 60 * 1000;
+const REFRESH_BUFFER_MS = 24 * 60 * 60 * 1000;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);

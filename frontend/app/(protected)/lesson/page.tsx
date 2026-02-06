@@ -1,42 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ChessPuzzle, SAMPLE_PUZZLES } from "@/components/applets/chess-puzzle";
-import { CodeBlocks, SAMPLE_CODE_PUZZLES } from "@/components/applets/code-blocks";
-import { SlopeGraph, SAMPLE_SLOPE_PUZZLES } from "@/components/applets/slope-graph";
+import { api } from "@/lib/api";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet } from "@/lib/types/applet";
+import { ChessPuzzle } from "@/components/applets/chess-puzzle";
+import { CodeBlocks } from "@/components/applets/code-blocks";
+import { SlopeGraph } from "@/components/applets/slope-graph";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-type LessonPuzzle =
-  | { type: "chess"; data: (typeof SAMPLE_PUZZLES)[number] }
-  | { type: "code-blocks"; data: (typeof SAMPLE_CODE_PUZZLES)[number] }
-  | { type: "slope-graph"; data: (typeof SAMPLE_SLOPE_PUZZLES)[number] };
-
-const ALL_PUZZLES: LessonPuzzle[] = [
-  ...SAMPLE_PUZZLES.map((p) => ({ type: "chess" as const, data: p })),
-  ...SAMPLE_CODE_PUZZLES.map((p) => ({ type: "code-blocks" as const, data: p })),
-  ...SAMPLE_SLOPE_PUZZLES.map((p) => ({ type: "slope-graph" as const, data: p })),
-];
-
 export default function LessonPage() {
   const router = useRouter();
+  const [applets, setApplets] = useState<Applet[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(0);
   const [completedPuzzles, setCompletedPuzzles] = useState<number[]>([]);
   const [xpEarned, setXpEarned] = useState(0);
 
-  const currentPuzzle = ALL_PUZZLES[currentPuzzleIndex];
-  const isLessonComplete = completedPuzzles.length === ALL_PUZZLES.length;
+  // Fetch applets on mount
+  useEffect(() => {
+    async function fetchApplets() {
+      try {
+        setIsLoading(true);
+        const { applets: fetchedApplets } = await api.getRandomApplets(5);
+        setApplets(fetchedApplets);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load applets");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchApplets();
+  }, []);
+
+  const currentPuzzle = applets[currentPuzzleIndex];
+  const isLessonComplete = applets.length > 0 && completedPuzzles.length === applets.length;
 
   const handlePuzzleComplete = (success: boolean) => {
-    if (success && !completedPuzzles.includes(currentPuzzleIndex)) {
-      setCompletedPuzzles([...completedPuzzles, currentPuzzleIndex]);
-      setXpEarned((prev) => prev + 10); // 10 XP per puzzle
+    if (success) {
+      // If puzzle is not yet marked complete, mark it and award XP
+      if (!completedPuzzles.includes(currentPuzzleIndex)) {
+        setCompletedPuzzles([...completedPuzzles, currentPuzzleIndex]);
+        setXpEarned((prev) => prev + 10); // 10 XP per puzzle
+      } else {
+        // Puzzle already complete - this is the Continue button, advance to next
+        if (currentPuzzleIndex < applets.length - 1) {
+          setCurrentPuzzleIndex(currentPuzzleIndex + 1);
+        }
+      }
     }
   };
 
   const handleNextPuzzle = () => {
-    if (currentPuzzleIndex < ALL_PUZZLES.length - 1) {
+    if (currentPuzzleIndex < applets.length - 1) {
       setCurrentPuzzleIndex(currentPuzzleIndex + 1);
     }
   };
@@ -46,6 +64,51 @@ export default function LessonPage() {
       setCurrentPuzzleIndex(currentPuzzleIndex - 1);
     }
   };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="max-w-2xl mx-auto flex items-center justify-center min-h-[400px]">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <Card className="text-center py-12">
+          <CardContent className="space-y-4">
+            <div className="text-4xl">😕</div>
+            <h2 className="text-xl font-bold text-foreground">Oops!</h2>
+            <p className="text-muted-foreground">{error}</p>
+            <Button onClick={() => router.push("/dashboard")}>
+              Back to Dashboard
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (applets.length === 0) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <Card className="text-center py-12">
+          <CardContent className="space-y-4">
+            <div className="text-4xl">📚</div>
+            <h2 className="text-xl font-bold text-foreground">No puzzles available</h2>
+            <p className="text-muted-foreground">Check back later for new content!</p>
+            <Button onClick={() => router.push("/dashboard")}>
+              Back to Dashboard
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -60,7 +123,7 @@ export default function LessonPage() {
             <span className="font-bold text-sm">+{xpEarned} XP</span>
           </div>
           <span className="text-sm font-semibold text-muted-foreground">
-            {completedPuzzles.length} / {ALL_PUZZLES.length}
+            {completedPuzzles.length} / {applets.length}
           </span>
         </div>
       </div>
@@ -70,7 +133,7 @@ export default function LessonPage() {
         <div
           className="h-full rounded-full bg-primary transition-all duration-500"
           style={{
-            width: `${(completedPuzzles.length / ALL_PUZZLES.length) * 100}%`,
+            width: `${(completedPuzzles.length / applets.length) * 100}%`,
           }}
         />
       </div>
@@ -107,34 +170,34 @@ export default function LessonPage() {
             </h1>
           </div>
 
-          {/* Puzzle */}
+          {/* Puzzle - render based on type */}
           {currentPuzzle.type === "chess" ? (
             <ChessPuzzle
-              key={currentPuzzle.data.id}
-              question={currentPuzzle.data.question}
-              hint={currentPuzzle.data.hint}
-              initialPosition={currentPuzzle.data.initialPosition}
-              correctMove={currentPuzzle.data.correctMove}
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              initialPosition={(currentPuzzle as ChessApplet).content.initialPosition}
+              correctMove={(currentPuzzle as ChessApplet).content.correctMove}
               onComplete={handlePuzzleComplete}
             />
           ) : currentPuzzle.type === "slope-graph" ? (
             <SlopeGraph
-              key={currentPuzzle.data.id}
-              question={currentPuzzle.data.question}
-              hint={currentPuzzle.data.hint}
-              startPoint={currentPuzzle.data.startPoint}
-              targetPoint={currentPuzzle.data.targetPoint}
-              gridSize={currentPuzzle.data.gridSize}
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              startPoint={(currentPuzzle as SlopeGraphApplet).content.startPoint}
+              targetPoint={(currentPuzzle as SlopeGraphApplet).content.targetPoint}
+              gridSize={(currentPuzzle as SlopeGraphApplet).content.gridSize}
               onComplete={handlePuzzleComplete}
             />
           ) : (
             <CodeBlocks
-              key={currentPuzzle.data.id}
-              question={currentPuzzle.data.question}
-              hint={currentPuzzle.data.hint}
-              language={currentPuzzle.data.language}
-              lines={currentPuzzle.data.lines}
-              answerBlocks={currentPuzzle.data.answerBlocks}
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              language={(currentPuzzle as CodeBlocksApplet).content.language}
+              lines={(currentPuzzle as CodeBlocksApplet).content.lines}
+              answerBlocks={(currentPuzzle as CodeBlocksApplet).content.answerBlocks}
               onComplete={handlePuzzleComplete}
             />
           )}
@@ -151,7 +214,7 @@ export default function LessonPage() {
 
             {/* Puzzle indicators */}
             <div className="flex gap-2">
-              {ALL_PUZZLES.map((_, index) => (
+              {applets.map((_, index) => (
                 <button
                   key={index}
                   className={`w-3 h-3 rounded-full transition-all ${
@@ -169,7 +232,7 @@ export default function LessonPage() {
             <Button
               variant="outline"
               onClick={handleNextPuzzle}
-              disabled={currentPuzzleIndex === ALL_PUZZLES.length - 1}
+              disabled={currentPuzzleIndex === applets.length - 1}
             >
               Next →
             </Button>

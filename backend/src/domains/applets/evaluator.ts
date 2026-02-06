@@ -4,48 +4,71 @@
  * Responsibilities:
  * - Evaluate user submissions for each applet type
  * - Return structured feedback and scores
- * - Handle AI-assisted evaluation for freeform responses
  *
- * Each applet type may have different evaluation logic.
+ * Note: Current applet types (code-blocks, slope-graph, chess) are
+ * evaluated client-side. This file is a placeholder for future
+ * server-side evaluation if needed.
  */
 
-import type { Applet, AppletSubmission, EvaluationResult } from "./model";
+import type { TypedApplet, AppletSubmission } from "./model";
+
+export interface EvaluationResult {
+  submissionId: string;
+  correct: boolean;
+  feedback: string;
+  score?: number;
+}
 
 export async function evaluateSubmission(
-  applet: Applet,
+  applet: TypedApplet,
   submission: AppletSubmission
 ): Promise<EvaluationResult> {
-  // TODO: Route to type-specific evaluator
+  // Route to type-specific evaluator
   switch (applet.type) {
-    case "quiz":
-      return evaluateQuiz(applet, submission);
-    case "code":
-      return evaluateCode(applet, submission);
-    case "flashcard":
-      return evaluateFlashcard(applet, submission);
-    case "freeform":
-      return evaluateFreeform(applet, submission);
+    case "code-blocks":
+      return evaluateCodeBlocks(applet, submission);
+    case "slope-graph":
+      return evaluateSlopeGraph(applet, submission);
+    case "chess":
+      return evaluateChess(applet, submission);
     default:
-      throw new Error(`Unknown applet type: ${applet.type}`);
+      throw new Error(`Unknown applet type: ${(applet as TypedApplet).type}`);
   }
 }
 
-async function evaluateQuiz(_applet: Applet, _submission: AppletSubmission): Promise<EvaluationResult> {
-  // TODO: Implement quiz evaluation
-  throw new Error("Not implemented");
+async function evaluateCodeBlocks(
+  _applet: TypedApplet,
+  submission: AppletSubmission
+): Promise<EvaluationResult> {
+  // Code blocks are evaluated client-side
+  // This is a placeholder for potential server-side validation
+  return {
+    submissionId: submission.id,
+    correct: submission.correct,
+    feedback: submission.correct ? "Correct!" : "Try again",
+  };
 }
 
-async function evaluateCode(_applet: Applet, _submission: AppletSubmission): Promise<EvaluationResult> {
-  // TODO: Implement code evaluation (run tests, check output)
-  throw new Error("Not implemented");
+async function evaluateSlopeGraph(
+  _applet: TypedApplet,
+  submission: AppletSubmission
+): Promise<EvaluationResult> {
+  // Slope graph is evaluated client-side
+  return {
+    submissionId: submission.id,
+    correct: submission.correct,
+    feedback: submission.correct ? "Correct!" : "Try again",
+  };
 }
 
-async function evaluateFlashcard(_applet: Applet, _submission: AppletSubmission): Promise<EvaluationResult> {
-  // TODO: Implement flashcard evaluation
-  throw new Error("Not implemented");
-}
-
-async function evaluateFreeform(_applet: Applet, _submission: AppletSubmission): Promise<EvaluationResult> {
-  // TODO: Implement freeform evaluation (may use AI)
-  throw new Error("Not implemented");
+async function evaluateChess(
+  _applet: TypedApplet,
+  submission: AppletSubmission
+): Promise<EvaluationResult> {
+  // Chess puzzles are evaluated client-side
+  return {
+    submissionId: submission.id,
+    correct: submission.correct,
+    feedback: submission.correct ? "Correct!" : "Try again",
+  };
 }

@@ -522,47 +522,5 @@ export function SlopeGraph({
   );
 }
 
-// --- Sample Puzzles ---
-
-export const SAMPLE_SLOPE_PUZZLES: SlopeGraphPuzzle[] = [
-  {
-    id: "move-right-up",
-    question: "Move the point 5 steps right and 4 steps up.",
-    hint: "Start at the origin and count grid squares: 5 to the right, then 4 up.",
-    startPoint: { x: 0, y: 0 },
-    targetPoint: { x: 5, y: 4 },
-    gridSize: 7,
-  },
-  {
-    id: "slope-2-over-3",
-    question: "Move the point to show a slope of 2/3 (rise 2, run 3).",
-    hint: "From the origin, go 3 right and 2 up. Slope = rise/run = 2/3.",
-    startPoint: { x: 0, y: 0 },
-    targetPoint: { x: 3, y: 2 },
-    gridSize: 7,
-  },
-  {
-    id: "slope-1",
-    question: "Move the point to show a slope of 1 (rise = run).",
-    hint: "A slope of 1 means for every step right, you go one step up. Try (4, 4).",
-    startPoint: { x: 0, y: 0 },
-    targetPoint: { x: 4, y: 4 },
-    gridSize: 7,
-  },
-  {
-    id: "find-point-from-offset",
-    question: "Start at (1, 2) and move 3 right and 2 up. Where do you end?",
-    hint: "Add the run to x: 1+3=4. Add the rise to y: 2+2=4. The answer is (4, 4).",
-    startPoint: { x: 1, y: 2 },
-    targetPoint: { x: 4, y: 4 },
-    gridSize: 7,
-  },
-  {
-    id: "steep-slope",
-    question: "Move the point to show a slope of 3 (rise 3, run 1).",
-    hint: "A steep slope means the line goes up fast. Go 1 right and 3 up from the origin.",
-    startPoint: { x: 0, y: 0 },
-    targetPoint: { x: 1, y: 3 },
-    gridSize: 7,
-  },
-];
+// Note: Puzzle content is now stored in the database.
+// Use the API to fetch puzzles: GET /applets?type=slope-graph

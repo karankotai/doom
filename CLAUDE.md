@@ -61,6 +61,8 @@ doom/
 │   │   ├── auth/                 # Auth forms, guards, user menu
 │   │   ├── profile/              # Avatar, level badge
 │   │   └── applets/              # Interactive learning components
+│   │       ├── code-blocks.tsx   # Fill-in-the-blank code puzzles
+│   │       ├── slope-graph.tsx   # Coordinate grid slope puzzles
 │   │       └── chess-puzzle.tsx  # Chess tactics puzzle applet
 │   ├── lib/
 │   │   ├── api.ts                # API client with auth token handling
@@ -94,21 +96,271 @@ Each domain has:
 - `api.ts` auto-retries 401s with token refresh
 
 ### Applet System
-Applets are interactive learning components. Currently implemented:
 
-**Chess Puzzle (`/components/applets/chess-puzzle.tsx`)**
-- 8x8 interactive chess board with Unicode pieces
-- Click to select piece, click again to move
-- Validates correct move against puzzle solution
-- Props:
-  - `question` - The puzzle prompt (e.g., "Find the checkmate!")
-  - `hint` - Optional hint text
-  - `initialPosition` - FEN-like string: `"wKe1,bKe8,wRa1"` (color + piece + square)
-  - `correctMove` - `{ from: { row, col }, to: { row, col } }` (0-indexed, row 0 = rank 8)
-  - `onComplete` - Callback when puzzle is solved
+Applets are interactive learning components. **Content is stored in the database**, not hardcoded.
+
+#### Database Schema
+
+Applets are stored in the `applets` table:
+```sql
+CREATE TABLE applets (
+    id UUID PRIMARY KEY,
+    type applet_type NOT NULL,       -- 'code-blocks', 'slope-graph', 'chess'
+    title VARCHAR(255) NOT NULL,
+    question TEXT NOT NULL,
+    hint TEXT,
+    content JSONB NOT NULL,          -- Type-specific content
+    difficulty INTEGER DEFAULT 1,     -- 1-5
+    tags TEXT[] DEFAULT '{}',
+    is_active BOOLEAN DEFAULT true
+);
+```
+
+#### API Endpoints
+
+```
+GET  /applets                  - List applets (with filters)
+GET  /applets/random?count=5   - Get random applets for a lesson
+GET  /applets/type/:type       - Get all applets of a specific type
+GET  /applets/:id              - Get single applet
+POST /applets                  - Create new applet
+```
+
+#### Creating New Applets
+
+1. **Add to database** - Insert into `applets` table with type-specific content
+2. **No code changes needed** - Existing components render based on content
+
+Example: Adding a new code-blocks puzzle via API:
+```json
+POST /applets
+{
+  "type": "code-blocks",
+  "title": "Python Hello World",
+  "question": "Complete the print statement",
+  "hint": "Use print() to output text",
+  "content": {
+    "language": "python",
+    "lines": [
+      {"lineNumber": 1, "segments": [
+        {"type": "slot", "slotId": "s1", "correctAnswerId": "ans-print"}
+      ]}
+    ],
+    "answerBlocks": [
+      {"id": "ans-print", "content": "print(\"Hello\")"},
+      {"id": "dist-1", "content": "echo(\"Hello\")"}
+    ]
+  },
+  "difficulty": 1,
+  "tags": ["python", "basics"]
+}
+```
+
+---
+
+## Applet Development Guidelines
+
+When creating a **new applet type**, follow these patterns:
+
+### 1. Backend: Define Types and Add to Enum
+
+**Update `backend/src/db/migrations/00X_new_applet.sql`**:
+```sql
+ALTER TYPE applet_type ADD VALUE 'your-applet-type';
+```
+
+**Update `backend/src/domains/applets/model.ts`**:
+```typescript
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "your-applet-type";
+
+// Add content interface
+export interface YourAppletContent {
+  // Type-specific fields
+}
+
+export interface YourAppletApplet extends Omit<Applet, "content"> {
+  type: "your-applet-type";
+  content: YourAppletContent;
+}
+
+// Add to union
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | YourAppletApplet;
+```
+
+### 2. Frontend: Create Component
+
+**Create `frontend/components/applets/your-applet.tsx`**:
+
+```typescript
+"use client";
+
+import { useState, useCallback } from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+// --- Types (match backend content structure) ---
+
+export interface YourAppletContent {
+  // Type-specific content fields
+}
+
+interface YourAppletProps {
+  question: string;
+  hint?: string;
+  // Spread content fields as individual props
+  onComplete?: (success: boolean) => void;
+}
+
+// --- Component ---
+
+export function YourApplet({
+  question,
+  hint,
+  onComplete,
+}: YourAppletProps) {
+  const [isComplete, setIsComplete] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
+
+  const checkAnswer = useCallback(() => {
+    // Validation logic
+    const isCorrect = true; // Your validation
+
+    if (isCorrect) {
+      setFeedback("correct");
+      setIsComplete(true);
+      onComplete?.(true);
+    } else {
+      setFeedback("incorrect");
+    }
+  }, [onComplete]);
+
+  const resetPuzzle = useCallback(() => {
+    setIsComplete(false);
+    setShowHint(false);
+    setFeedback(null);
+  }, []);
+
+  return (
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader className="text-center pb-4">
+        <CardTitle className="text-xl sm:text-2xl">{question}</CardTitle>
+        {hint && showHint && (
+          <p className="text-sm text-muted-foreground mt-2 animate-pop">
+            {hint}
+          </p>
+        )}
+      </CardHeader>
+
+      <CardContent className="space-y-5">
+        {/* Feedback banner */}
+        {feedback && (
+          <div
+            className={cn(
+              "text-center py-2 px-4 rounded-xl font-bold text-white animate-pop",
+              feedback === "correct" ? "bg-primary" : "bg-destructive"
+            )}
+          >
+            {feedback === "correct"
+              ? "Correct! Well done!"
+              : "Not quite - try again!"}
+          </div>
+        )}
+
+        {/* Interactive content area */}
+        <div className="your-interactive-area">
+          {/* Your applet UI */}
+        </div>
+
+        {/* Controls */}
+        <div className="flex gap-3 justify-center pt-2">
+          {!isComplete && hint && !showHint && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowHint(true)}
+            >
+              Show hint
+            </Button>
+          )}
+          <Button variant="outline" size="sm" onClick={resetPuzzle}>
+            Start over
+          </Button>
+          {!isComplete && (
+            <Button size="sm" onClick={checkAnswer}>
+              Check
+            </Button>
+          )}
+          {isComplete && (
+            <Button size="sm" onClick={() => onComplete?.(true)}>
+              Continue
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### 3. Frontend: Register in Lesson Page
+
+**Update `frontend/app/(protected)/lesson/page.tsx`**:
+
+```typescript
+import { YourApplet } from "@/components/applets/your-applet";
+
+// In the render switch:
+} else if (currentPuzzle.type === "your-applet-type") {
+  <YourApplet
+    key={currentPuzzle.id}
+    question={currentPuzzle.question}
+    hint={currentPuzzle.hint}
+    // spread content fields
+    onComplete={handlePuzzleComplete}
+  />
+}
+```
+
+### 4. Update Frontend Types
+
+**Update `frontend/lib/types/applet.ts`**:
+
+```typescript
+export interface YourAppletContent {
+  // Match backend
+}
+
+export interface YourAppletApplet extends BaseApplet {
+  type: "your-applet-type";
+  content: YourAppletContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | YourAppletApplet;
+```
+
+---
+
+### Existing Applet Types
+
+**Code Blocks (`code-blocks`)**
+- Fill-in-the-blank code puzzles
+- Drag and drop answer blocks into slots
+- Content: `{ language, lines[], answerBlocks[] }`
+
+**Slope Graph (`slope-graph`)**
+- Move a point on a coordinate grid
+- Learn rise/run and slope concepts
+- Content: `{ startPoint, targetPoint, gridSize }`
+
+**Chess (`chess`)**
+- Interactive chess board puzzles
+- Find the correct move
+- Content: `{ initialPosition, correctMove }`
 
 **Lesson Page (`/app/(protected)/lesson/page.tsx`)**
-- Renders puzzles from `SAMPLE_PUZZLES` array
+- Fetches random applets from API
 - Tracks progress and XP earned
 - Navigation between puzzles
 
@@ -157,6 +409,7 @@ Key tables:
 - `users` - id, email, name, password_hash
 - `sessions` - id, user_id, refresh_token_hash, expires_at
 - `user_profiles` - user_id, level, xp, xp_to_next_level, title
+- `applets` - id, type, title, question, hint, content (JSONB), difficulty, tags
 
 Run `bun run src/db/migrate.ts` in backend to create tables.
 
@@ -178,6 +431,15 @@ Run `bun run src/db/migrate.ts` in backend to create tables.
 - `POST /auth/refresh` - Refresh access token
 - `POST /auth/logout` - Sign out
 - `GET /auth/me` - Get current user (protected)
+
+### Applets
+- `GET /applets` - List applets (query: type, difficulty, tags, limit, offset)
+- `GET /applets/random` - Random applets for lessons (query: count, types)
+- `GET /applets/type/:type` - Get all applets of a type
+- `GET /applets/:id` - Get single applet
+- `POST /applets` - Create applet
+- `PATCH /applets/:id` - Update applet
+- `DELETE /applets/:id` - Soft delete applet
 
 ### Protected Routes
 All routes under `/users`, `/journeys`, `/applets` require authentication.

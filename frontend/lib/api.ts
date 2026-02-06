@@ -17,6 +17,7 @@ import type {
   AuthResponse,
   RefreshResponse,
 } from "./types/auth";
+import type { Applet, AppletType } from "./types/applet";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
@@ -152,6 +153,43 @@ class ApiClient {
 
   async getCurrentUser(): Promise<{ user: User }> {
     return this.request<{ user: User }>("/auth/me");
+  }
+
+  // ============== Applets ==============
+
+  async getApplets(params?: {
+    type?: AppletType;
+    difficulty?: number;
+    tags?: string[];
+    limit?: number;
+    offset?: number;
+  }): Promise<{ applets: Applet[] }> {
+    const searchParams = new URLSearchParams();
+    if (params?.type) searchParams.set("type", params.type);
+    if (params?.difficulty) searchParams.set("difficulty", String(params.difficulty));
+    if (params?.tags?.length) searchParams.set("tags", params.tags.join(","));
+    if (params?.limit) searchParams.set("limit", String(params.limit));
+    if (params?.offset) searchParams.set("offset", String(params.offset));
+
+    const query = searchParams.toString();
+    return this.request<{ applets: Applet[] }>(`/applets${query ? `?${query}` : ""}`);
+  }
+
+  async getRandomApplets(count?: number, types?: AppletType[]): Promise<{ applets: Applet[] }> {
+    const searchParams = new URLSearchParams();
+    if (count) searchParams.set("count", String(count));
+    if (types?.length) searchParams.set("types", types.join(","));
+
+    const query = searchParams.toString();
+    return this.request<{ applets: Applet[] }>(`/applets/random${query ? `?${query}` : ""}`);
+  }
+
+  async getAppletsByType(type: AppletType): Promise<{ applets: Applet[] }> {
+    return this.request<{ applets: Applet[] }>(`/applets/type/${type}`);
+  }
+
+  async getApplet(id: string): Promise<{ applet: Applet }> {
+    return this.request<{ applet: Applet }>(`/applets/${id}`);
   }
 }
 
