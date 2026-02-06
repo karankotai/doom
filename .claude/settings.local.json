@@ -12,7 +12,11 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:unpkg.com)",
       "WebFetch(domain:www.iconbolt.com)",
-      "WebFetch(domain:game-icons.net)"
+      "WebFetch(domain:game-icons.net)",
+      "Bash(bun run:*)",
+      "Bash(npx tsc:*)",
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(./node_modules/.bin/next build:*)"
     ]
   }
 }

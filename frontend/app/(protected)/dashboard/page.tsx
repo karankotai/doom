@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useAuth } from "@/lib/context/auth-context";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +26,9 @@ export default function DashboardPage() {
             Ready to continue your learning journey?
           </p>
         </div>
-        <Button size="lg">Start Lesson</Button>
+        <Button size="lg" asChild>
+          <Link href="/lesson">Start Lesson</Link>
+        </Button>
       </div>
 
       {/* Stats row */}
@@ -103,32 +106,30 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-xl shadow-duo-accent">
-                    📚
+                    ♟️
                   </div>
                   <div>
-                    <CardTitle>Getting Started</CardTitle>
-                    <CardDescription>Begin your learning journey</CardDescription>
+                    <CardTitle>Chess Tactics</CardTitle>
+                    <CardDescription>Master checkmates and tactics</CardDescription>
                   </div>
                 </div>
-                <Button variant="secondary" size="sm">
-                  Start
+                <Button variant="secondary" size="sm" asChild>
+                  <Link href="/lesson">Start</Link>
                 </Button>
               </div>
             </CardHeader>
             <CardContent>
-              {/* Unit progress */}
+              {/* Puzzle progress */}
               <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map((unit) => (
+                {[1, 2, 3].map((puzzle) => (
                   <div
-                    key={unit}
-                    className={`flex-1 h-2 rounded-full ${
-                      unit === 1 ? "bg-primary" : "bg-muted"
-                    }`}
+                    key={puzzle}
+                    className="flex-1 h-2 rounded-full bg-muted"
                   />
                 ))}
               </div>
               <p className="text-sm text-muted-foreground mt-2">
-                0 of 5 units completed
+                0 of 3 puzzles completed
               </p>
             </CardContent>
           </Card>
