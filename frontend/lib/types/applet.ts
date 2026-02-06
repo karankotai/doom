@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text";
 
 // --- Code Blocks types ---
 
@@ -83,6 +83,21 @@ export interface VennDiagramContent {
   correctRegions: VennRegionId[];
 }
 
+// --- Highlight Text types ---
+
+export interface HighlightSpan {
+  text: string;
+  startIndex: number;
+  endIndex: number;
+  category: string;
+}
+
+export interface HighlightTextContent {
+  text: string;
+  categories: string[];
+  correctHighlights: HighlightSpan[];
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -127,12 +142,17 @@ export interface VennDiagramApplet extends BaseApplet {
   content: VennDiagramContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet;
+export interface HighlightTextApplet extends BaseApplet {
+  type: "highlight-text";
+  content: HighlightTextContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 
 export interface GeneratedExercise {
-  type: "mcq" | "fill-blanks" | "venn-diagram";
+  type: "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text";
   title: string;
   question: string;
   hint: string;

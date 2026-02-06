@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
 import { Mcq } from "@/components/applets/mcq";
 import { FillBlanks } from "@/components/applets/fill-blanks";
 import { VennDiagram } from "@/components/applets/venn-diagram";
+import { HighlightText } from "@/components/applets/highlight-text";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -17,6 +18,7 @@ const APPLET_TYPES: { type: AppletType; name: string; icon: string; description:
   { type: "fill-blanks", name: "Fill in the Blanks", icon: "📝", description: "Drag and drop words to complete sentences" },
   { type: "code-blocks", name: "Code Blocks", icon: "🧩", description: "Complete code by placing blocks in the right slots" },
   { type: "venn-diagram", name: "Venn Diagram", icon: "⭕", description: "Color regions to represent set operations" },
+  { type: "highlight-text", name: "Highlight Text", icon: "🖍️", description: "Identify parts of speech by highlighting words" },
   { type: "slope-graph", name: "Slope Graph", icon: "📐", description: "Move points on a graph to learn about slopes" },
   { type: "chess", name: "Chess Tactics", icon: "♟️", description: "Find the best move in chess puzzles" },
 ];
@@ -129,6 +131,18 @@ export default function AppletsPage() {
             hint={applet.hint}
             labels={(applet as VennDiagramApplet).content.labels}
             correctRegions={(applet as VennDiagramApplet).content.correctRegions}
+            onComplete={handleComplete}
+          />
+        );
+      case "highlight-text":
+        return (
+          <HighlightText
+            key={applet.id}
+            question={applet.question}
+            hint={applet.hint}
+            text={(applet as HighlightTextApplet).content.text}
+            categories={(applet as HighlightTextApplet).content.categories}
+            correctHighlights={(applet as HighlightTextApplet).content.correctHighlights}
             onComplete={handleComplete}
           />
         );

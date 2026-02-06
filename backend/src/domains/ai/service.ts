@@ -7,7 +7,7 @@ import { env } from "@/lib/env";
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
 interface GeneratedApplet {
-  type: "mcq" | "fill-blanks" | "venn-diagram";
+  type: "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text";
   title: string;
   question: string;
   hint: string;
@@ -39,6 +39,10 @@ You must respond with a valid JSON array of 5 exercise objects. Each exercise sh
 3. "venn-diagram" - Color regions of a 2-circle Venn diagram for set operations
    Content format: { "labels": ["Set A", "Set B"], "correctRegions": ["a-only" | "b-only" | "a-and-b" | "neither"] }
    Use this for comparing/contrasting concepts, showing relationships, or set theory.
+
+4. "highlight-text" - Identify and categorize words/phrases in a sentence
+   Content format: { "text": "The full sentence to analyze.", "categories": ["noun", "verb", "adjective"], "correctHighlights": [{"text": "word", "startIndex": 0, "endIndex": 4, "category": "noun"}] }
+   Use this for grammar (parts of speech), identifying key terms, or text analysis. The startIndex and endIndex must match the exact character positions in the text.
 
 Return ONLY a JSON array, no markdown, no explanation. Example format:
 [
@@ -130,10 +134,10 @@ Make the content accurate and educational.`;
   }
 }
 
-function validateAppletType(type: string): "mcq" | "fill-blanks" | "venn-diagram" {
-  const validTypes = ["mcq", "fill-blanks", "venn-diagram"];
+function validateAppletType(type: string): "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" {
+  const validTypes = ["mcq", "fill-blanks", "venn-diagram", "highlight-text"];
   if (validTypes.includes(type)) {
-    return type as "mcq" | "fill-blanks" | "venn-diagram";
+    return type as "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text";
   }
   return "mcq"; // Default to MCQ if invalid type
 }

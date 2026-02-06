@@ -154,7 +154,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {["❓ MCQ", "📝 Fill Blanks", "🧩 Code", "⭕ Venn", "📐 Slope", "♟️ Chess"].map((type) => (
+                {["❓ MCQ", "📝 Fill Blanks", "🧩 Code", "⭕ Venn", "🖍️ Highlight", "📐 Slope", "♟️ Chess"].map((type) => (
                   <span
                     key={type}
                     className="px-2 py-1 rounded-lg bg-accent/10 text-xs font-semibold text-accent"

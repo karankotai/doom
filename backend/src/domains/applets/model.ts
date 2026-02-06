@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text";
 
 // Base applet structure from database
 export interface Applet {
@@ -102,6 +102,21 @@ export interface VennDiagramContent {
   correctRegions: VennRegionId[];
 }
 
+// --- Highlight Text specific types ---
+
+export interface HighlightSpan {
+  text: string;
+  startIndex: number;
+  endIndex: number;
+  category: string;
+}
+
+export interface HighlightTextContent {
+  text: string;
+  categories: string[];
+  correctHighlights: HighlightSpan[];
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -134,7 +149,12 @@ export interface VennDiagramApplet extends Omit<Applet, "content"> {
   content: VennDiagramContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet;
+export interface HighlightTextApplet extends Omit<Applet, "content"> {
+  type: "highlight-text";
+  content: HighlightTextContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet;
 
 // --- Query params ---
 

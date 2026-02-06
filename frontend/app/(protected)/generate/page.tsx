@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { api } from "@/lib/api";
-import type { GeneratedExercise, McqContent, FillBlanksContent, VennDiagramContent } from "@/lib/types/applet";
+import type { GeneratedExercise, McqContent, FillBlanksContent, VennDiagramContent, HighlightTextContent } from "@/lib/types/applet";
 import { Mcq } from "@/components/applets/mcq";
 import { FillBlanks } from "@/components/applets/fill-blanks";
 import { VennDiagram } from "@/components/applets/venn-diagram";
+import { HighlightText } from "@/components/applets/highlight-text";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -110,6 +111,20 @@ export default function GeneratePage() {
             hint={exercise.hint}
             labels={vennContent.labels}
             correctRegions={vennContent.correctRegions}
+            onComplete={handleComplete}
+          />
+        );
+      }
+      case "highlight-text": {
+        const highlightContent = exercise.content as unknown as HighlightTextContent;
+        return (
+          <HighlightText
+            key={`${exercise.title}-${currentIndex}`}
+            question={exercise.question}
+            hint={exercise.hint}
+            text={highlightContent.text}
+            categories={highlightContent.categories}
+            correctHighlights={highlightContent.correctHighlights}
             onComplete={handleComplete}
           />
         );
@@ -255,6 +270,7 @@ export default function GeneratePage() {
             {currentExercise.type === "mcq" && "Multiple Choice"}
             {currentExercise.type === "fill-blanks" && "Fill in the Blanks"}
             {currentExercise.type === "venn-diagram" && "Venn Diagram"}
+            {currentExercise.type === "highlight-text" && "Highlight Text"}
           </span>
         </div>
       )}
