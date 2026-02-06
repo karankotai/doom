@@ -31,6 +31,10 @@ export async function evaluateSubmission(
       return evaluateSlopeGraph(applet, submission);
     case "chess":
       return evaluateChess(applet, submission);
+    case "mcq":
+      return evaluateMcq(applet, submission);
+    case "fill-blanks":
+      return evaluateFillBlanks(applet, submission);
     default:
       throw new Error(`Unknown applet type: ${(applet as TypedApplet).type}`);
   }
@@ -66,6 +70,30 @@ async function evaluateChess(
   submission: AppletSubmission
 ): Promise<EvaluationResult> {
   // Chess puzzles are evaluated client-side
+  return {
+    submissionId: submission.id,
+    correct: submission.correct,
+    feedback: submission.correct ? "Correct!" : "Try again",
+  };
+}
+
+async function evaluateMcq(
+  _applet: TypedApplet,
+  submission: AppletSubmission
+): Promise<EvaluationResult> {
+  // MCQ is evaluated client-side
+  return {
+    submissionId: submission.id,
+    correct: submission.correct,
+    feedback: submission.correct ? "Correct!" : "Try again",
+  };
+}
+
+async function evaluateFillBlanks(
+  _applet: TypedApplet,
+  submission: AppletSubmission
+): Promise<EvaluationResult> {
+  // Fill-blanks is evaluated client-side
   return {
     submissionId: submission.id,
     correct: submission.correct,

@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
+import { Mcq } from "@/components/applets/mcq";
+import { FillBlanks } from "@/components/applets/fill-blanks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -163,10 +165,16 @@ export default function LessonPage() {
           {/* Puzzle type indicator */}
           <div className="flex items-center justify-center gap-2">
             <span className="text-2xl">
-              {currentPuzzle.type === "chess" ? "♟️" : currentPuzzle.type === "slope-graph" ? "📐" : "🧩"}
+              {currentPuzzle.type === "chess" ? "♟️" :
+               currentPuzzle.type === "slope-graph" ? "📐" :
+               currentPuzzle.type === "mcq" ? "❓" :
+               currentPuzzle.type === "fill-blanks" ? "📝" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
-              {currentPuzzle.type === "chess" ? "Chess Tactics" : currentPuzzle.type === "slope-graph" ? "Slope Graph" : "Code Blocks"}
+              {currentPuzzle.type === "chess" ? "Chess Tactics" :
+               currentPuzzle.type === "slope-graph" ? "Slope Graph" :
+               currentPuzzle.type === "mcq" ? "Multiple Choice" :
+               currentPuzzle.type === "fill-blanks" ? "Fill in the Blanks" : "Code Blocks"}
             </h1>
           </div>
 
@@ -188,6 +196,24 @@ export default function LessonPage() {
               startPoint={(currentPuzzle as SlopeGraphApplet).content.startPoint}
               targetPoint={(currentPuzzle as SlopeGraphApplet).content.targetPoint}
               gridSize={(currentPuzzle as SlopeGraphApplet).content.gridSize}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "mcq" ? (
+            <Mcq
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              options={(currentPuzzle as McqApplet).content.options}
+              correctOptionId={(currentPuzzle as McqApplet).content.correctOptionId}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "fill-blanks" ? (
+            <FillBlanks
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              segments={(currentPuzzle as FillBlanksApplet).content.segments}
+              answerBlocks={(currentPuzzle as FillBlanksApplet).content.answerBlocks}
               onComplete={handlePuzzleComplete}
             />
           ) : (

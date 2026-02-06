@@ -359,6 +359,16 @@ export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | YourApp
 - Find the correct move
 - Content: `{ initialPosition, correctMove }`
 
+**MCQ (`mcq`)**
+- Multiple choice questions with 4 button options
+- Click to select answer, immediate feedback
+- Content: `{ options: [{id, text}], correctOptionId }`
+
+**Fill Blanks (`fill-blanks`)**
+- Fill-in-the-blank sentences for English, Science, History, etc.
+- Drag and drop answer blocks into blank slots
+- Content: `{ segments: [{type, content/slotId}], answerBlocks: [{id, content}] }`
+
 **Lesson Page (`/app/(protected)/lesson/page.tsx`)**
 - Fetches random applets from API
 - Tracks progress and XP earned

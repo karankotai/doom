@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks";
 
 // --- Code Blocks types ---
 
@@ -51,6 +51,29 @@ export interface ChessContent {
   correctMove: ChessMove;
 }
 
+// --- MCQ types ---
+
+export interface McqOption {
+  id: string;
+  text: string;
+}
+
+export interface McqContent {
+  options: McqOption[];
+  correctOptionId: string;
+}
+
+// --- Fill Blanks types ---
+
+export type FillBlanksSegment =
+  | { type: "text"; content: string }
+  | { type: "slot"; slotId: string; correctAnswerId: string };
+
+export interface FillBlanksContent {
+  segments: FillBlanksSegment[];
+  answerBlocks: AnswerBlock[];
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -80,4 +103,14 @@ export interface ChessApplet extends BaseApplet {
   content: ChessContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet;
+export interface McqApplet extends BaseApplet {
+  type: "mcq";
+  content: McqContent;
+}
+
+export interface FillBlanksApplet extends BaseApplet {
+  type: "fill-blanks";
+  content: FillBlanksContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet;

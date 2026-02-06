@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks";
 
 // Base applet structure from database
 export interface Applet {
@@ -69,6 +69,29 @@ export interface ChessContent {
   correctMove: ChessMove;
 }
 
+// --- MCQ specific types ---
+
+export interface McqOption {
+  id: string;
+  text: string;
+}
+
+export interface McqContent {
+  options: McqOption[];
+  correctOptionId: string;
+}
+
+// --- Fill Blanks specific types ---
+
+export type FillBlanksSegment =
+  | { type: "text"; content: string }
+  | { type: "slot"; slotId: string; correctAnswerId: string };
+
+export interface FillBlanksContent {
+  segments: FillBlanksSegment[];
+  answerBlocks: AnswerBlock[];
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -86,7 +109,17 @@ export interface ChessApplet extends Omit<Applet, "content"> {
   content: ChessContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet;
+export interface McqApplet extends Omit<Applet, "content"> {
+  type: "mcq";
+  content: McqContent;
+}
+
+export interface FillBlanksApplet extends Omit<Applet, "content"> {
+  type: "fill-blanks";
+  content: FillBlanksContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet;
 
 // --- Query params ---
 
