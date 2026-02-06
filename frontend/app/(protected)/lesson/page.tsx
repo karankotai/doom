@@ -4,16 +4,19 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChessPuzzle, SAMPLE_PUZZLES } from "@/components/applets/chess-puzzle";
 import { CodeBlocks, SAMPLE_CODE_PUZZLES } from "@/components/applets/code-blocks";
+import { SlopeGraph, SAMPLE_SLOPE_PUZZLES } from "@/components/applets/slope-graph";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 type LessonPuzzle =
   | { type: "chess"; data: (typeof SAMPLE_PUZZLES)[number] }
-  | { type: "code-blocks"; data: (typeof SAMPLE_CODE_PUZZLES)[number] };
+  | { type: "code-blocks"; data: (typeof SAMPLE_CODE_PUZZLES)[number] }
+  | { type: "slope-graph"; data: (typeof SAMPLE_SLOPE_PUZZLES)[number] };
 
 const ALL_PUZZLES: LessonPuzzle[] = [
   ...SAMPLE_PUZZLES.map((p) => ({ type: "chess" as const, data: p })),
   ...SAMPLE_CODE_PUZZLES.map((p) => ({ type: "code-blocks" as const, data: p })),
+  ...SAMPLE_SLOPE_PUZZLES.map((p) => ({ type: "slope-graph" as const, data: p })),
 ];
 
 export default function LessonPage() {
@@ -97,10 +100,10 @@ export default function LessonPage() {
           {/* Puzzle type indicator */}
           <div className="flex items-center justify-center gap-2">
             <span className="text-2xl">
-              {currentPuzzle.type === "chess" ? "♟️" : "🧩"}
+              {currentPuzzle.type === "chess" ? "♟️" : currentPuzzle.type === "slope-graph" ? "📐" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
-              {currentPuzzle.type === "chess" ? "Chess Tactics" : "Code Blocks"}
+              {currentPuzzle.type === "chess" ? "Chess Tactics" : currentPuzzle.type === "slope-graph" ? "Slope Graph" : "Code Blocks"}
             </h1>
           </div>
 
@@ -112,6 +115,16 @@ export default function LessonPage() {
               hint={currentPuzzle.data.hint}
               initialPosition={currentPuzzle.data.initialPosition}
               correctMove={currentPuzzle.data.correctMove}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "slope-graph" ? (
+            <SlopeGraph
+              key={currentPuzzle.data.id}
+              question={currentPuzzle.data.question}
+              hint={currentPuzzle.data.hint}
+              startPoint={currentPuzzle.data.startPoint}
+              targetPoint={currentPuzzle.data.targetPoint}
+              gridSize={currentPuzzle.data.gridSize}
               onComplete={handlePuzzleComplete}
             />
           ) : (
