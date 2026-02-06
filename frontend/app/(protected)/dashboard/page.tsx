@@ -134,17 +134,60 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Empty state for more courses */}
-          <Card className="border-dashed">
-            <CardContent className="py-12 text-center">
-              <div className="text-4xl mb-4">🎯</div>
-              <h3 className="font-bold text-lg text-foreground mb-2">
-                Explore More Courses
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Discover new topics and expand your knowledge
+          {/* Applet Gallery Card */}
+          <Card className="bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-xl shadow-duo-accent">
+                    🎮
+                  </div>
+                  <div>
+                    <CardTitle>Applet Gallery</CardTitle>
+                    <CardDescription>Try all types of interactive puzzles</CardDescription>
+                  </div>
+                </div>
+                <Button variant="secondary" size="sm" asChild>
+                  <Link href="/applets">Explore</Link>
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {["❓ MCQ", "📝 Fill Blanks", "🧩 Code", "⭕ Venn", "📐 Slope", "♟️ Chess"].map((type) => (
+                  <span
+                    key={type}
+                    className="px-2 py-1 rounded-lg bg-accent/10 text-xs font-semibold text-accent"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* AI Generate Card */}
+          <Card className="bg-gradient-to-br from-purple/5 to-purple/10 border-purple/20">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple text-xl shadow-lg">
+                    ✨
+                  </div>
+                  <div>
+                    <CardTitle>AI Generator</CardTitle>
+                    <CardDescription>Create exercises on any topic instantly</CardDescription>
+                  </div>
+                </div>
+                <Button variant="secondary" size="sm" asChild>
+                  <Link href="/generate">Create</Link>
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Enter any learning topic and get AI-generated interactive exercises tailored to your chosen difficulty level.
               </p>
-              <Button variant="outline">Browse Courses</Button>
             </CardContent>
           </Card>
         </div>

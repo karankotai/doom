@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram";
 
 // --- Code Blocks types ---
 
@@ -74,6 +74,15 @@ export interface FillBlanksContent {
   answerBlocks: AnswerBlock[];
 }
 
+// --- Venn Diagram types ---
+
+export type VennRegionId = "a-only" | "b-only" | "a-and-b" | "neither";
+
+export interface VennDiagramContent {
+  labels: [string, string];
+  correctRegions: VennRegionId[];
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -113,4 +122,21 @@ export interface FillBlanksApplet extends BaseApplet {
   content: FillBlanksContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet;
+export interface VennDiagramApplet extends BaseApplet {
+  type: "venn-diagram";
+  content: VennDiagramContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet;
+
+// --- AI Generated Exercise (before it has an ID) ---
+
+export interface GeneratedExercise {
+  type: "mcq" | "fill-blanks" | "venn-diagram";
+  title: string;
+  question: string;
+  hint: string;
+  content: Record<string, unknown>;
+  difficulty: number;
+  tags: string[];
+}

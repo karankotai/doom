@@ -35,6 +35,8 @@ export async function evaluateSubmission(
       return evaluateMcq(applet, submission);
     case "fill-blanks":
       return evaluateFillBlanks(applet, submission);
+    case "venn-diagram":
+      return evaluateVennDiagram(applet, submission);
     default:
       throw new Error(`Unknown applet type: ${(applet as TypedApplet).type}`);
   }
@@ -94,6 +96,18 @@ async function evaluateFillBlanks(
   submission: AppletSubmission
 ): Promise<EvaluationResult> {
   // Fill-blanks is evaluated client-side
+  return {
+    submissionId: submission.id,
+    correct: submission.correct,
+    feedback: submission.correct ? "Correct!" : "Try again",
+  };
+}
+
+async function evaluateVennDiagram(
+  _applet: TypedApplet,
+  submission: AppletSubmission
+): Promise<EvaluationResult> {
+  // Venn diagram is evaluated client-side
   return {
     submissionId: submission.id,
     correct: submission.correct,

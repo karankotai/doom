@@ -17,7 +17,7 @@ import type {
   AuthResponse,
   RefreshResponse,
 } from "./types/auth";
-import type { Applet, AppletType } from "./types/applet";
+import type { Applet, AppletType, GeneratedExercise } from "./types/applet";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
@@ -190,6 +190,15 @@ class ApiClient {
 
   async getApplet(id: string): Promise<{ applet: Applet }> {
     return this.request<{ applet: Applet }>(`/applets/${id}`);
+  }
+
+  // ============== AI Generation ==============
+
+  async generateExercises(topic: string, difficulty?: number): Promise<{ exercises: GeneratedExercise[] }> {
+    return this.request<{ exercises: GeneratedExercise[] }>("/ai/generate", {
+      method: "POST",
+      body: JSON.stringify({ topic, difficulty }),
+    });
   }
 }
 

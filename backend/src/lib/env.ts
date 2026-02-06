@@ -40,6 +40,6 @@ export const env = {
   // CORS
   FRONTEND_URL: getEnvOrDefault("FRONTEND_URL", "http://localhost:3000"),
 
-  // Add AI provider keys here when implementing AI domain
-  // OPENAI_API_KEY: getEnvOrThrow("OPENAI_API_KEY"),
+  // AI provider keys
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY ?? "",
 } as const;

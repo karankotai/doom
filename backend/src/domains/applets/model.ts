@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram";
 
 // Base applet structure from database
 export interface Applet {
@@ -92,6 +92,16 @@ export interface FillBlanksContent {
   answerBlocks: AnswerBlock[];
 }
 
+// --- Venn Diagram specific types ---
+
+// Region IDs for 2-circle Venn diagram: "a-only", "b-only", "a-and-b", "neither"
+export type VennRegionId = "a-only" | "b-only" | "a-and-b" | "neither";
+
+export interface VennDiagramContent {
+  labels: [string, string]; // Labels for circles A and B
+  correctRegions: VennRegionId[];
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -119,7 +129,12 @@ export interface FillBlanksApplet extends Omit<Applet, "content"> {
   content: FillBlanksContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet;
+export interface VennDiagramApplet extends Omit<Applet, "content"> {
+  type: "venn-diagram";
+  content: VennDiagramContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet;
 
 // --- Query params ---
 

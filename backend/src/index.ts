@@ -16,6 +16,7 @@ import { authRoutes } from "./domains/auth/routes";
 import { usersRoutes } from "./domains/users/routes";
 import { journeysRoutes } from "./domains/journeys/routes";
 import { appletsRoutes } from "./domains/applets/routes";
+import { aiRoutes } from "./domains/ai/routes";
 import { env } from "./lib/env";
 import { requireAuth } from "./middleware/auth";
 
@@ -48,6 +49,7 @@ protectedApp.use("*", requireAuth);
 protectedApp.route("/users", usersRoutes);
 protectedApp.route("/journeys", journeysRoutes);
 protectedApp.route("/applets", appletsRoutes);
+protectedApp.route("/ai", aiRoutes);
 
 // Mount protected app
 app.route("/", protectedApp);

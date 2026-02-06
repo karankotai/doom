@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
 import { Mcq } from "@/components/applets/mcq";
 import { FillBlanks } from "@/components/applets/fill-blanks";
+import { VennDiagram } from "@/components/applets/venn-diagram";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -168,13 +169,15 @@ export default function LessonPage() {
               {currentPuzzle.type === "chess" ? "♟️" :
                currentPuzzle.type === "slope-graph" ? "📐" :
                currentPuzzle.type === "mcq" ? "❓" :
-               currentPuzzle.type === "fill-blanks" ? "📝" : "🧩"}
+               currentPuzzle.type === "fill-blanks" ? "📝" :
+               currentPuzzle.type === "venn-diagram" ? "⭕" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
                currentPuzzle.type === "slope-graph" ? "Slope Graph" :
                currentPuzzle.type === "mcq" ? "Multiple Choice" :
-               currentPuzzle.type === "fill-blanks" ? "Fill in the Blanks" : "Code Blocks"}
+               currentPuzzle.type === "fill-blanks" ? "Fill in the Blanks" :
+               currentPuzzle.type === "venn-diagram" ? "Venn Diagram" : "Code Blocks"}
             </h1>
           </div>
 
@@ -214,6 +217,15 @@ export default function LessonPage() {
               hint={currentPuzzle.hint}
               segments={(currentPuzzle as FillBlanksApplet).content.segments}
               answerBlocks={(currentPuzzle as FillBlanksApplet).content.answerBlocks}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "venn-diagram" ? (
+            <VennDiagram
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              labels={(currentPuzzle as VennDiagramApplet).content.labels}
+              correctRegions={(currentPuzzle as VennDiagramApplet).content.correctRegions}
               onComplete={handlePuzzleComplete}
             />
           ) : (

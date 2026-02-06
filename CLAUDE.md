@@ -369,6 +369,11 @@ export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | YourApp
 - Drag and drop answer blocks into blank slots
 - Content: `{ segments: [{type, content/slotId}], answerBlocks: [{id, content}] }`
 
+**Venn Diagram (`venn-diagram`)**
+- Click to color regions of a 2-circle Venn diagram
+- Learn set operations: union, intersection, complement, etc.
+- Content: `{ labels: [string, string], correctRegions: ["a-only"|"b-only"|"a-and-b"|"neither"][] }`
+
 **Lesson Page (`/app/(protected)/lesson/page.tsx`)**
 - Fetches random applets from API
 - Tracks progress and XP earned

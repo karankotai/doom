@@ -21,13 +21,25 @@ export default function ProtectedLayout({
               <Logo size="md" />
             </Link>
 
-            {/* Navigation - can be expanded */}
+            {/* Navigation */}
             <nav className="hidden md:flex items-center gap-6">
               <Link
                 href="/dashboard"
                 className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
               >
                 Learn
+              </Link>
+              <Link
+                href="/applets"
+                className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
+              >
+                Applets
+              </Link>
+              <Link
+                href="/generate"
+                className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
+              >
+                Generate
               </Link>
             </nav>
 

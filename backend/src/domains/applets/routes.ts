@@ -47,7 +47,7 @@ appletsRoutes.get("/random", async (c) => {
 appletsRoutes.get("/type/:type", async (c) => {
   const type = c.req.param("type") as AppletType;
 
-  if (!["code-blocks", "slope-graph", "chess", "mcq", "fill-blanks"].includes(type)) {
+  if (!["code-blocks", "slope-graph", "chess", "mcq", "fill-blanks", "venn-diagram"].includes(type)) {
     return c.json({ error: "Invalid applet type" }, 400);
   }
 
@@ -77,7 +77,7 @@ appletsRoutes.post("/", async (c) => {
     return c.json({ error: "Missing required fields: type, title, question, content" }, 400);
   }
 
-  if (!["code-blocks", "slope-graph", "chess", "mcq", "fill-blanks"].includes(type)) {
+  if (!["code-blocks", "slope-graph", "chess", "mcq", "fill-blanks", "venn-diagram"].includes(type)) {
     return c.json({ error: "Invalid applet type" }, 400);
   }
 
