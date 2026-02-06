@@ -94,11 +94,12 @@ export interface FillBlanksContent {
 
 // --- Venn Diagram specific types ---
 
-// Region IDs for 2-circle Venn diagram: "a-only", "b-only", "a-and-b", "neither"
-export type VennRegionId = "a-only" | "b-only" | "a-and-b" | "neither";
+// Region IDs: "A", "B", "AB", "ABC", "none" etc. for n-circle diagrams
+// Legacy support: "a-only", "b-only", "a-and-b", "neither" (auto-converted by frontend)
+export type VennRegionId = string;
 
 export interface VennDiagramContent {
-  labels: [string, string]; // Labels for circles A and B
+  labels: string[]; // 2-5 labels for circles
   correctRegions: VennRegionId[];
 }
 

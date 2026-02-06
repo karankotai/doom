@@ -36,8 +36,10 @@ You must respond with a valid JSON array of 5 exercise objects. Each exercise sh
 2. "fill-blanks" - Fill in the blanks with drag-and-drop
    Content format: { "segments": [{"type": "text", "content": "Some text "}, {"type": "slot", "slotId": "s1", "correctAnswerId": "ans1"}, {"type": "text", "content": " more text."}], "answerBlocks": [{"id": "ans1", "content": "correct"}, {"id": "dist1", "content": "wrong"}] }
 
-3. "venn-diagram" - Color regions of a 2-circle Venn diagram for set operations
-   Content format: { "labels": ["Set A", "Set B"], "correctRegions": ["a-only" | "b-only" | "a-and-b" | "neither"] }
+3. "venn-diagram" - Color regions of a 2-5 circle Venn diagram for set operations
+   Content format: { "labels": ["Set A", "Set B", "Set C"], "correctRegions": ["A", "B", "AB", "ABC", "none"] }
+   Region IDs use capital letters: "A" (only in A), "AB" (in A and B but not others), "ABC" (in all three), "none" (outside all).
+   For 2 circles use A,B. For 3 use A,B,C. For 4 use A,B,C,D. For 5 use A,B,C,D,E.
    Use this for comparing/contrasting concepts, showing relationships, or set theory.
 
 4. "highlight-text" - Identify and categorize words/phrases in a sentence
