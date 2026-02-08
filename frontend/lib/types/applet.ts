@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram";
 
 // --- Code Blocks types ---
 
@@ -255,6 +255,25 @@ export interface MatchPairsContent {
   rightColumnLabel?: string;
 }
 
+// --- Interactive Diagram types ---
+
+export interface DiagramElement {
+  id: string;
+  type: "path" | "rect" | "circle" | "ellipse" | "line" | "polygon" | "polyline" | "text";
+  attrs: Record<string, string | number>;
+  label?: string;
+  selectable?: boolean;
+  style?: Record<string, string | number>;
+}
+
+export interface InteractiveDiagramContent {
+  elements: DiagramElement[];
+  correctIds: string[];
+  selectCount?: number;
+  viewBox: { width: number; height: number };
+  diagramTitle?: string;
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -344,7 +363,12 @@ export interface MatchPairsApplet extends BaseApplet {
   content: MatchPairsContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet;
+export interface InteractiveDiagramApplet extends BaseApplet {
+  type: "interactive-diagram";
+  content: InteractiveDiagramContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

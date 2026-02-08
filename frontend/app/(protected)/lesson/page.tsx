@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -19,6 +19,7 @@ import { CategorizationGrid } from "@/components/applets/categorization-grid";
 import { FractionVisualizer } from "@/components/applets/fraction-visualizer";
 import { ChartReading } from "@/components/applets/chart-reading";
 import { MatchPairs } from "@/components/applets/match-pairs";
+import { InteractiveDiagram } from "@/components/applets/interactive-diagram";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -188,7 +189,8 @@ export default function LessonPage() {
                currentPuzzle.type === "categorization-grid" ? "📋" :
                currentPuzzle.type === "fraction-visualizer" ? "🟦" :
                currentPuzzle.type === "chart-reading" ? "📊" :
-               currentPuzzle.type === "match-pairs" ? "🔗" : "🧩"}
+               currentPuzzle.type === "match-pairs" ? "🔗" :
+               currentPuzzle.type === "interactive-diagram" ? "🔬" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
@@ -204,7 +206,8 @@ export default function LessonPage() {
                currentPuzzle.type === "categorization-grid" ? "Categorization Grid" :
                currentPuzzle.type === "fraction-visualizer" ? "Fraction Visualizer" :
                currentPuzzle.type === "chart-reading" ? "Chart Reading" :
-               currentPuzzle.type === "match-pairs" ? "Match Pairs" : "Code Blocks"}
+               currentPuzzle.type === "match-pairs" ? "Match Pairs" :
+               currentPuzzle.type === "interactive-diagram" ? "Interactive Diagram" : "Code Blocks"}
             </h1>
           </div>
 
@@ -356,6 +359,18 @@ export default function LessonPage() {
               correctPairs={(currentPuzzle as MatchPairsApplet).content.correctPairs}
               leftColumnLabel={(currentPuzzle as MatchPairsApplet).content.leftColumnLabel}
               rightColumnLabel={(currentPuzzle as MatchPairsApplet).content.rightColumnLabel}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "interactive-diagram" ? (
+            <InteractiveDiagram
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              elements={(currentPuzzle as InteractiveDiagramApplet).content.elements}
+              correctIds={(currentPuzzle as InteractiveDiagramApplet).content.correctIds}
+              selectCount={(currentPuzzle as InteractiveDiagramApplet).content.selectCount}
+              viewBox={(currentPuzzle as InteractiveDiagramApplet).content.viewBox}
+              diagramTitle={(currentPuzzle as InteractiveDiagramApplet).content.diagramTitle}
               onComplete={handlePuzzleComplete}
             />
           ) : (

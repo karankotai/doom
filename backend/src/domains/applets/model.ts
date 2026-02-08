@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram";
 
 // Base applet structure from database
 export interface Applet {
@@ -273,6 +273,25 @@ export interface MatchPairsContent {
   rightColumnLabel?: string;
 }
 
+// --- Interactive Diagram specific types ---
+
+export interface DiagramElement {
+  id: string;
+  type: "path" | "rect" | "circle" | "ellipse" | "line" | "polygon" | "polyline" | "text";
+  attrs: Record<string, string | number>;
+  label?: string;
+  selectable?: boolean;
+  style?: Record<string, string | number>;
+}
+
+export interface InteractiveDiagramContent {
+  elements: DiagramElement[];
+  correctIds: string[];
+  selectCount?: number;
+  viewBox: { width: number; height: number };
+  diagramTitle?: string;
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -350,7 +369,12 @@ export interface MatchPairsApplet extends Omit<Applet, "content"> {
   content: MatchPairsContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet;
+export interface InteractiveDiagramApplet extends Omit<Applet, "content"> {
+  type: "interactive-diagram";
+  content: InteractiveDiagramContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet;
 
 // --- Query params ---
 

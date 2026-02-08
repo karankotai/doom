@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -18,6 +18,7 @@ import { CategorizationGrid } from "@/components/applets/categorization-grid";
 import { FractionVisualizer } from "@/components/applets/fraction-visualizer";
 import { ChartReading } from "@/components/applets/chart-reading";
 import { MatchPairs } from "@/components/applets/match-pairs";
+import { InteractiveDiagram } from "@/components/applets/interactive-diagram";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -37,6 +38,7 @@ const APPLET_TYPES: { type: AppletType; name: string; icon: string; description:
   { type: "fraction-visualizer", name: "Fraction Visualizer", icon: "🟦", description: "Color sections of a shape to represent fractions visually" },
   { type: "chart-reading", name: "Chart Reading", icon: "📊", description: "Read and interpret bar charts, pie charts, line graphs, scatter plots, and histograms" },
   { type: "match-pairs", name: "Match Pairs", icon: "🔗", description: "Draw lines to match items between two columns — languages, science, history and more" },
+  { type: "interactive-diagram", name: "Interactive Diagram", icon: "🔬", description: "Click on diagram regions to answer questions about geometry, biology, anatomy, and more" },
 ];
 
 export default function AppletsPage() {
@@ -268,6 +270,20 @@ export default function AppletsPage() {
             correctPairs={(applet as MatchPairsApplet).content.correctPairs}
             leftColumnLabel={(applet as MatchPairsApplet).content.leftColumnLabel}
             rightColumnLabel={(applet as MatchPairsApplet).content.rightColumnLabel}
+            onComplete={handleComplete}
+          />
+        );
+      case "interactive-diagram":
+        return (
+          <InteractiveDiagram
+            key={applet.id}
+            question={applet.question}
+            hint={applet.hint}
+            elements={(applet as InteractiveDiagramApplet).content.elements}
+            correctIds={(applet as InteractiveDiagramApplet).content.correctIds}
+            selectCount={(applet as InteractiveDiagramApplet).content.selectCount}
+            viewBox={(applet as InteractiveDiagramApplet).content.viewBox}
+            diagramTitle={(applet as InteractiveDiagramApplet).content.diagramTitle}
             onComplete={handleComplete}
           />
         );
