@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer";
 
 // --- Code Blocks types ---
 
@@ -198,6 +198,27 @@ export interface CategorizationGridContent {
   };
 }
 
+// --- Fraction Visualizer types ---
+
+export type ShapeSectionSvg =
+  | { type: "rect"; x: number; y: number; width: number; height: number }
+  | { type: "path"; d: string }
+  | { type: "arc"; cx: number; cy: number; r: number; startAngle: number; endAngle: number };
+
+export interface ShapeSection {
+  id: string;
+  fractionValue: number;
+  svg: ShapeSectionSvg;
+}
+
+export interface FractionVisualizerContent {
+  shape: "rectangle" | "circle" | "triangle";
+  sections: ShapeSection[];
+  targetNumerator: number;
+  targetDenominator: number;
+  viewBox: { width: number; height: number };
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -272,7 +293,12 @@ export interface CategorizationGridApplet extends BaseApplet {
   content: CategorizationGridContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet;
+export interface FractionVisualizerApplet extends BaseApplet {
+  type: "fraction-visualizer";
+  content: FractionVisualizerContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

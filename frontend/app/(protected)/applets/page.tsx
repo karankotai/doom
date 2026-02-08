@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -15,6 +15,7 @@ import { Ordering } from "@/components/applets/ordering";
 import { ColorMixing } from "@/components/applets/color-mixing";
 import { MapSelect } from "@/components/applets/map-select";
 import { CategorizationGrid } from "@/components/applets/categorization-grid";
+import { FractionVisualizer } from "@/components/applets/fraction-visualizer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -31,6 +32,7 @@ const APPLET_TYPES: { type: AppletType; name: string; icon: string; description:
   { type: "color-mixing", name: "Color Mixing", icon: "🎨", description: "Mix colors to match a target — learn additive and subtractive color theory" },
   { type: "map-select", name: "Map Select", icon: "🗺️", description: "Select countries on a world map to answer geography and history questions" },
   { type: "categorization-grid", name: "Categorization Grid", icon: "📋", description: "Sort items into categories by dragging and dropping them into a grid" },
+  { type: "fraction-visualizer", name: "Fraction Visualizer", icon: "🟦", description: "Color sections of a shape to represent fractions visually" },
 ];
 
 export default function AppletsPage() {
@@ -217,6 +219,20 @@ export default function AppletsPage() {
             correctMapping={(applet as CategorizationGridApplet).content.correctMapping}
             layout={(applet as CategorizationGridApplet).content.layout}
             matrixAxes={(applet as CategorizationGridApplet).content.matrixAxes}
+            onComplete={handleComplete}
+          />
+        );
+      case "fraction-visualizer":
+        return (
+          <FractionVisualizer
+            key={applet.id}
+            question={applet.question}
+            hint={applet.hint}
+            shape={(applet as FractionVisualizerApplet).content.shape}
+            sections={(applet as FractionVisualizerApplet).content.sections}
+            targetNumerator={(applet as FractionVisualizerApplet).content.targetNumerator}
+            targetDenominator={(applet as FractionVisualizerApplet).content.targetDenominator}
+            viewBox={(applet as FractionVisualizerApplet).content.viewBox}
             onComplete={handleComplete}
           />
         );

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -16,6 +16,7 @@ import { Ordering } from "@/components/applets/ordering";
 import { ColorMixing } from "@/components/applets/color-mixing";
 import { MapSelect } from "@/components/applets/map-select";
 import { CategorizationGrid } from "@/components/applets/categorization-grid";
+import { FractionVisualizer } from "@/components/applets/fraction-visualizer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -182,7 +183,8 @@ export default function LessonPage() {
                currentPuzzle.type === "ordering" ? "📊" :
                currentPuzzle.type === "color-mixing" ? "🎨" :
                currentPuzzle.type === "map-select" ? "🗺️" :
-               currentPuzzle.type === "categorization-grid" ? "📋" : "🧩"}
+               currentPuzzle.type === "categorization-grid" ? "📋" :
+               currentPuzzle.type === "fraction-visualizer" ? "🟦" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
@@ -195,7 +197,8 @@ export default function LessonPage() {
                currentPuzzle.type === "ordering" ? "Ordering" :
                currentPuzzle.type === "color-mixing" ? "Color Mixing" :
                currentPuzzle.type === "map-select" ? "Map Select" :
-               currentPuzzle.type === "categorization-grid" ? "Categorization Grid" : "Code Blocks"}
+               currentPuzzle.type === "categorization-grid" ? "Categorization Grid" :
+               currentPuzzle.type === "fraction-visualizer" ? "Fraction Visualizer" : "Code Blocks"}
             </h1>
           </div>
 
@@ -308,6 +311,18 @@ export default function LessonPage() {
               correctMapping={(currentPuzzle as CategorizationGridApplet).content.correctMapping}
               layout={(currentPuzzle as CategorizationGridApplet).content.layout}
               matrixAxes={(currentPuzzle as CategorizationGridApplet).content.matrixAxes}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "fraction-visualizer" ? (
+            <FractionVisualizer
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              shape={(currentPuzzle as FractionVisualizerApplet).content.shape}
+              sections={(currentPuzzle as FractionVisualizerApplet).content.sections}
+              targetNumerator={(currentPuzzle as FractionVisualizerApplet).content.targetNumerator}
+              targetDenominator={(currentPuzzle as FractionVisualizerApplet).content.targetDenominator}
+              viewBox={(currentPuzzle as FractionVisualizerApplet).content.viewBox}
               onComplete={handlePuzzleComplete}
             />
           ) : (
