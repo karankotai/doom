@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -12,6 +12,7 @@ import { FillBlanks } from "@/components/applets/fill-blanks";
 import { VennDiagram } from "@/components/applets/venn-diagram";
 import { HighlightText } from "@/components/applets/highlight-text";
 import { ComparativeAdvantage } from "@/components/applets/comparative-advantage";
+import { Ordering } from "@/components/applets/ordering";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -174,7 +175,8 @@ export default function LessonPage() {
                currentPuzzle.type === "fill-blanks" ? "📝" :
                currentPuzzle.type === "venn-diagram" ? "⭕" :
                currentPuzzle.type === "highlight-text" ? "🖍️" :
-               currentPuzzle.type === "comparative-advantage" ? "⚖️" : "🧩"}
+               currentPuzzle.type === "comparative-advantage" ? "⚖️" :
+               currentPuzzle.type === "ordering" ? "📊" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
@@ -183,7 +185,8 @@ export default function LessonPage() {
                currentPuzzle.type === "fill-blanks" ? "Fill in the Blanks" :
                currentPuzzle.type === "venn-diagram" ? "Venn Diagram" :
                currentPuzzle.type === "highlight-text" ? "Highlight Text" :
-               currentPuzzle.type === "comparative-advantage" ? "Comparative Advantage" : "Code Blocks"}
+               currentPuzzle.type === "comparative-advantage" ? "Comparative Advantage" :
+               currentPuzzle.type === "ordering" ? "Ordering" : "Code Blocks"}
             </h1>
           </div>
 
@@ -252,6 +255,16 @@ export default function LessonPage() {
               parties={(currentPuzzle as ComparativeAdvantageApplet).content.parties}
               goods={(currentPuzzle as ComparativeAdvantageApplet).content.goods}
               steps={(currentPuzzle as ComparativeAdvantageApplet).content.steps}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "ordering" ? (
+            <Ordering
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              items={(currentPuzzle as OrderingApplet).content.items}
+              correctOrder={(currentPuzzle as OrderingApplet).content.correctOrder}
+              direction={(currentPuzzle as OrderingApplet).content.direction}
               onComplete={handlePuzzleComplete}
             />
           ) : (

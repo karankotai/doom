@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering";
 
 // --- Code Blocks types ---
 
@@ -124,6 +124,21 @@ export interface ComparativeAdvantageContent {
   steps: AdvantageStep[];
 }
 
+// --- Ordering types ---
+
+export interface OrderingItem {
+  id: string;
+  label: string;
+  emoji?: string;
+  subtitle?: string;
+}
+
+export interface OrderingContent {
+  items: OrderingItem[];
+  correctOrder: string[];
+  direction: "top-down" | "bottom-up";
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -178,7 +193,12 @@ export interface ComparativeAdvantageApplet extends BaseApplet {
   content: ComparativeAdvantageContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet;
+export interface OrderingApplet extends BaseApplet {
+  type: "ordering";
+  content: OrderingContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

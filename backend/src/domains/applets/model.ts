@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering";
 
 // Base applet structure from database
 export interface Applet {
@@ -142,6 +142,21 @@ export interface ComparativeAdvantageContent {
   steps: AdvantageStep[];
 }
 
+// --- Ordering specific types ---
+
+export interface OrderingItem {
+  id: string;
+  label: string;
+  emoji?: string;
+  subtitle?: string;
+}
+
+export interface OrderingContent {
+  items: OrderingItem[];
+  correctOrder: string[];
+  direction: "top-down" | "bottom-up";
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -184,7 +199,12 @@ export interface ComparativeAdvantageApplet extends Omit<Applet, "content"> {
   content: ComparativeAdvantageContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet;
+export interface OrderingApplet extends Omit<Applet, "content"> {
+  type: "ordering";
+  content: OrderingContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet;
 
 // --- Query params ---
 
