@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage";
 
 // --- Code Blocks types ---
 
@@ -100,6 +100,30 @@ export interface HighlightTextContent {
   correctHighlights: HighlightSpan[];
 }
 
+// --- Comparative Advantage types ---
+
+export interface AdvantageParty {
+  name: string;
+  emoji: string;
+  production: Record<string, number>;
+}
+
+export interface AdvantageStep {
+  instruction: string;
+  good: string;
+  questionType: "absolute" | "opportunity-cost" | "comparative";
+  partyIndex: number;
+  correctAnswer: number;
+  tolerance?: number;
+  explanation?: string;
+}
+
+export interface ComparativeAdvantageContent {
+  parties: [AdvantageParty, AdvantageParty];
+  goods: string[];
+  steps: AdvantageStep[];
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -149,7 +173,12 @@ export interface HighlightTextApplet extends BaseApplet {
   content: HighlightTextContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet;
+export interface ComparativeAdvantageApplet extends BaseApplet {
+  type: "comparative-advantage";
+  content: ComparativeAdvantageContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

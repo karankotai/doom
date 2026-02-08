@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage";
 
 // Base applet structure from database
 export interface Applet {
@@ -118,6 +118,30 @@ export interface HighlightTextContent {
   correctHighlights: HighlightSpan[];
 }
 
+// --- Comparative Advantage specific types ---
+
+export interface AdvantageParty {
+  name: string;
+  emoji: string;
+  production: Record<string, number>;
+}
+
+export interface AdvantageStep {
+  instruction: string;
+  good: string;
+  questionType: "absolute" | "opportunity-cost" | "comparative";
+  partyIndex: number;
+  correctAnswer: number;
+  tolerance?: number;
+  explanation?: string;
+}
+
+export interface ComparativeAdvantageContent {
+  parties: [AdvantageParty, AdvantageParty];
+  goods: string[];
+  steps: AdvantageStep[];
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -155,7 +179,12 @@ export interface HighlightTextApplet extends Omit<Applet, "content"> {
   content: HighlightTextContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet;
+export interface ComparativeAdvantageApplet extends Omit<Applet, "content"> {
+  type: "comparative-advantage";
+  content: ComparativeAdvantageContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet;
 
 // --- Query params ---
 

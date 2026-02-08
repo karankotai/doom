@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -10,6 +10,7 @@ import { Mcq } from "@/components/applets/mcq";
 import { FillBlanks } from "@/components/applets/fill-blanks";
 import { VennDiagram } from "@/components/applets/venn-diagram";
 import { HighlightText } from "@/components/applets/highlight-text";
+import { ComparativeAdvantage } from "@/components/applets/comparative-advantage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -21,6 +22,7 @@ const APPLET_TYPES: { type: AppletType; name: string; icon: string; description:
   { type: "highlight-text", name: "Highlight Text", icon: "🖍️", description: "Identify parts of speech by highlighting words" },
   { type: "slope-graph", name: "Slope Graph", icon: "📐", description: "Move points on a graph to learn about slopes" },
   { type: "chess", name: "Chess Tactics", icon: "♟️", description: "Find the best move in chess puzzles" },
+  { type: "comparative-advantage", name: "Comparative Advantage", icon: "⚖️", description: "Use sliders to explore absolute and comparative advantage" },
 ];
 
 export default function AppletsPage() {
@@ -143,6 +145,18 @@ export default function AppletsPage() {
             text={(applet as HighlightTextApplet).content.text}
             categories={(applet as HighlightTextApplet).content.categories}
             correctHighlights={(applet as HighlightTextApplet).content.correctHighlights}
+            onComplete={handleComplete}
+          />
+        );
+      case "comparative-advantage":
+        return (
+          <ComparativeAdvantage
+            key={applet.id}
+            question={applet.question}
+            hint={applet.hint}
+            parties={(applet as ComparativeAdvantageApplet).content.parties}
+            goods={(applet as ComparativeAdvantageApplet).content.goods}
+            steps={(applet as ComparativeAdvantageApplet).content.steps}
             onComplete={handleComplete}
           />
         );
