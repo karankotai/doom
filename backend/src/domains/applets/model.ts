@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing";
 
 // Base applet structure from database
 export interface Applet {
@@ -157,6 +157,22 @@ export interface OrderingContent {
   direction: "top-down" | "bottom-up";
 }
 
+// --- Color Mixing specific types ---
+
+export interface ColorBlock {
+  id: string;
+  label: string;
+  hex: string;
+}
+
+export interface ColorMixingContent {
+  targetHex: string;
+  targetLabel?: string;
+  colorBlocks: ColorBlock[];
+  correctBlockIds: string[];
+  mode: "additive" | "subtractive";
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -204,7 +220,12 @@ export interface OrderingApplet extends Omit<Applet, "content"> {
   content: OrderingContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet;
+export interface ColorMixingApplet extends Omit<Applet, "content"> {
+  type: "color-mixing";
+  content: ColorMixingContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet;
 
 // --- Query params ---
 

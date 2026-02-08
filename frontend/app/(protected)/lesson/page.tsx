@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -13,6 +13,7 @@ import { VennDiagram } from "@/components/applets/venn-diagram";
 import { HighlightText } from "@/components/applets/highlight-text";
 import { ComparativeAdvantage } from "@/components/applets/comparative-advantage";
 import { Ordering } from "@/components/applets/ordering";
+import { ColorMixing } from "@/components/applets/color-mixing";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -176,7 +177,8 @@ export default function LessonPage() {
                currentPuzzle.type === "venn-diagram" ? "⭕" :
                currentPuzzle.type === "highlight-text" ? "🖍️" :
                currentPuzzle.type === "comparative-advantage" ? "⚖️" :
-               currentPuzzle.type === "ordering" ? "📊" : "🧩"}
+               currentPuzzle.type === "ordering" ? "📊" :
+               currentPuzzle.type === "color-mixing" ? "🎨" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
@@ -186,7 +188,8 @@ export default function LessonPage() {
                currentPuzzle.type === "venn-diagram" ? "Venn Diagram" :
                currentPuzzle.type === "highlight-text" ? "Highlight Text" :
                currentPuzzle.type === "comparative-advantage" ? "Comparative Advantage" :
-               currentPuzzle.type === "ordering" ? "Ordering" : "Code Blocks"}
+               currentPuzzle.type === "ordering" ? "Ordering" :
+               currentPuzzle.type === "color-mixing" ? "Color Mixing" : "Code Blocks"}
             </h1>
           </div>
 
@@ -265,6 +268,18 @@ export default function LessonPage() {
               items={(currentPuzzle as OrderingApplet).content.items}
               correctOrder={(currentPuzzle as OrderingApplet).content.correctOrder}
               direction={(currentPuzzle as OrderingApplet).content.direction}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "color-mixing" ? (
+            <ColorMixing
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              targetHex={(currentPuzzle as ColorMixingApplet).content.targetHex}
+              targetLabel={(currentPuzzle as ColorMixingApplet).content.targetLabel}
+              colorBlocks={(currentPuzzle as ColorMixingApplet).content.colorBlocks}
+              correctBlockIds={(currentPuzzle as ColorMixingApplet).content.correctBlockIds}
+              mode={(currentPuzzle as ColorMixingApplet).content.mode}
               onComplete={handlePuzzleComplete}
             />
           ) : (

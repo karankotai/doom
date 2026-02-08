@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing";
 
 // --- Code Blocks types ---
 
@@ -139,6 +139,22 @@ export interface OrderingContent {
   direction: "top-down" | "bottom-up";
 }
 
+// --- Color Mixing types ---
+
+export interface ColorBlock {
+  id: string;
+  label: string;
+  hex: string;
+}
+
+export interface ColorMixingContent {
+  targetHex: string;
+  targetLabel?: string;
+  colorBlocks: ColorBlock[];
+  correctBlockIds: string[];
+  mode: "additive" | "subtractive";
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -198,7 +214,12 @@ export interface OrderingApplet extends BaseApplet {
   content: OrderingContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet;
+export interface ColorMixingApplet extends BaseApplet {
+  type: "color-mixing";
+  content: ColorMixingContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

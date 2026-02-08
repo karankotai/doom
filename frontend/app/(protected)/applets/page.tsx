@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -12,6 +12,7 @@ import { VennDiagram } from "@/components/applets/venn-diagram";
 import { HighlightText } from "@/components/applets/highlight-text";
 import { ComparativeAdvantage } from "@/components/applets/comparative-advantage";
 import { Ordering } from "@/components/applets/ordering";
+import { ColorMixing } from "@/components/applets/color-mixing";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -25,6 +26,7 @@ const APPLET_TYPES: { type: AppletType; name: string; icon: string; description:
   { type: "chess", name: "Chess Tactics", icon: "♟️", description: "Find the best move in chess puzzles" },
   { type: "comparative-advantage", name: "Comparative Advantage", icon: "⚖️", description: "Use sliders to explore absolute and comparative advantage" },
   { type: "ordering", name: "Ordering", icon: "📊", description: "Drag and drop items into the correct hierarchical order" },
+  { type: "color-mixing", name: "Color Mixing", icon: "🎨", description: "Mix colors to match a target — learn additive and subtractive color theory" },
 ];
 
 export default function AppletsPage() {
@@ -171,6 +173,20 @@ export default function AppletsPage() {
             items={(applet as OrderingApplet).content.items}
             correctOrder={(applet as OrderingApplet).content.correctOrder}
             direction={(applet as OrderingApplet).content.direction}
+            onComplete={handleComplete}
+          />
+        );
+      case "color-mixing":
+        return (
+          <ColorMixing
+            key={applet.id}
+            question={applet.question}
+            hint={applet.hint}
+            targetHex={(applet as ColorMixingApplet).content.targetHex}
+            targetLabel={(applet as ColorMixingApplet).content.targetLabel}
+            colorBlocks={(applet as ColorMixingApplet).content.colorBlocks}
+            correctBlockIds={(applet as ColorMixingApplet).content.correctBlockIds}
+            mode={(applet as ColorMixingApplet).content.mode}
             onComplete={handleComplete}
           />
         );
