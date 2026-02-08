@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid";
 
 // --- Code Blocks types ---
 
@@ -173,6 +173,31 @@ export interface MapSelectContent {
   };
 }
 
+// --- Categorization Grid types ---
+
+export interface CategoryItem {
+  id: string;
+  text: string;
+  emoji?: string;
+}
+
+export interface GridCategory {
+  id: string;
+  label: string;
+  emoji?: string;
+}
+
+export interface CategorizationGridContent {
+  categories: GridCategory[];
+  items: CategoryItem[];
+  correctMapping: Record<string, string>; // itemId -> categoryId
+  layout: "columns" | "matrix";
+  matrixAxes?: {
+    rowLabel: string;
+    colLabel: string;
+  };
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -242,7 +267,12 @@ export interface MapSelectApplet extends BaseApplet {
   content: MapSelectContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet;
+export interface CategorizationGridApplet extends BaseApplet {
+  type: "categorization-grid";
+  content: CategorizationGridContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

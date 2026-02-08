@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -15,6 +15,7 @@ import { ComparativeAdvantage } from "@/components/applets/comparative-advantage
 import { Ordering } from "@/components/applets/ordering";
 import { ColorMixing } from "@/components/applets/color-mixing";
 import { MapSelect } from "@/components/applets/map-select";
+import { CategorizationGrid } from "@/components/applets/categorization-grid";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -180,7 +181,8 @@ export default function LessonPage() {
                currentPuzzle.type === "comparative-advantage" ? "⚖️" :
                currentPuzzle.type === "ordering" ? "📊" :
                currentPuzzle.type === "color-mixing" ? "🎨" :
-               currentPuzzle.type === "map-select" ? "🗺️" : "🧩"}
+               currentPuzzle.type === "map-select" ? "🗺️" :
+               currentPuzzle.type === "categorization-grid" ? "📋" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
@@ -192,7 +194,8 @@ export default function LessonPage() {
                currentPuzzle.type === "comparative-advantage" ? "Comparative Advantage" :
                currentPuzzle.type === "ordering" ? "Ordering" :
                currentPuzzle.type === "color-mixing" ? "Color Mixing" :
-               currentPuzzle.type === "map-select" ? "Map Select" : "Code Blocks"}
+               currentPuzzle.type === "map-select" ? "Map Select" :
+               currentPuzzle.type === "categorization-grid" ? "Categorization Grid" : "Code Blocks"}
             </h1>
           </div>
 
@@ -293,6 +296,18 @@ export default function LessonPage() {
               regions={(currentPuzzle as MapSelectApplet).content.regions}
               correctRegionIds={(currentPuzzle as MapSelectApplet).content.correctRegionIds}
               mapView={(currentPuzzle as MapSelectApplet).content.mapView}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "categorization-grid" ? (
+            <CategorizationGrid
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              categories={(currentPuzzle as CategorizationGridApplet).content.categories}
+              items={(currentPuzzle as CategorizationGridApplet).content.items}
+              correctMapping={(currentPuzzle as CategorizationGridApplet).content.correctMapping}
+              layout={(currentPuzzle as CategorizationGridApplet).content.layout}
+              matrixAxes={(currentPuzzle as CategorizationGridApplet).content.matrixAxes}
               onComplete={handlePuzzleComplete}
             />
           ) : (

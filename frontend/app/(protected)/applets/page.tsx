@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -14,6 +14,7 @@ import { ComparativeAdvantage } from "@/components/applets/comparative-advantage
 import { Ordering } from "@/components/applets/ordering";
 import { ColorMixing } from "@/components/applets/color-mixing";
 import { MapSelect } from "@/components/applets/map-select";
+import { CategorizationGrid } from "@/components/applets/categorization-grid";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -29,6 +30,7 @@ const APPLET_TYPES: { type: AppletType; name: string; icon: string; description:
   { type: "ordering", name: "Ordering", icon: "📊", description: "Drag and drop items into the correct hierarchical order" },
   { type: "color-mixing", name: "Color Mixing", icon: "🎨", description: "Mix colors to match a target — learn additive and subtractive color theory" },
   { type: "map-select", name: "Map Select", icon: "🗺️", description: "Select countries on a world map to answer geography and history questions" },
+  { type: "categorization-grid", name: "Categorization Grid", icon: "📋", description: "Sort items into categories by dragging and dropping them into a grid" },
 ];
 
 export default function AppletsPage() {
@@ -201,6 +203,20 @@ export default function AppletsPage() {
             regions={(applet as MapSelectApplet).content.regions}
             correctRegionIds={(applet as MapSelectApplet).content.correctRegionIds}
             mapView={(applet as MapSelectApplet).content.mapView}
+            onComplete={handleComplete}
+          />
+        );
+      case "categorization-grid":
+        return (
+          <CategorizationGrid
+            key={applet.id}
+            question={applet.question}
+            hint={applet.hint}
+            categories={(applet as CategorizationGridApplet).content.categories}
+            items={(applet as CategorizationGridApplet).content.items}
+            correctMapping={(applet as CategorizationGridApplet).content.correctMapping}
+            layout={(applet as CategorizationGridApplet).content.layout}
+            matrixAxes={(applet as CategorizationGridApplet).content.matrixAxes}
             onComplete={handleComplete}
           />
         );

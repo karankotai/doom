@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid";
 
 // Base applet structure from database
 export interface Applet {
@@ -191,6 +191,31 @@ export interface MapSelectContent {
   };
 }
 
+// --- Categorization Grid specific types ---
+
+export interface CategoryItem {
+  id: string;
+  text: string;
+  emoji?: string;
+}
+
+export interface GridCategory {
+  id: string;
+  label: string;
+  emoji?: string;
+}
+
+export interface CategorizationGridContent {
+  categories: GridCategory[];
+  items: CategoryItem[];
+  correctMapping: Record<string, string>;
+  layout: "columns" | "matrix";
+  matrixAxes?: {
+    rowLabel: string;
+    colLabel: string;
+  };
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -248,7 +273,12 @@ export interface MapSelectApplet extends Omit<Applet, "content"> {
   content: MapSelectContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet;
+export interface CategorizationGridApplet extends Omit<Applet, "content"> {
+  type: "categorization-grid";
+  content: CategorizationGridContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet;
 
 // --- Query params ---
 
