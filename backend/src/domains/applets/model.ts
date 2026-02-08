@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs";
 
 // Base applet structure from database
 export interface Applet {
@@ -258,6 +258,21 @@ export interface ChartReadingContent {
   unit?: string;
 }
 
+// --- Match Pairs specific types ---
+
+export interface MatchItem {
+  id: string;
+  text: string;
+}
+
+export interface MatchPairsContent {
+  leftItems: MatchItem[];
+  rightItems: MatchItem[];
+  correctPairs: Record<string, string>;
+  leftColumnLabel?: string;
+  rightColumnLabel?: string;
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -330,7 +345,12 @@ export interface ChartReadingApplet extends Omit<Applet, "content"> {
   content: ChartReadingContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet;
+export interface MatchPairsApplet extends Omit<Applet, "content"> {
+  type: "match-pairs";
+  content: MatchPairsContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet;
 
 // --- Query params ---
 

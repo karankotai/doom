@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs";
 
 // --- Code Blocks types ---
 
@@ -240,6 +240,21 @@ export interface ChartReadingContent {
   unit?: string;
 }
 
+// --- Match Pairs types ---
+
+export interface MatchItem {
+  id: string;
+  text: string;
+}
+
+export interface MatchPairsContent {
+  leftItems: MatchItem[];
+  rightItems: MatchItem[];
+  correctPairs: Record<string, string>;
+  leftColumnLabel?: string;
+  rightColumnLabel?: string;
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -324,7 +339,12 @@ export interface ChartReadingApplet extends BaseApplet {
   content: ChartReadingContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet;
+export interface MatchPairsApplet extends BaseApplet {
+  type: "match-pairs";
+  content: MatchPairsContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 
