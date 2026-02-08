@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -13,6 +13,7 @@ import { HighlightText } from "@/components/applets/highlight-text";
 import { ComparativeAdvantage } from "@/components/applets/comparative-advantage";
 import { Ordering } from "@/components/applets/ordering";
 import { ColorMixing } from "@/components/applets/color-mixing";
+import { MapSelect } from "@/components/applets/map-select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -27,6 +28,7 @@ const APPLET_TYPES: { type: AppletType; name: string; icon: string; description:
   { type: "comparative-advantage", name: "Comparative Advantage", icon: "⚖️", description: "Use sliders to explore absolute and comparative advantage" },
   { type: "ordering", name: "Ordering", icon: "📊", description: "Drag and drop items into the correct hierarchical order" },
   { type: "color-mixing", name: "Color Mixing", icon: "🎨", description: "Mix colors to match a target — learn additive and subtractive color theory" },
+  { type: "map-select", name: "Map Select", icon: "🗺️", description: "Select countries on a world map to answer geography and history questions" },
 ];
 
 export default function AppletsPage() {
@@ -187,6 +189,18 @@ export default function AppletsPage() {
             colorBlocks={(applet as ColorMixingApplet).content.colorBlocks}
             correctBlockIds={(applet as ColorMixingApplet).content.correctBlockIds}
             mode={(applet as ColorMixingApplet).content.mode}
+            onComplete={handleComplete}
+          />
+        );
+      case "map-select":
+        return (
+          <MapSelect
+            key={applet.id}
+            question={applet.question}
+            hint={applet.hint}
+            regions={(applet as MapSelectApplet).content.regions}
+            correctRegionIds={(applet as MapSelectApplet).content.correctRegionIds}
+            mapView={(applet as MapSelectApplet).content.mapView}
             onComplete={handleComplete}
           />
         );

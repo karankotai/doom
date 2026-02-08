@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select";
 
 // --- Code Blocks types ---
 
@@ -155,6 +155,24 @@ export interface ColorMixingContent {
   mode: "additive" | "subtractive";
 }
 
+// --- Map Select types ---
+
+export interface MapRegion {
+  id: string;
+  label?: string;
+}
+
+export interface MapSelectContent {
+  regions: MapRegion[];
+  correctRegionIds: string[];
+  mapView?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -219,7 +237,12 @@ export interface ColorMixingApplet extends BaseApplet {
   content: ColorMixingContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet;
+export interface MapSelectApplet extends BaseApplet {
+  type: "map-select";
+  content: MapSelectContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

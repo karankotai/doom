@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select";
 
 // Base applet structure from database
 export interface Applet {
@@ -173,6 +173,24 @@ export interface ColorMixingContent {
   mode: "additive" | "subtractive";
 }
 
+// --- Map Select specific types ---
+
+export interface MapRegion {
+  id: string;
+  label?: string;
+}
+
+export interface MapSelectContent {
+  regions: MapRegion[];
+  correctRegionIds: string[];
+  mapView?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -225,7 +243,12 @@ export interface ColorMixingApplet extends Omit<Applet, "content"> {
   content: ColorMixingContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet;
+export interface MapSelectApplet extends Omit<Applet, "content"> {
+  type: "map-select";
+  content: MapSelectContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet;
 
 // --- Query params ---
 
