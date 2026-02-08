@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading";
 
 // --- Code Blocks types ---
 
@@ -219,6 +219,27 @@ export interface FractionVisualizerContent {
   viewBox: { width: number; height: number };
 }
 
+// --- Chart Reading types ---
+
+export interface ChartDataPoint {
+  id: string;
+  label: string;
+  value: number;
+  value2?: number;
+  color?: string;
+}
+
+export interface ChartReadingContent {
+  chartType: "bar" | "pie" | "line" | "scatter" | "histogram";
+  chartTitle: string;
+  data: ChartDataPoint[];
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  selectCount: number;
+  correctIds: string[];
+  unit?: string;
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -298,7 +319,12 @@ export interface FractionVisualizerApplet extends BaseApplet {
   content: FractionVisualizerContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet;
+export interface ChartReadingApplet extends BaseApplet {
+  type: "chart-reading";
+  content: ChartReadingContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading";
 
 // Base applet structure from database
 export interface Applet {
@@ -237,6 +237,27 @@ export interface FractionVisualizerContent {
   viewBox: { width: number; height: number };
 }
 
+// --- Chart Reading specific types ---
+
+export interface ChartDataPoint {
+  id: string;
+  label: string;
+  value: number;
+  value2?: number;
+  color?: string;
+}
+
+export interface ChartReadingContent {
+  chartType: "bar" | "pie" | "line" | "scatter" | "histogram";
+  chartTitle: string;
+  data: ChartDataPoint[];
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  selectCount: number;
+  correctIds: string[];
+  unit?: string;
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -304,7 +325,12 @@ export interface FractionVisualizerApplet extends Omit<Applet, "content"> {
   content: FractionVisualizerContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet;
+export interface ChartReadingApplet extends Omit<Applet, "content"> {
+  type: "chart-reading";
+  content: ChartReadingContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet;
 
 // --- Query params ---
 

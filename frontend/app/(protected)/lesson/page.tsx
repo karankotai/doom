@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -17,6 +17,7 @@ import { ColorMixing } from "@/components/applets/color-mixing";
 import { MapSelect } from "@/components/applets/map-select";
 import { CategorizationGrid } from "@/components/applets/categorization-grid";
 import { FractionVisualizer } from "@/components/applets/fraction-visualizer";
+import { ChartReading } from "@/components/applets/chart-reading";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -184,7 +185,8 @@ export default function LessonPage() {
                currentPuzzle.type === "color-mixing" ? "🎨" :
                currentPuzzle.type === "map-select" ? "🗺️" :
                currentPuzzle.type === "categorization-grid" ? "📋" :
-               currentPuzzle.type === "fraction-visualizer" ? "🟦" : "🧩"}
+               currentPuzzle.type === "fraction-visualizer" ? "🟦" :
+               currentPuzzle.type === "chart-reading" ? "📊" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
@@ -198,7 +200,8 @@ export default function LessonPage() {
                currentPuzzle.type === "color-mixing" ? "Color Mixing" :
                currentPuzzle.type === "map-select" ? "Map Select" :
                currentPuzzle.type === "categorization-grid" ? "Categorization Grid" :
-               currentPuzzle.type === "fraction-visualizer" ? "Fraction Visualizer" : "Code Blocks"}
+               currentPuzzle.type === "fraction-visualizer" ? "Fraction Visualizer" :
+               currentPuzzle.type === "chart-reading" ? "Chart Reading" : "Code Blocks"}
             </h1>
           </div>
 
@@ -323,6 +326,21 @@ export default function LessonPage() {
               targetNumerator={(currentPuzzle as FractionVisualizerApplet).content.targetNumerator}
               targetDenominator={(currentPuzzle as FractionVisualizerApplet).content.targetDenominator}
               viewBox={(currentPuzzle as FractionVisualizerApplet).content.viewBox}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "chart-reading" ? (
+            <ChartReading
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              chartType={(currentPuzzle as ChartReadingApplet).content.chartType}
+              chartTitle={(currentPuzzle as ChartReadingApplet).content.chartTitle}
+              data={(currentPuzzle as ChartReadingApplet).content.data}
+              xAxisLabel={(currentPuzzle as ChartReadingApplet).content.xAxisLabel}
+              yAxisLabel={(currentPuzzle as ChartReadingApplet).content.yAxisLabel}
+              selectCount={(currentPuzzle as ChartReadingApplet).content.selectCount}
+              correctIds={(currentPuzzle as ChartReadingApplet).content.correctIds}
+              unit={(currentPuzzle as ChartReadingApplet).content.unit}
               onComplete={handlePuzzleComplete}
             />
           ) : (
