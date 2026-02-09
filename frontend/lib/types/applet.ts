@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram" | "thought-tree";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram" | "thought-tree" | "circuit-builder";
 
 // --- Code Blocks types ---
 
@@ -294,6 +294,30 @@ export interface ThoughtTreeContent {
   finalAnswer: string;
 }
 
+// --- Circuit Builder types ---
+
+export interface CircuitNode {
+  id: string;
+  type: "battery" | "bulb" | "switch" | "ammeter" | "voltmeter" | "resistor" | "junction";
+  x: number;
+  y: number;
+  label?: string;
+  value?: number;
+}
+
+export interface CircuitWire {
+  id: string;
+  from: string;
+  to: string;
+  waypoints?: { x: number; y: number }[];
+}
+
+export interface CircuitBuilderContent {
+  nodes: CircuitNode[];
+  wires: CircuitWire[];
+  correctSwitchStates: Record<string, boolean>;
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -393,7 +417,12 @@ export interface ThoughtTreeApplet extends BaseApplet {
   content: ThoughtTreeContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet | ThoughtTreeApplet;
+export interface CircuitBuilderApplet extends BaseApplet {
+  type: "circuit-builder";
+  content: CircuitBuilderContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet | ThoughtTreeApplet | CircuitBuilderApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

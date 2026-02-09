@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/context/auth-context";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet, ThoughtTreeApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet, ThoughtTreeApplet, CircuitBuilderApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -22,6 +22,7 @@ import { ChartReading } from "@/components/applets/chart-reading";
 import { MatchPairs } from "@/components/applets/match-pairs";
 import { InteractiveDiagram } from "@/components/applets/interactive-diagram";
 import { ThoughtTree } from "@/components/applets/thought-tree";
+import { CircuitBuilder } from "@/components/applets/circuit-builder";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -196,7 +197,8 @@ export default function LessonPage() {
                currentPuzzle.type === "chart-reading" ? "📊" :
                currentPuzzle.type === "match-pairs" ? "🔗" :
                currentPuzzle.type === "interactive-diagram" ? "🔬" :
-               currentPuzzle.type === "thought-tree" ? "🌳" : "🧩"}
+               currentPuzzle.type === "thought-tree" ? "🌳" :
+               currentPuzzle.type === "circuit-builder" ? "⚡" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
@@ -214,7 +216,8 @@ export default function LessonPage() {
                currentPuzzle.type === "chart-reading" ? "Chart Reading" :
                currentPuzzle.type === "match-pairs" ? "Match Pairs" :
                currentPuzzle.type === "interactive-diagram" ? "Interactive Diagram" :
-               currentPuzzle.type === "thought-tree" ? "Thought Tree" : "Code Blocks"}
+               currentPuzzle.type === "thought-tree" ? "Thought Tree" :
+               currentPuzzle.type === "circuit-builder" ? "Circuit Builder" : "Code Blocks"}
             </h1>
           </div>
 
@@ -387,6 +390,16 @@ export default function LessonPage() {
               hint={currentPuzzle.hint}
               nodes={(currentPuzzle as ThoughtTreeApplet).content.nodes}
               finalAnswer={(currentPuzzle as ThoughtTreeApplet).content.finalAnswer}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "circuit-builder" ? (
+            <CircuitBuilder
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              nodes={(currentPuzzle as CircuitBuilderApplet).content.nodes}
+              wires={(currentPuzzle as CircuitBuilderApplet).content.wires}
+              correctSwitchStates={(currentPuzzle as CircuitBuilderApplet).content.correctSwitchStates}
               onComplete={handlePuzzleComplete}
             />
           ) : (
