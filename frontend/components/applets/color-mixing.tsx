@@ -505,7 +505,7 @@ export function ColorMixing({
                 onClick={() => addToZone(block.id)}
                 className={cn(
                   "flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 border-border bg-card",
-                  "shadow-duo cursor-grab active:cursor-grabbing active:translate-y-1 active:shadow-none",
+                  "shadow-cosmos cursor-grab active:cursor-grabbing active:translate-y-1 active:shadow-none",
                   "transition-all duration-150 select-none",
                   "hover:brightness-105 hover:border-accent/50",
                   isComplete && "pointer-events-none opacity-50"

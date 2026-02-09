@@ -308,7 +308,7 @@ export function VennDiagram({
             onMouseLeave={() => setHoveredRegion(null)}
           >
             {/* Background */}
-            <rect x="0" y="0" width={width} height={height} fill="#131829" />
+            <rect x="0" y="0" width={width} height={height} fill="#F2EFF8" />
 
             {/* Render colored points for regions */}
             {regionPaths.map((p, i) => {

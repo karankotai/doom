@@ -33,9 +33,9 @@ export default function HomePage() {
     <main className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
       {/* Decorative nebula blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary/15 blur-3xl animate-nebula-drift" />
-        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-accent/15 blur-3xl animate-nebula-drift" style={{ animationDelay: "-7s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-secondary/10 blur-3xl animate-nebula-drift" style={{ animationDelay: "-13s" }} />
+        <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-nebula-drift" />
+        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-accent/20 blur-3xl animate-nebula-drift" style={{ animationDelay: "-7s" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-secondary/15 blur-3xl animate-nebula-drift" style={{ animationDelay: "-13s" }} />
       </div>
 
       <div className="relative max-w-2xl text-center space-y-10">

@@ -4,27 +4,27 @@
 
 @layer base {
   :root {
-    /* Space / Cosmos color palette */
-    --background: 228 35% 7%; /* Deep Space Navy #0B0E17 */
-    --foreground: 248 18% 92%; /* Star White #E8E6F0 */
+    /* Light Space / Cosmos color palette */
+    --background: 250 25% 96%; /* Cosmic Mist #F2EFF8 */
+    --foreground: 233 28% 15%; /* Deep Space Ink #1C1E30 */
 
-    --card: 228 33% 12%; /* Cosmic Panel #131829 */
-    --card-foreground: 248 18% 92%;
+    --card: 0 0% 100%; /* Starlight White */
+    --card-foreground: 233 28% 15%;
 
-    --popover: 228 33% 12%;
-    --popover-foreground: 248 18% 92%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 233 28% 15%;
 
     /* Nebula Blue - Primary #6C63FF */
     --primary: 245 100% 69%;
     --primary-foreground: 0 0% 100%;
 
-    /* Electric Cyan #00E5FF */
-    --secondary: 186 100% 50%;
-    --secondary-foreground: 228 35% 7%;
+    /* Electric Cyan #00C2D4 (slightly deeper for light bg legibility) */
+    --secondary: 186 100% 42%;
+    --secondary-foreground: 0 0% 100%;
 
-    /* Space Dust #1E2235 */
-    --muted: 228 29% 16%;
-    --muted-foreground: 233 10% 59%; /* Faded Starlight #8B8DA3 */
+    /* Soft Lavender Mist #EDEAF5 */
+    --muted: 248 25% 94%;
+    --muted-foreground: 239 10% 46%; /* Meteor Gray #6B6D87 */
 
     /* Cosmic Magenta #FF6AC1 */
     --accent: 326 100% 71%;
@@ -36,14 +36,14 @@
 
     /* Star Gold #FFD700 */
     --warning: 51 100% 50%;
-    --warning-foreground: 228 35% 7%;
+    --warning-foreground: 233 28% 15%;
 
     /* Aurora Purple #B388FF */
     --purple: 262 100% 77%;
     --purple-foreground: 0 0% 100%;
 
-    --border: 229 24% 22%; /* Void Edge #2A2F45 */
-    --input: 229 24% 22%;
+    --border: 250 18% 87%; /* Stardust Edge #D6D2E4 */
+    --input: 250 18% 87%;
     --ring: 245 100% 69%; /* Nebula Blue */
 
     --radius: 1rem;
@@ -82,10 +82,10 @@
 
   /* Cyan variant 3D button */
   .btn-3d-blue {
-    box-shadow: 0 4px 0 0 hsl(186 100% 38%);
+    box-shadow: 0 4px 0 0 hsl(186 100% 32%);
   }
   .btn-3d-blue:active {
-    box-shadow: 0 0 0 0 hsl(186 100% 38%);
+    box-shadow: 0 0 0 0 hsl(186 100% 32%);
   }
 
   /* Cosmos-style progress bar */
@@ -99,18 +99,18 @@
   /* Cosmos-style card with subtle glow */
   .card-cosmos {
     @apply rounded-2xl border-2 border-border bg-card p-6;
-    box-shadow: 0 2px 8px rgba(108, 99, 255, 0.06);
+    box-shadow: 0 2px 12px rgba(108, 99, 255, 0.08);
   }
 
   /* Glow utility classes */
   .glow-nebula {
-    box-shadow: 0 0 20px rgba(108, 99, 255, 0.3), 0 0 60px rgba(108, 99, 255, 0.1);
+    box-shadow: 0 0 20px rgba(108, 99, 255, 0.2), 0 0 60px rgba(108, 99, 255, 0.08);
   }
 
   /* Gradient text utilities */
   .text-gradient-cosmos {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #6C63FF, #00E5FF);
+    background-image: linear-gradient(135deg, #6C63FF, #00C2D4);
   }
 
   .text-gradient-aurora {

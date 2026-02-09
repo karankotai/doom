@@ -284,7 +284,7 @@ export function SlopeGraph({
                   cx={toSvgX(xi)}
                   cy={toSvgY(yi)}
                   r={1.5}
-                  className="fill-cosmos-void"
+                  className="fill-cosmos-edge"
                 />
               ))
             )}
@@ -435,7 +435,7 @@ export function SlopeGraph({
                 cx={toSvgX(startPoint.x)}
                 cy={toSvgY(startPoint.y)}
                 r={6}
-                className="fill-cosmos-void"
+                className="fill-cosmos-edge"
                 opacity={0.5}
               />
             )}
@@ -456,7 +456,7 @@ export function SlopeGraph({
               cx={toSvgX(currentPoint.x)}
               cy={toSvgY(currentPoint.y)}
               r={isDragging ? 14 : 10}
-              fill="#131829"
+              fill="white"
               className="transition-all duration-150"
             />
 

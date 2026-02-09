@@ -348,7 +348,7 @@ export function CategorizationGrid({
         onTouchStart={(e) => handleTouchStart(e, item.id)}
         className={cn(
           "inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-sm font-semibold transition-all select-none",
-          "bg-card shadow-duo",
+          "bg-card shadow-cosmos",
           !isComplete && "cursor-grab active:cursor-grabbing",
           isDragging && "opacity-40 scale-95",
           validation === "correct" && "border-primary bg-primary/10 text-primary",

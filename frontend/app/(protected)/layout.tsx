@@ -14,7 +14,7 @@ export default function ProtectedLayout({
     <AuthGuard>
       <div className="min-h-screen bg-muted/30">
         {/* Header - Duolingo style */}
-        <header className="sticky top-0 z-50 w-full border-b-2 border-border backdrop-blur-xl bg-card/80">
+        <header className="sticky top-0 z-50 w-full border-b-2 border-border backdrop-blur-xl bg-background/80">
           <div className="container flex h-16 items-center justify-between">
             {/* Logo */}
             <Link href="/dashboard">

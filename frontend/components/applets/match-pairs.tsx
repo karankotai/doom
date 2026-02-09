@@ -415,7 +415,7 @@ export function MatchPairs({
                     onMouseLeave={() => setHoveredLeft(null)}
                     className={cn(
                       "flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all select-none",
-                      "bg-card shadow-duo",
+                      "bg-card shadow-cosmos",
                       !isComplete && "cursor-pointer",
                       isActive && "border-accent ring-2 ring-accent/30 bg-accent/5",
                       isPaired && !isActive && !validation && "border-accent/50",
@@ -465,7 +465,7 @@ export function MatchPairs({
                     onMouseLeave={() => setHoveredRight(null)}
                     className={cn(
                       "flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all select-none",
-                      "bg-card shadow-duo",
+                      "bg-card shadow-cosmos",
                       !isComplete && "cursor-pointer",
                       isActive && "border-accent ring-2 ring-accent/30 bg-accent/5",
                       isPaired && !isActive && !validation && "border-accent/50",

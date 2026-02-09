@@ -66,23 +66,23 @@ const config: Config = {
           DEFAULT: "hsl(var(--purple))",
           foreground: "hsl(var(--purple-foreground))",
         },
-        /* Space / Cosmos direct colors */
+        /* Space / Cosmos direct colors (light mode) */
         cosmos: {
           nebula: "#6C63FF",
           "nebula-dark": "#5A52E0",
           "nebula-light": "#8B85FF",
-          cyan: "#00E5FF",
-          "cyan-dark": "#00B8D4",
+          cyan: "#00C2D4",
+          "cyan-dark": "#00A3B3",
           magenta: "#FF6AC1",
           gold: "#FFD700",
           red: "#FF3B5C",
           purple: "#B388FF",
-          panel: "#131829",
-          dust: "#1E2235",
-          void: "#2A2F45",
-          star: "#E8E6F0",
-          "star-faded": "#8B8DA3",
-          deep: "#0B0E17",
+          mist: "#F2EFF8",
+          cloud: "#EDEAF5",
+          edge: "#D6D2E4",
+          ink: "#1C1E30",
+          "ink-faded": "#6B6D87",
+          white: "#FFFFFF",
         },
       },
       borderRadius: {
@@ -98,7 +98,7 @@ const config: Config = {
         "cosmos-primary": "0 4px 0 0 #5A52E0",
         "cosmos-accent": "0 4px 0 0 #D94FA0",
         "cosmos-destructive": "0 4px 0 0 #CC2F4A",
-        "cosmos-secondary": "0 4px 0 0 #2A2F45",
+        "cosmos-secondary": "0 4px 0 0 #C5C1D4",
         /* Glow shadows */
         "glow-sm": "0 0 10px rgba(108, 99, 255, 0.2)",
         "glow-md": "0 0 20px rgba(108, 99, 255, 0.3)",
@@ -143,8 +143,8 @@ const config: Config = {
           "100%": { transform: "translate(0, 0) scale(1)" },
         },
         "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(108, 99, 255, 0.3)" },
-          "50%": { boxShadow: "0 0 40px rgba(108, 99, 255, 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(108, 99, 255, 0.15)" },
+          "50%": { boxShadow: "0 0 40px rgba(108, 99, 255, 0.3)" },
         },
       },
       animation: {
