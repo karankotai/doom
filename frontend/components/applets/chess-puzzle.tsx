@@ -368,7 +368,7 @@ export function ChessPuzzle({
         {/* Chess board */}
         <div className="relative aspect-square w-full max-w-md mx-auto">
           {/* Board border */}
-          <div className="absolute inset-0 rounded-2xl bg-amber-900 p-1.5 sm:p-2 shadow-duo">
+          <div className="absolute inset-0 rounded-2xl bg-amber-900 p-1.5 sm:p-2 shadow-cosmos">
             {/* File labels (a-h) */}
             <div className="absolute -bottom-6 left-0 right-0 flex justify-around px-2 text-xs font-bold text-muted-foreground">
               {["a", "b", "c", "d", "e", "f", "g", "h"].map((file) => (

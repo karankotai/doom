@@ -309,7 +309,7 @@ export function Ordering({
                 onTouchStart={(e) => handleTouchStart(e, index)}
                 className={cn(
                   "flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-150 select-none",
-                  "bg-card shadow-duo",
+                  "bg-card shadow-cosmos",
                   !isComplete && "cursor-grab active:cursor-grabbing",
                   isDragging && "opacity-40 scale-95",
                   isDragOver && !isDragging && "border-accent bg-accent/10 scale-[1.02]",

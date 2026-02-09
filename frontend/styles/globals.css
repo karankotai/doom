@@ -4,86 +4,49 @@
 
 @layer base {
   :root {
-    /* Duolingo-inspired color palette */
-    --background: 0 0% 100%; /* Clean white */
-    --foreground: 200 9% 28%; /* Eel - #4B4B4B */
+    /* Space / Cosmos color palette */
+    --background: 228 35% 7%; /* Deep Space Navy #0B0E17 */
+    --foreground: 248 18% 92%; /* Star White #E8E6F0 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 200 9% 28%;
+    --card: 228 33% 12%; /* Cosmic Panel #131829 */
+    --card-foreground: 248 18% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 200 9% 28%;
+    --popover: 228 33% 12%;
+    --popover-foreground: 248 18% 92%;
 
-    /* Feather Green - Primary Duolingo green #58CC02 */
-    --primary: 94 98% 40%;
+    /* Nebula Blue - Primary #6C63FF */
+    --primary: 245 100% 69%;
     --primary-foreground: 0 0% 100%;
 
-    /* Mask Green - Lighter green #89E219 */
-    --secondary: 82 82% 49%;
-    --secondary-foreground: 0 0% 100%;
+    /* Electric Cyan #00E5FF */
+    --secondary: 186 100% 50%;
+    --secondary-foreground: 228 35% 7%;
 
-    /* Light gray for muted elements */
-    --muted: 0 0% 94%; /* Gallery #F0F0F0 */
-    --muted-foreground: 0 0% 44%; /* Dove Gray #6F6F6F */
+    /* Space Dust #1E2235 */
+    --muted: 228 29% 16%;
+    --muted-foreground: 233 10% 59%; /* Faded Starlight #8B8DA3 */
 
-    /* Dodger Blue - Duolingo's accent blue #1CB0F6 */
-    --accent: 197 92% 54%;
+    /* Cosmic Magenta #FF6AC1 */
+    --accent: 326 100% 71%;
     --accent-foreground: 0 0% 100%;
 
-    /* Fire Red #FF4B4B */
-    --destructive: 0 100% 65%;
+    /* Supernova Red #FF3B5C */
+    --destructive: 350 100% 62%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Sun Yellow #FFC800 for XP/achievements */
-    --warning: 47 100% 50%;
-    --warning-foreground: 200 9% 28%;
+    /* Star Gold #FFD700 */
+    --warning: 51 100% 50%;
+    --warning-foreground: 228 35% 7%;
 
-    /* Purple for streaks/special #CE82FF */
-    --purple: 276 100% 75%;
+    /* Aurora Purple #B388FF */
+    --purple: 262 100% 77%;
     --purple-foreground: 0 0% 100%;
 
-    --border: 0 0% 81%; /* Alto #CFCFCF */
-    --input: 0 0% 81%;
-    --ring: 94 98% 40%; /* Feather Green */
+    --border: 229 24% 22%; /* Void Edge #2A2F45 */
+    --input: 229 24% 22%;
+    --ring: 245 100% 69%; /* Nebula Blue */
 
-    /* Duolingo uses rounder corners */
     --radius: 1rem;
-  }
-
-  .dark {
-    --background: 200 9% 12%;
-    --foreground: 0 0% 94%;
-
-    --card: 200 9% 16%;
-    --card-foreground: 0 0% 94%;
-
-    --popover: 200 9% 16%;
-    --popover-foreground: 0 0% 94%;
-
-    --primary: 94 98% 40%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 82 82% 49%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 200 9% 20%;
-    --muted-foreground: 0 0% 65%;
-
-    --accent: 197 92% 54%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 100% 65%;
-    --destructive-foreground: 0 0% 100%;
-
-    --warning: 47 100% 50%;
-    --warning-foreground: 200 9% 12%;
-
-    --purple: 276 100% 75%;
-    --purple-foreground: 0 0% 100%;
-
-    --border: 200 9% 25%;
-    --input: 200 9% 25%;
-    --ring: 94 98% 40%;
   }
 }
 
@@ -94,14 +57,13 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
-  /* Duolingo-style selection color */
   ::selection {
     @apply bg-primary/20 text-foreground;
   }
 }
 
 @layer components {
-  /* Duolingo-style 3D button effect */
+  /* 3D button effect - space theme */
   .btn-3d {
     @apply relative transform transition-all duration-150 active:translate-y-1;
     box-shadow: 0 4px 0 0 hsl(var(--primary) / 0.6);
@@ -112,31 +74,47 @@
 
   /* Success variant 3D button */
   .btn-3d-success {
-    box-shadow: 0 4px 0 0 hsl(94 98% 30%);
+    box-shadow: 0 4px 0 0 hsl(245 100% 55%);
   }
   .btn-3d-success:active {
-    box-shadow: 0 0 0 0 hsl(94 98% 30%);
+    box-shadow: 0 0 0 0 hsl(245 100% 55%);
   }
 
-  /* Blue variant 3D button */
+  /* Cyan variant 3D button */
   .btn-3d-blue {
-    box-shadow: 0 4px 0 0 hsl(197 92% 40%);
+    box-shadow: 0 4px 0 0 hsl(186 100% 38%);
   }
   .btn-3d-blue:active {
-    box-shadow: 0 0 0 0 hsl(197 92% 40%);
+    box-shadow: 0 0 0 0 hsl(186 100% 38%);
   }
 
-  /* Duolingo-style progress bar */
-  .progress-duo {
+  /* Cosmos-style progress bar */
+  .progress-cosmos {
     @apply h-4 w-full rounded-full bg-muted overflow-hidden;
   }
-  .progress-duo-fill {
+  .progress-cosmos-fill {
     @apply h-full rounded-full bg-primary transition-all duration-500 ease-out;
   }
 
-  /* Duolingo-style card with subtle shadow */
-  .card-duo {
+  /* Cosmos-style card with subtle glow */
+  .card-cosmos {
     @apply rounded-2xl border-2 border-border bg-card p-6;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(108, 99, 255, 0.06);
+  }
+
+  /* Glow utility classes */
+  .glow-nebula {
+    box-shadow: 0 0 20px rgba(108, 99, 255, 0.3), 0 0 60px rgba(108, 99, 255, 0.1);
+  }
+
+  /* Gradient text utilities */
+  .text-gradient-cosmos {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #6C63FF, #00E5FF);
+  }
+
+  .text-gradient-aurora {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #B388FF, #FF6AC1);
   }
 }

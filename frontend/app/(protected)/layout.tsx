@@ -14,7 +14,7 @@ export default function ProtectedLayout({
     <AuthGuard>
       <div className="min-h-screen bg-muted/30">
         {/* Header - Duolingo style */}
-        <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-background">
+        <header className="sticky top-0 z-50 w-full border-b-2 border-border backdrop-blur-xl bg-card/80">
           <div className="container flex h-16 items-center justify-between">
             {/* Logo */}
             <Link href="/dashboard">
@@ -53,7 +53,7 @@ export default function ProtectedLayout({
 
               {/* Streak indicator placeholder */}
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-destructive/10 text-destructive">
-                <span className="text-lg animate-flame">🔥</span>
+                <span className="text-lg animate-orbit-pulse">🔥</span>
                 <span className="font-bold text-sm">0</span>
               </div>
 

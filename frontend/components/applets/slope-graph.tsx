@@ -284,7 +284,7 @@ export function SlopeGraph({
                   cx={toSvgX(xi)}
                   cy={toSvgY(yi)}
                   r={1.5}
-                  className="fill-gray-300 dark:fill-gray-600"
+                  className="fill-cosmos-void"
                 />
               ))
             )}
@@ -384,7 +384,7 @@ export function SlopeGraph({
                   y1={toSvgY(startPoint.y)}
                   x2={toSvgX(currentPoint.x)}
                   y2={toSvgY(startPoint.y)}
-                  stroke="#1CB0F6"
+                  stroke="#00E5FF"
                   strokeWidth={2}
                   strokeDasharray="6 3"
                   opacity={0.7}
@@ -395,7 +395,7 @@ export function SlopeGraph({
                   y1={toSvgY(startPoint.y)}
                   x2={toSvgX(currentPoint.x)}
                   y2={toSvgY(currentPoint.y)}
-                  stroke="#FF4B4B"
+                  stroke="#FF3B5C"
                   strokeWidth={2}
                   strokeDasharray="6 3"
                   opacity={0.7}
@@ -407,7 +407,7 @@ export function SlopeGraph({
                     y={toSvgY(startPoint.y) + 18}
                     textAnchor="middle"
                     className="text-[12px] font-bold"
-                    fill="#1CB0F6"
+                    fill="#00E5FF"
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
                     {dx > 0 ? `+${dx}` : dx}
@@ -420,7 +420,7 @@ export function SlopeGraph({
                     y={toSvgY(startPoint.y + dy / 2) + 4}
                     textAnchor="start"
                     className="text-[12px] font-bold"
-                    fill="#FF4B4B"
+                    fill="#FF3B5C"
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
                     {dy > 0 ? `+${dy}` : dy}
@@ -435,7 +435,7 @@ export function SlopeGraph({
                 cx={toSvgX(startPoint.x)}
                 cy={toSvgY(startPoint.y)}
                 r={6}
-                className="fill-gray-300 dark:fill-gray-600"
+                className="fill-cosmos-void"
                 opacity={0.5}
               />
             )}
@@ -446,7 +446,7 @@ export function SlopeGraph({
                 cx={toSvgX(currentPoint.x)}
                 cy={toSvgY(currentPoint.y)}
                 r={18}
-                fill="#1CB0F6"
+                fill="#00E5FF"
                 opacity={0.15}
               />
             )}
@@ -456,7 +456,7 @@ export function SlopeGraph({
               cx={toSvgX(currentPoint.x)}
               cy={toSvgY(currentPoint.y)}
               r={isDragging ? 14 : 10}
-              fill="white"
+              fill="#131829"
               className="transition-all duration-150"
             />
 
@@ -465,7 +465,7 @@ export function SlopeGraph({
               cx={toSvgX(currentPoint.x)}
               cy={toSvgY(currentPoint.y)}
               r={isDragging ? 10 : 6}
-              fill={isComplete ? "#58CC02" : "#1CB0F6"}
+              fill={isComplete ? "#6C63FF" : "#00E5FF"}
               className="transition-all duration-150"
               style={{
                 filter: isDragging ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "none",

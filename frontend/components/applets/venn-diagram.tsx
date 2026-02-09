@@ -30,8 +30,8 @@ const CIRCLE_COLORS = [
   { stroke: "#8B5CF6", label: "E" }, // Purple
 ];
 
-const SELECTED_COLOR = "#58CC02";
-const HOVER_COLOR = "#89E219";
+const SELECTED_COLOR = "#6C63FF";
+const HOVER_COLOR = "#8B85FF";
 
 // --- Geometry helpers ---
 
@@ -308,7 +308,7 @@ export function VennDiagram({
             onMouseLeave={() => setHoveredRegion(null)}
           >
             {/* Background */}
-            <rect x="0" y="0" width={width} height={height} fill="#f8fafc" />
+            <rect x="0" y="0" width={width} height={height} fill="#131829" />
 
             {/* Render colored points for regions */}
             {regionPaths.map((p, i) => {

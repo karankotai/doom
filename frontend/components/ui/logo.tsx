@@ -55,7 +55,7 @@ export function Logo({ size = "md", showText = true, className }: LogoProps) {
     <div className={cn("flex items-center gap-3", className)}>
       <div
         className={cn(
-          "flex items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-duo-primary transition-transform hover:scale-105",
+          "flex items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-cosmos-primary transition-transform hover:scale-105",
           sizeClasses[size]
         )}
       >
@@ -64,7 +64,7 @@ export function Logo({ size = "md", showText = true, className }: LogoProps) {
       {showText && (
         <span
           className={cn(
-            "font-extrabold text-primary tracking-tight",
+            "font-extrabold tracking-tight text-gradient-cosmos",
             textSizeClasses[size]
           )}
         >

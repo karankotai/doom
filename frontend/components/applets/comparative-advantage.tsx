@@ -284,7 +284,7 @@ export function ComparativeAdvantage({
           <div className={cn(
             "flex-1 rounded-2xl border-2 p-4 text-center transition-all",
             step?.partyIndex === 0 && !stepDone
-              ? "border-accent bg-accent/5 shadow-duo-accent"
+              ? "border-accent bg-accent/5 shadow-cosmos-accent"
               : "border-border bg-card",
           )}>
             <div className="text-3xl mb-1">{parties[0].emoji}</div>
@@ -363,7 +363,7 @@ export function ComparativeAdvantage({
           <div className={cn(
             "flex-1 rounded-2xl border-2 p-4 text-center transition-all",
             step?.partyIndex === 1 && !stepDone
-              ? "border-accent bg-accent/5 shadow-duo-accent"
+              ? "border-accent bg-accent/5 shadow-cosmos-accent"
               : "border-border bg-card",
           )}>
             <div className="text-3xl mb-1">{parties[1].emoji}</div>
