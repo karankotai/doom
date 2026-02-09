@@ -23,6 +23,7 @@ import { MatchPairs } from "@/components/applets/match-pairs";
 import { InteractiveDiagram } from "@/components/applets/interactive-diagram";
 import { ThoughtTree } from "@/components/applets/thought-tree";
 import { CircuitBuilder } from "@/components/applets/circuit-builder";
+import { ExplanationReveal } from "@/components/applets/explanation-reveal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -412,6 +413,11 @@ export default function LessonPage() {
               answerBlocks={(currentPuzzle as CodeBlocksApplet).content.answerBlocks}
               onComplete={handlePuzzleComplete}
             />
+          )}
+
+          {/* Explanation reveal — shown after puzzle is completed */}
+          {currentPuzzle.explanation && completedPuzzles.includes(currentPuzzleIndex) && (
+            <ExplanationReveal explanation={currentPuzzle.explanation} />
           )}
 
           {/* Navigation */}

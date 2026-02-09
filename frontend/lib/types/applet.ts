@@ -326,6 +326,7 @@ export interface BaseApplet {
   title: string;
   question: string;
   hint?: string;
+  explanation?: string;
   difficulty: number;
   tags: string[];
 }

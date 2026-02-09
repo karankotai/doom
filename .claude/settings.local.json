@@ -18,7 +18,8 @@
       "Bash(./node_modules/.bin/tsc:*)",
       "Bash(./node_modules/.bin/next build:*)",
       "Bash(ls:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(bun -e:*)"
     ]
   }
 }

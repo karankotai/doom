@@ -66,6 +66,7 @@ function rowToApplet(row: Record<string, unknown>): Applet {
     title: row.title as string,
     question: row.question as string,
     hint: row.hint as string | undefined,
+    explanation: row.explanation as string | undefined,
     content: row.content,
     difficulty: row.difficulty as number,
     tags: row.tags as string[],

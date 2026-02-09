@@ -42,6 +42,7 @@ import { ChartReading } from "@/components/applets/chart-reading";
 import { MatchPairs } from "@/components/applets/match-pairs";
 import { InteractiveDiagram } from "@/components/applets/interactive-diagram";
 import { ThoughtTree } from "@/components/applets/thought-tree";
+import { ExplanationReveal } from "@/components/applets/explanation-reveal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -256,6 +257,11 @@ export default function CourseLessonPage() {
 
           {/* Render applet */}
           {renderApplet(currentApplet, handlePuzzleComplete)}
+
+          {/* Explanation reveal — shown after puzzle is completed */}
+          {currentApplet.explanation && completedIndices.includes(currentIndex) && (
+            <ExplanationReveal explanation={currentApplet.explanation} />
+          )}
 
           {/* Navigation */}
           <div className="flex justify-between items-center pt-4">

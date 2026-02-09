@@ -14,6 +14,7 @@ export interface Applet {
   title: string;
   question: string;
   hint: string | undefined;
+  explanation: string | undefined;
   content: unknown; // Type-specific JSONB content
   difficulty: number;
   tags: string[];
