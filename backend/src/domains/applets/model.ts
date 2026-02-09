@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram" | "thought-tree";
 
 // Base applet structure from database
 export interface Applet {
@@ -292,6 +292,26 @@ export interface InteractiveDiagramContent {
   diagramTitle?: string;
 }
 
+// --- Thought Tree specific types ---
+
+export interface ThoughtTreeChoice {
+  id: string;
+  text: string;
+}
+
+export interface ThoughtTreeNode {
+  id: string;
+  question: string;
+  leftChoice: ThoughtTreeChoice;
+  rightChoice: ThoughtTreeChoice;
+  correctChoiceId: string;
+}
+
+export interface ThoughtTreeContent {
+  nodes: ThoughtTreeNode[];
+  finalAnswer: string;
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -374,7 +394,12 @@ export interface InteractiveDiagramApplet extends Omit<Applet, "content"> {
   content: InteractiveDiagramContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet;
+export interface ThoughtTreeApplet extends Omit<Applet, "content"> {
+  type: "thought-tree";
+  content: ThoughtTreeContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet | ThoughtTreeApplet;
 
 // --- Query params ---
 

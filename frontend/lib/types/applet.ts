@@ -2,7 +2,7 @@
  * Applet types - mirrors backend models
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram" | "thought-tree";
 
 // --- Code Blocks types ---
 
@@ -274,6 +274,26 @@ export interface InteractiveDiagramContent {
   diagramTitle?: string;
 }
 
+// --- Thought Tree types ---
+
+export interface ThoughtTreeChoice {
+  id: string;
+  text: string;
+}
+
+export interface ThoughtTreeNode {
+  id: string;
+  question: string;
+  leftChoice: ThoughtTreeChoice;
+  rightChoice: ThoughtTreeChoice;
+  correctChoiceId: string;
+}
+
+export interface ThoughtTreeContent {
+  nodes: ThoughtTreeNode[];
+  finalAnswer: string;
+}
+
 // --- Base Applet ---
 
 export interface BaseApplet {
@@ -368,7 +388,12 @@ export interface InteractiveDiagramApplet extends BaseApplet {
   content: InteractiveDiagramContent;
 }
 
-export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet;
+export interface ThoughtTreeApplet extends BaseApplet {
+  type: "thought-tree";
+  content: ThoughtTreeContent;
+}
+
+export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet | ThoughtTreeApplet;
 
 // --- AI Generated Exercise (before it has an ID) ---
 

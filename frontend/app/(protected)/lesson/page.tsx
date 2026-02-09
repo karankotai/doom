@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/context/auth-context";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet } from "@/lib/types/applet";
+import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet, ThoughtTreeApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -21,6 +21,7 @@ import { FractionVisualizer } from "@/components/applets/fraction-visualizer";
 import { ChartReading } from "@/components/applets/chart-reading";
 import { MatchPairs } from "@/components/applets/match-pairs";
 import { InteractiveDiagram } from "@/components/applets/interactive-diagram";
+import { ThoughtTree } from "@/components/applets/thought-tree";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -194,7 +195,8 @@ export default function LessonPage() {
                currentPuzzle.type === "fraction-visualizer" ? "🟦" :
                currentPuzzle.type === "chart-reading" ? "📊" :
                currentPuzzle.type === "match-pairs" ? "🔗" :
-               currentPuzzle.type === "interactive-diagram" ? "🔬" : "🧩"}
+               currentPuzzle.type === "interactive-diagram" ? "🔬" :
+               currentPuzzle.type === "thought-tree" ? "🌳" : "🧩"}
             </span>
             <h1 className="text-lg font-bold text-foreground">
               {currentPuzzle.type === "chess" ? "Chess Tactics" :
@@ -211,7 +213,8 @@ export default function LessonPage() {
                currentPuzzle.type === "fraction-visualizer" ? "Fraction Visualizer" :
                currentPuzzle.type === "chart-reading" ? "Chart Reading" :
                currentPuzzle.type === "match-pairs" ? "Match Pairs" :
-               currentPuzzle.type === "interactive-diagram" ? "Interactive Diagram" : "Code Blocks"}
+               currentPuzzle.type === "interactive-diagram" ? "Interactive Diagram" :
+               currentPuzzle.type === "thought-tree" ? "Thought Tree" : "Code Blocks"}
             </h1>
           </div>
 
@@ -375,6 +378,15 @@ export default function LessonPage() {
               selectCount={(currentPuzzle as InteractiveDiagramApplet).content.selectCount}
               viewBox={(currentPuzzle as InteractiveDiagramApplet).content.viewBox}
               diagramTitle={(currentPuzzle as InteractiveDiagramApplet).content.diagramTitle}
+              onComplete={handlePuzzleComplete}
+            />
+          ) : currentPuzzle.type === "thought-tree" ? (
+            <ThoughtTree
+              key={currentPuzzle.id}
+              question={currentPuzzle.question}
+              hint={currentPuzzle.hint}
+              nodes={(currentPuzzle as ThoughtTreeApplet).content.nodes}
+              finalAnswer={(currentPuzzle as ThoughtTreeApplet).content.finalAnswer}
               onComplete={handlePuzzleComplete}
             />
           ) : (

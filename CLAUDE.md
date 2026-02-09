@@ -54,8 +54,9 @@ doom/
 │   │   │   ├── login/page.tsx
 │   │   │   └── register/page.tsx
 │   │   └── (protected)/          # Requires authentication
-│   │       ├── layout.tsx        # Header with UserMenu
-│   │       └── dashboard/page.tsx
+│   │       ├── layout.tsx        # Header with live XP/streak from AuthContext
+│   │       ├── dashboard/page.tsx # Dashboard with real profile data
+│   │       └── lesson/page.tsx   # Lesson flow, persists XP to backend
 │   ├── components/
 │   │   ├── ui/                   # shadcn components (button, card, input, etc.)
 │   │   ├── auth/                 # Auth forms, guards, user menu
@@ -91,9 +92,10 @@ Each domain has:
 4. **Auto-refresh** → Frontend schedules refresh 2 min before expiry
 
 ### Frontend Auth
-- `AuthProvider` wraps the app, manages tokens in memory
+- `AuthProvider` wraps the app, manages tokens in memory + `profile`/`achievements` state
 - `AuthGuard` component protects routes
 - `api.ts` auto-retries 401s with token refresh
+- `refreshProfile()` from `useAuth()` re-fetches profile data (call after XP changes)
 
 ### Applet System
 
@@ -374,10 +376,44 @@ export type Applet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | YourApp
 - Learn set operations: union, intersection, complement, etc.
 - Content: `{ labels: [string, string], correctRegions: ["a-only"|"b-only"|"a-and-b"|"neither"][] }`
 
+**Thought Tree (`thought-tree`)**
+- Visual decision tree with 5 binary-choice questions
+- Progressive reveal: each choice unlocks the next depth level
+- No per-question feedback — only reveals correct/wrong at the end (unlike MCQ)
+- SVG branch lines connecting question nodes to choice buttons, glow animations
+- Content: `{ nodes: [{id, question, leftChoice: {id, text}, rightChoice: {id, text}, correctChoiceId}], finalAnswer }`
+
 **Lesson Page (`/app/(protected)/lesson/page.tsx`)**
 - Fetches random applets from API
 - Tracks progress and XP earned
+- Calls `api.awardXp(10)` on each puzzle completion (persists to backend)
+- Calls `refreshProfile()` when returning to dashboard
 - Navigation between puzzles
+
+### XP, Streaks & Achievements System
+
+XP is awarded via `POST /users/me/xp`. The `addXp()` service function handles:
+
+**Streak Logic:**
+- Same day activity → increments `daily_xp` only
+- Consecutive day (yesterday) → increments `current_streak`, resets `daily_xp`
+- Gap > 1 day → resets `current_streak` to 1, resets `daily_xp`
+- Always updates `last_activity_date` to today
+
+**Level Up:** XP threshold increases by 50% per level (base: 100 XP). Title changes at levels 5, 10, 20, 35, 50, 75.
+
+**Achievements** (auto-awarded on XP gain, `INSERT ... ON CONFLICT DO NOTHING`):
+
+| type | label | emoji | condition |
+|------|-------|-------|-----------|
+| first_lesson | First Steps | trophy | First XP earned |
+| streak_3 | On Fire | fire | current_streak >= 3 |
+| streak_7 | Week Warrior | star | current_streak >= 7 |
+| level_5 | Apprentice | medal | level >= 5 |
+| xp_100 | Century | 100 | total XP >= 100 |
+| xp_500 | Scholar | books | total XP >= 500 |
+
+**Frontend flow:** `useAuth()` exposes `profile`, `achievements`, and `refreshProfile()`. Dashboard and header read from context. Lesson page fires `awardXp()` per puzzle and calls `refreshProfile()` on completion.
 
 ## Environment Variables
 
@@ -423,7 +459,8 @@ cd frontend && bun run --bun tsc --noEmit
 Key tables:
 - `users` - id, email, name, password_hash
 - `sessions` - id, user_id, refresh_token_hash, expires_at
-- `user_profiles` - user_id, level, xp, xp_to_next_level, title
+- `user_profiles` - user_id, level, xp, xp_to_next_level, title, current_streak, longest_streak, last_activity_date, daily_xp, daily_goal
+- `achievements` - id, user_id, type, label, emoji, earned_at (unique on user_id+type)
 - `applets` - id, type, title, question, hint, content (JSONB), difficulty, tags
 
 Run `bun run src/db/migrate.ts` in backend to create tables.
@@ -445,7 +482,7 @@ Run `bun run src/db/migrate.ts` in backend to create tables.
 - `POST /auth/login` - Sign in
 - `POST /auth/refresh` - Refresh access token
 - `POST /auth/logout` - Sign out
-- `GET /auth/me` - Get current user (protected)
+- `GET /auth/me` - Get current user + profile + achievements (protected)
 
 ### Applets
 - `GET /applets` - List applets (query: type, difficulty, tags, limit, offset)
@@ -455,6 +492,10 @@ Run `bun run src/db/migrate.ts` in backend to create tables.
 - `POST /applets` - Create applet
 - `PATCH /applets/:id` - Update applet
 - `DELETE /applets/:id` - Soft delete applet
+
+### Users (protected)
+- `GET /users/me/profile` - Get current user's profile + achievements
+- `POST /users/me/xp` - Award XP (body: `{ amount }`) — handles streak logic, daily XP, and auto-awards achievements
 
 ### Protected Routes
 All routes under `/users`, `/journeys`, `/applets` require authentication.
