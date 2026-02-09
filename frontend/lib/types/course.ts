@@ -1,10 +1,8 @@
 /**
- * Journeys (Courses) domain models.
- *
- * Hierarchy: Course → Units → Lessons → Applets
+ * Course types — mirrors backend models
  */
 
-import type { Applet } from "../applets/model";
+import type { Applet } from "./applet";
 
 export interface Course {
   id: string;
@@ -14,8 +12,8 @@ export interface Course {
   color: string;
   isPublished: boolean;
   sortOrder: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CourseUnit {
@@ -25,7 +23,7 @@ export interface CourseUnit {
   description: string | null;
   sortOrder: number;
   isCheckpoint: boolean;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface CourseLesson {
@@ -37,27 +35,9 @@ export interface CourseLesson {
   sortOrder: number;
   xpReward: number;
   isCheckpointReview: boolean;
-  createdAt: Date;
+  createdAt: string;
 }
 
-export interface UserLessonProgress {
-  id: string;
-  userId: string;
-  lessonId: string;
-  completedAt: Date;
-  score: number;
-}
-
-export interface UserCourseProgress {
-  id: string;
-  userId: string;
-  courseId: string;
-  currentLessonId: string | null;
-  startedAt: Date;
-  completedAt: Date | null;
-}
-
-// Full course with nested structure for API responses
 export interface CourseWithUnits extends Course {
   units: UnitWithLessons[];
 }
@@ -68,4 +48,21 @@ export interface UnitWithLessons extends CourseUnit {
 
 export interface LessonWithApplets extends CourseLesson {
   applets: Applet[];
+}
+
+export interface UserCourseProgress {
+  id: string;
+  userId: string;
+  courseId: string;
+  currentLessonId: string | null;
+  startedAt: string;
+  completedAt: string | null;
+}
+
+export interface UserLessonProgress {
+  id: string;
+  userId: string;
+  lessonId: string;
+  completedAt: string;
+  score: number;
 }

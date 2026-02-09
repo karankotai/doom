@@ -111,35 +111,26 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 space-y-4">
           <h2 className="text-xl font-bold text-foreground">Your Learning Path</h2>
 
-          <Card>
+          <Card className="bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-xl shadow-cosmos-accent">
-                    ♟️
+                    📚
                   </div>
                   <div>
-                    <CardTitle>Chess Tactics</CardTitle>
-                    <CardDescription>Master checkmates and tactics</CardDescription>
+                    <CardTitle>Courses</CardTitle>
+                    <CardDescription>Structured learning paths to master a topic</CardDescription>
                   </div>
                 </div>
                 <Button variant="secondary" size="sm" asChild>
-                  <Link href="/lesson">Start</Link>
+                  <Link href="/courses">Browse</Link>
                 </Button>
               </div>
             </CardHeader>
             <CardContent>
-              {/* Puzzle progress */}
-              <div className="flex gap-2">
-                {[1, 2, 3].map((puzzle) => (
-                  <div
-                    key={puzzle}
-                    className="flex-1 h-2 rounded-full bg-muted"
-                  />
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground mt-2">
-                0 of 3 puzzles completed
+              <p className="text-sm text-muted-foreground">
+                Follow guided courses that progress through lessons, checkpoints, and reviews.
               </p>
             </CardContent>
           </Card>

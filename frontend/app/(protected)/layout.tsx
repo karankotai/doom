@@ -28,6 +28,12 @@ function ProtectedContent({ children }: { children: React.ReactNode }) {
               Learn
             </Link>
             <Link
+              href="/courses"
+              className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
+            >
+              Courses
+            </Link>
+            <Link
               href="/applets"
               className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
             >

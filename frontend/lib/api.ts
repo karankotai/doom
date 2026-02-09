@@ -20,6 +20,7 @@ import type {
   RefreshResponse,
 } from "./types/auth";
 import type { Applet, AppletType, GeneratedExercise } from "./types/applet";
+import type { Course, CourseWithUnits, LessonWithApplets, UserCourseProgress, UserLessonProgress } from "./types/course";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
@@ -216,6 +217,37 @@ class ApiClient {
     return this.request<{ exercises: GeneratedExercise[] }>("/ai/generate", {
       method: "POST",
       body: JSON.stringify({ topic, difficulty }),
+    });
+  }
+
+  // ============== Courses ==============
+
+  async getCourses(): Promise<{ courses: Course[] }> {
+    return this.request<{ courses: Course[] }>("/journeys");
+  }
+
+  async getCourse(id: string): Promise<{ course: CourseWithUnits }> {
+    return this.request<{ course: CourseWithUnits }>(`/journeys/${id}`);
+  }
+
+  async getCourseProgress(courseId: string): Promise<{ courseProgress: UserCourseProgress | null; completedLessonIds: string[] }> {
+    return this.request<{ courseProgress: UserCourseProgress | null; completedLessonIds: string[] }>(`/journeys/${courseId}/progress`);
+  }
+
+  async startCourse(courseId: string): Promise<{ progress: UserCourseProgress }> {
+    return this.request<{ progress: UserCourseProgress }>(`/journeys/${courseId}/start`, {
+      method: "POST",
+    });
+  }
+
+  async getLesson(lessonId: string): Promise<{ lesson: LessonWithApplets }> {
+    return this.request<{ lesson: LessonWithApplets }>(`/journeys/lessons/${lessonId}`);
+  }
+
+  async completeLesson(lessonId: string, score: number): Promise<{ progress: UserLessonProgress }> {
+    return this.request<{ progress: UserLessonProgress }>(`/journeys/lessons/${lessonId}/complete`, {
+      method: "POST",
+      body: JSON.stringify({ score }),
     });
   }
 }
