@@ -5,7 +5,7 @@
  * Each applet type has specific content structure stored as JSONB.
  */
 
-export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram" | "thought-tree";
+export type AppletType = "code-blocks" | "slope-graph" | "chess" | "mcq" | "fill-blanks" | "venn-diagram" | "highlight-text" | "comparative-advantage" | "ordering" | "color-mixing" | "map-select" | "categorization-grid" | "fraction-visualizer" | "chart-reading" | "match-pairs" | "interactive-diagram" | "thought-tree" | "circuit-builder";
 
 // Base applet structure from database
 export interface Applet {
@@ -312,6 +312,30 @@ export interface ThoughtTreeContent {
   finalAnswer: string;
 }
 
+// --- Circuit Builder specific types ---
+
+export interface CircuitNode {
+  id: string;
+  type: "battery" | "bulb" | "switch" | "ammeter" | "voltmeter" | "resistor" | "junction";
+  x: number;
+  y: number;
+  label?: string;
+  value?: number;
+}
+
+export interface CircuitWire {
+  id: string;
+  from: string;
+  to: string;
+  waypoints?: { x: number; y: number }[];
+}
+
+export interface CircuitBuilderContent {
+  nodes: CircuitNode[];
+  wires: CircuitWire[];
+  correctSwitchStates: Record<string, boolean>;
+}
+
 // --- API Response types ---
 
 export interface CodeBlocksApplet extends Omit<Applet, "content"> {
@@ -399,7 +423,12 @@ export interface ThoughtTreeApplet extends Omit<Applet, "content"> {
   content: ThoughtTreeContent;
 }
 
-export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet | ThoughtTreeApplet;
+export interface CircuitBuilderApplet extends Omit<Applet, "content"> {
+  type: "circuit-builder";
+  content: CircuitBuilderContent;
+}
+
+export type TypedApplet = CodeBlocksApplet | SlopeGraphApplet | ChessApplet | McqApplet | FillBlanksApplet | VennDiagramApplet | HighlightTextApplet | ComparativeAdvantageApplet | OrderingApplet | ColorMixingApplet | MapSelectApplet | CategorizationGridApplet | FractionVisualizerApplet | ChartReadingApplet | MatchPairsApplet | InteractiveDiagramApplet | ThoughtTreeApplet | CircuitBuilderApplet;
 
 // --- Query params ---
 

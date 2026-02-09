@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet, ThoughtTreeApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet, ThoughtTreeApplet, CircuitBuilderApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -20,6 +20,7 @@ import { ChartReading } from "@/components/applets/chart-reading";
 import { MatchPairs } from "@/components/applets/match-pairs";
 import { InteractiveDiagram } from "@/components/applets/interactive-diagram";
 import { ThoughtTree } from "@/components/applets/thought-tree";
+import { CircuitBuilder } from "@/components/applets/circuit-builder";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -41,6 +42,7 @@ const APPLET_TYPES: { type: AppletType; name: string; icon: string; description:
   { type: "match-pairs", name: "Match Pairs", icon: "🔗", description: "Draw lines to match items between two columns — languages, science, history and more" },
   { type: "interactive-diagram", name: "Interactive Diagram", icon: "🔬", description: "Click on diagram regions to answer questions about geometry, biology, anatomy, and more" },
   { type: "thought-tree", name: "Thought Tree", icon: "🌳", description: "Navigate a branching decision tree — pick the right path through 5 questions to reach the answer" },
+  { type: "circuit-builder", name: "Circuit Builder", icon: "⚡", description: "Toggle switches to complete circuits — learn series and parallel circuits interactively" },
 ];
 
 export default function AppletsPage() {
@@ -297,6 +299,18 @@ export default function AppletsPage() {
             hint={applet.hint}
             nodes={(applet as ThoughtTreeApplet).content.nodes}
             finalAnswer={(applet as ThoughtTreeApplet).content.finalAnswer}
+            onComplete={handleComplete}
+          />
+        );
+      case "circuit-builder":
+        return (
+          <CircuitBuilder
+            key={applet.id}
+            question={applet.question}
+            hint={applet.hint}
+            nodes={(applet as CircuitBuilderApplet).content.nodes}
+            wires={(applet as CircuitBuilderApplet).content.wires}
+            correctSwitchStates={(applet as CircuitBuilderApplet).content.correctSwitchStates}
             onComplete={handleComplete}
           />
         );
