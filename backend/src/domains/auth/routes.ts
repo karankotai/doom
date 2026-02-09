@@ -156,3 +156,41 @@ authRoutes.get("/me", async (c) => {
     return c.json({ error: "Failed to get user" }, 500);
   }
 });
+
+// GET /auth/google - Redirect to Google OAuth consent screen
+authRoutes.get("/google", (c) => {
+  if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
+    return c.json({ error: "Google sign-in is not configured" }, 501);
+  }
+  const url = authService.getGoogleAuthUrl();
+  return c.redirect(url);
+});
+
+// POST /auth/google/callback - Exchange Google auth code for session
+authRoutes.post("/google/callback", async (c) => {
+  try {
+    if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
+      return c.json({ error: "Google sign-in is not configured" }, 501);
+    }
+
+    const { code } = await c.req.json<{ code: string }>();
+
+    if (!code) {
+      return c.json({ error: "Authorization code is required" }, 400);
+    }
+
+    const result = await authService.loginWithGoogle(code);
+    const { _refreshToken, ...response } = result;
+
+    // Set refresh token as httpOnly cookie
+    setCookie(c, REFRESH_TOKEN_COOKIE, _refreshToken, getRefreshTokenCookieOptions());
+
+    return c.json(response);
+  } catch (error) {
+    if (error instanceof AppError) {
+      return c.json({ error: error.message }, error.statusCode as 400 | 401 | 403 | 404 | 500);
+    }
+    console.error("Google auth error:", error);
+    return c.json({ error: "Google authentication failed" }, 500);
+  }
+});

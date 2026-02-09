@@ -87,9 +87,10 @@ Each domain has:
 
 ### Authentication Flow
 1. **Register/Login** → Returns access token (15min) + sets httpOnly refresh cookie (7 days)
-2. **API Requests** → Bearer token in Authorization header
-3. **Token Refresh** → POST `/auth/refresh` uses cookie, returns new tokens
-4. **Auto-refresh** → Frontend schedules refresh 2 min before expiry
+2. **Google OAuth** → `GET /auth/google` redirects to Google → Google redirects to `/auth/callback` on frontend → frontend POSTs code to `POST /auth/google/callback` → returns tokens (same as login)
+3. **API Requests** → Bearer token in Authorization header
+4. **Token Refresh** → POST `/auth/refresh` uses cookie, returns new tokens
+5. **Auto-refresh** → Frontend schedules refresh 2 min before expiry
 
 ### Frontend Auth
 - `AuthProvider` wraps the app, manages tokens in memory + `profile`/`achievements` state
@@ -426,6 +427,8 @@ JWT_SECRET=your-secret-key-min-32-chars-long-here
 REFRESH_TOKEN_EXPIRY_DAYS=7
 ACCESS_TOKEN_EXPIRY_MINUTES=15
 FRONTEND_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```
 
 ### Frontend (`.env`)
@@ -457,7 +460,7 @@ cd frontend && bun run --bun tsc --noEmit
 ## Database Schema
 
 Key tables:
-- `users` - id, email, name, password_hash
+- `users` - id, email, name, password_hash (nullable for OAuth users), google_id (nullable, unique)
 - `sessions` - id, user_id, refresh_token_hash, expires_at
 - `user_profiles` - user_id, level, xp, xp_to_next_level, title, current_streak, longest_streak, last_activity_date, daily_xp, daily_goal
 - `achievements` - id, user_id, type, label, emoji, earned_at (unique on user_id+type)
@@ -483,6 +486,8 @@ Run `bun run src/db/migrate.ts` in backend to create tables.
 - `POST /auth/refresh` - Refresh access token
 - `POST /auth/logout` - Sign out
 - `GET /auth/me` - Get current user + profile + achievements (protected)
+- `GET /auth/google` - Redirect to Google OAuth consent screen
+- `POST /auth/google/callback` - Exchange Google auth code for session tokens
 
 ### Applets
 - `GET /applets` - List applets (query: type, difficulty, tags, limit, offset)

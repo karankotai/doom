@@ -153,6 +153,13 @@ class ApiClient {
     });
   }
 
+  async googleLogin(code: string): Promise<AuthResponse> {
+    return this.request<AuthResponse>("/auth/google/callback", {
+      method: "POST",
+      body: JSON.stringify({ code }),
+    });
+  }
+
   async getCurrentUser(): Promise<{ user: User; profile: UserProfile | null; achievements: Achievement[] }> {
     return this.request<{ user: User; profile: UserProfile | null; achievements: Achievement[] }>("/auth/me");
   }

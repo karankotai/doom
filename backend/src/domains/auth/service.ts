@@ -353,3 +353,135 @@ export async function getCurrentUser(
     name: user.name,
   };
 }
+
+// ============== Google OAuth ==============
+
+interface GoogleTokenResponse {
+  access_token: string;
+  id_token: string;
+  token_type: string;
+}
+
+interface GoogleUserInfo {
+  sub: string;
+  email: string;
+  name: string;
+  picture?: string;
+}
+
+export function getGoogleAuthUrl(): string {
+  const params = new URLSearchParams({
+    client_id: env.GOOGLE_CLIENT_ID,
+    redirect_uri: `${env.FRONTEND_URL}/auth/callback`,
+    response_type: "code",
+    scope: "openid email profile",
+    access_type: "offline",
+    prompt: "select_account",
+  });
+  return `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
+}
+
+export async function exchangeGoogleCode(code: string): Promise<GoogleTokenResponse> {
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      code,
+      client_id: env.GOOGLE_CLIENT_ID,
+      client_secret: env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${env.FRONTEND_URL}/auth/callback`,
+      grant_type: "authorization_code",
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Google token exchange failed:", text);
+    throw new UnauthorizedError("Google authentication failed");
+  }
+
+  return res.json();
+}
+
+export async function getGoogleUserInfo(accessToken: string): Promise<GoogleUserInfo> {
+  const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (!res.ok) {
+    throw new UnauthorizedError("Failed to fetch Google user info");
+  }
+
+  return res.json();
+}
+
+async function findUserByGoogleId(googleId: string): Promise<UserRow | null> {
+  const [user] = await sql<UserRow[]>`
+    SELECT id, email, name, password_hash, created_at, updated_at
+    FROM users
+    WHERE google_id = ${googleId}
+  `;
+  return user || null;
+}
+
+async function createGoogleUser(
+  email: string,
+  name: string,
+  googleId: string
+): Promise<UserRow> {
+  const [user] = await sql<UserRow[]>`
+    INSERT INTO users (email, name, google_id)
+    VALUES (${email.toLowerCase()}, ${name}, ${googleId})
+    RETURNING id, email, name, password_hash, created_at, updated_at
+  `;
+  return user!;
+}
+
+async function linkGoogleId(userId: string, googleId: string): Promise<void> {
+  await sql`UPDATE users SET google_id = ${googleId} WHERE id = ${userId}`;
+}
+
+export async function loginWithGoogle(
+  code: string
+): Promise<AuthResponse & { _refreshToken: string }> {
+  // Exchange code for tokens
+  const tokens = await exchangeGoogleCode(code);
+  const googleUser = await getGoogleUserInfo(tokens.access_token);
+
+  // Try to find existing user by google_id
+  let user = await findUserByGoogleId(googleUser.sub);
+
+  if (!user) {
+    // Try to find by email (existing user linking Google account)
+    user = await getUserByEmail(googleUser.email);
+
+    if (user) {
+      // Link Google ID to existing account
+      await linkGoogleId(user.id, googleUser.sub);
+    } else {
+      // Create new user
+      user = await createGoogleUser(googleUser.email, googleUser.name, googleUser.sub);
+      await createUserProfile(user.id, user.name);
+    }
+  }
+
+  // Create session
+  const { refreshToken } = await createSession(user.id);
+
+  // Generate access token
+  const { token: accessToken, expiresAt } = await generateAccessToken({
+    id: user.id,
+    email: user.email,
+  });
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    },
+    accessToken,
+    expiresAt,
+    _refreshToken: refreshToken,
+  };
+}

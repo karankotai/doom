@@ -40,6 +40,10 @@ export const env = {
   // CORS
   FRONTEND_URL: getEnvOrDefault("FRONTEND_URL", "http://localhost:3000"),
 
+  // Google OAuth (optional — Google sign-in disabled if not set)
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? "",
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? "",
+
   // AI provider keys
   GEMINI_API_KEY: process.env.GEMINI_API_KEY ?? "",
 } as const;
