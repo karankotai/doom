@@ -14,6 +14,8 @@ import { setCookie, getCookie, deleteCookie } from "hono/cookie";
 import { env } from "../../lib/env";
 import { AppError } from "../../lib/errors";
 import * as authService from "./service";
+import * as userService from "../users/service";
+import { requireAuth } from "../../middleware/auth";
 import type { LoginInput, RegisterInput } from "./model";
 
 export const authRoutes = new Hono();
@@ -126,6 +128,7 @@ authRoutes.post("/logout", async (c) => {
 });
 
 // GET /auth/me - Get current user from session
+authRoutes.use("/me", requireAuth);
 authRoutes.get("/me", async (c) => {
   try {
     // Get user from context (set by auth middleware)
@@ -141,7 +144,10 @@ authRoutes.get("/me", async (c) => {
       return c.json({ error: "User not found" }, 404);
     }
 
-    return c.json({ user: currentUser });
+    const profile = await userService.getProfile(user.userId);
+    const achievements = await userService.getAchievements(user.userId);
+
+    return c.json({ user: currentUser, profile, achievements });
   } catch (error) {
     if (error instanceof AppError) {
       return c.json({ error: error.message }, error.statusCode as 400 | 401 | 403 | 404 | 500);

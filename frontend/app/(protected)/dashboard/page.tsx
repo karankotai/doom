@@ -11,8 +11,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+const ACHIEVEMENT_DEFS = [
+  { type: "first_lesson", label: "First Steps", emoji: "\u{1F3C6}" },
+  { type: "streak_3", label: "On Fire", emoji: "\u{1F525}" },
+  { type: "streak_7", label: "Week Warrior", emoji: "\u2B50" },
+  { type: "level_5", label: "Apprentice", emoji: "\u{1F396}\uFE0F" },
+  { type: "xp_100", label: "Century", emoji: "\u{1F4AF}" },
+  { type: "xp_500", label: "Scholar", emoji: "\u{1F4DA}" },
+];
+
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { user, profile, achievements } = useAuth();
+  const earnedTypes = new Set(achievements.map((a) => a.type));
 
   return (
     <div className="space-y-8">
@@ -38,13 +48,13 @@ export default function DashboardPage() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-white shadow-cosmos-primary">
-                <span className="text-2xl font-extrabold">1</span>
+                <span className="text-2xl font-extrabold">{profile?.level ?? 1}</span>
               </div>
               <div>
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
                   Current Level
                 </p>
-                <p className="text-xl font-bold text-foreground">Novice Learner</p>
+                <p className="text-xl font-bold text-foreground">{profile?.title ?? "Novice Learner"}</p>
               </div>
             </div>
           </CardContent>
@@ -61,14 +71,14 @@ export default function DashboardPage() {
                 </span>
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-extrabold text-warning">0</span>
-                <span className="text-muted-foreground font-semibold">/ 100 XP</span>
+                <span className="text-3xl font-extrabold text-warning">{profile?.xp ?? 0}</span>
+                <span className="text-muted-foreground font-semibold">/ {profile?.xpToNextLevel ?? 100} XP</span>
               </div>
               {/* Duolingo-style progress bar */}
               <div className="h-4 w-full rounded-full bg-warning/20 overflow-hidden">
                 <div
                   className="h-full rounded-full bg-warning transition-all duration-500"
-                  style={{ width: "0%" }}
+                  style={{ width: `${profile ? Math.min(100, (profile.xp / profile.xpToNextLevel) * 100) : 0}%` }}
                 />
               </div>
             </div>
@@ -87,7 +97,7 @@ export default function DashboardPage() {
                   Day Streak
                 </p>
                 <p className="text-xl font-bold text-foreground">
-                  <span className="text-3xl text-destructive">0</span> days
+                  <span className="text-3xl text-destructive">{profile?.currentStreak ?? 0}</span> days
                 </p>
               </div>
             </div>
@@ -199,19 +209,29 @@ export default function DashboardPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="grid grid-cols-3 gap-4">
-                {/* Locked achievements */}
-                {["🏆", "⭐", "🎖️"].map((emoji, i) => (
-                  <div
-                    key={i}
-                    className="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl bg-muted text-2xl opacity-40"
-                  >
-                    {emoji}
-                  </div>
-                ))}
+                {ACHIEVEMENT_DEFS.map((def) => {
+                  const earned = earnedTypes.has(def.type);
+                  return (
+                    <div
+                      key={def.type}
+                      className={`flex flex-col items-center gap-1 ${earned ? "" : "opacity-40"}`}
+                      title={earned ? def.label : `${def.label} (Locked)`}
+                    >
+                      <div className={`flex h-16 w-16 items-center justify-center rounded-2xl text-2xl ${earned ? "bg-primary/10" : "bg-muted"}`}>
+                        {def.emoji}
+                      </div>
+                      <span className="text-xs font-semibold text-muted-foreground truncate max-w-[64px] text-center">
+                        {def.label}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
-              <p className="text-center text-sm text-muted-foreground mt-4">
-                Complete lessons to unlock achievements!
-              </p>
+              {achievements.length === 0 && (
+                <p className="text-center text-sm text-muted-foreground mt-4">
+                  Complete lessons to unlock achievements!
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -226,12 +246,12 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground font-medium">Progress</span>
-                  <span className="font-bold text-purple">0 / 50 XP</span>
+                  <span className="font-bold text-purple">{profile?.dailyXp ?? 0} / {profile?.dailyGoal ?? 50} XP</span>
                 </div>
                 <div className="h-3 w-full rounded-full bg-purple/20 overflow-hidden">
                   <div
                     className="h-full rounded-full bg-purple transition-all duration-500"
-                    style={{ width: "0%" }}
+                    style={{ width: `${profile ? Math.min(100, (profile.dailyXp / profile.dailyGoal) * 100) : 0}%` }}
                   />
                 </div>
               </div>

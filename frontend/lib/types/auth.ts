@@ -37,3 +37,31 @@ export interface RefreshResponse {
   accessToken: string;
   expiresAt: number;
 }
+
+export interface UserProfile {
+  id: string;
+  userId: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  level: number;
+  xp: number;
+  xpToNextLevel: number;
+  title: string;
+  bio: string | null;
+  currentStreak: number;
+  longestStreak: number;
+  lastActivityDate: string | null;
+  dailyXp: number;
+  dailyGoal: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Achievement {
+  id: string;
+  userId: string;
+  type: string;
+  label: string;
+  emoji: string;
+  earnedAt: string;
+}

@@ -17,15 +17,20 @@ import {
 } from "../api";
 import type {
   User,
+  UserProfile,
+  Achievement,
   AuthState,
   LoginCredentials,
   RegisterCredentials,
 } from "../types/auth";
 
 interface AuthContextType extends AuthState {
+  profile: UserProfile | null;
+  achievements: Achievement[];
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (credentials: RegisterCredentials) => Promise<void>;
   logout: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -35,6 +40,8 @@ const REFRESH_BUFFER_MS = 24 * 60 * 60 * 1000;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [accessToken, setToken] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -114,9 +121,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAccessToken(response.accessToken, response.expiresAt);
         scheduleRefresh(response.expiresAt);
 
-        // Get user info
-        const { user } = await api.getCurrentUser();
+        // Get user info + profile
+        const { user, profile, achievements } = await api.getCurrentUser();
         setUser(user);
+        setProfile(profile);
+        setAchievements(achievements ?? []);
       } catch {
         // No valid session - user needs to log in
         clearAccessToken();
@@ -132,6 +141,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [scheduleRefresh, clearRefreshTimeout]);
 
+  const refreshProfile = useCallback(async () => {
+    try {
+      const { user: u, profile: p, achievements: a } = await api.getCurrentUser();
+      setUser(u);
+      setProfile(p);
+      setAchievements(a ?? []);
+    } catch {
+      // Silently fail — profile refresh is best-effort
+    }
+  }, []);
+
   const login = useCallback(
     async (credentials: LoginCredentials) => {
       const response = await api.login(credentials);
@@ -140,6 +160,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setExpiresAt(response.expiresAt);
       setAccessToken(response.accessToken, response.expiresAt);
       scheduleRefresh(response.expiresAt);
+      // Fetch profile after login
+      try {
+        const { profile: p, achievements: a } = await api.getCurrentUser();
+        setProfile(p);
+        setAchievements(a ?? []);
+      } catch { /* ignore */ }
     },
     [scheduleRefresh]
   );
@@ -152,6 +178,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setExpiresAt(response.expiresAt);
       setAccessToken(response.accessToken, response.expiresAt);
       scheduleRefresh(response.expiresAt);
+      // Fetch profile after register
+      try {
+        const { profile: p, achievements: a } = await api.getCurrentUser();
+        setProfile(p);
+        setAchievements(a ?? []);
+      } catch { /* ignore */ }
     },
     [scheduleRefresh]
   );
@@ -164,6 +196,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Ignore logout errors
     }
     setUser(null);
+    setProfile(null);
+    setAchievements([]);
     setToken(null);
     setExpiresAt(null);
     clearAccessToken();
@@ -173,6 +207,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
+        profile,
+        achievements,
         accessToken,
         expiresAt,
         isLoading,
@@ -180,6 +216,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
+        refreshProfile,
       }}
     >
       {children}

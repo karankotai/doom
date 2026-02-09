@@ -36,8 +36,22 @@ export interface UserProfile {
   xpToNextLevel: number;
   title: string;
   bio: string | null;
+  currentStreak: number;
+  longestStreak: number;
+  lastActivityDate: string | null;
+  dailyXp: number;
+  dailyGoal: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Achievement {
+  id: string;
+  userId: string;
+  type: string;
+  label: string;
+  emoji: string;
+  earnedAt: Date;
 }
 
 export interface UpdateProfileInput {

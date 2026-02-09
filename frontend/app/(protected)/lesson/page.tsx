@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/context/auth-context";
 import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
@@ -25,6 +26,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function LessonPage() {
   const router = useRouter();
+  const { refreshProfile } = useAuth();
   const [applets, setApplets] = useState<Applet[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,6 +59,8 @@ export default function LessonPage() {
       if (!completedPuzzles.includes(currentPuzzleIndex)) {
         setCompletedPuzzles([...completedPuzzles, currentPuzzleIndex]);
         setXpEarned((prev) => prev + 10); // 10 XP per puzzle
+        // Persist XP to backend (fire-and-forget)
+        api.awardXp(10).catch(() => {});
       } else {
         // Puzzle already complete - this is the Continue button, advance to next
         if (currentPuzzleIndex < applets.length - 1) {
@@ -166,7 +170,7 @@ export default function LessonPage() {
               <span>⚡</span>
               <span>+{xpEarned} XP earned!</span>
             </div>
-            <Button size="lg" onClick={() => router.push("/dashboard")}>
+            <Button size="lg" onClick={() => { refreshProfile(); router.push("/dashboard"); }}>
               Back to Dashboard
             </Button>
           </CardContent>

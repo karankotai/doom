@@ -12,6 +12,8 @@
 
 import type {
   User,
+  UserProfile,
+  Achievement,
   LoginCredentials,
   RegisterCredentials,
   AuthResponse,
@@ -151,8 +153,17 @@ class ApiClient {
     });
   }
 
-  async getCurrentUser(): Promise<{ user: User }> {
-    return this.request<{ user: User }>("/auth/me");
+  async getCurrentUser(): Promise<{ user: User; profile: UserProfile | null; achievements: Achievement[] }> {
+    return this.request<{ user: User; profile: UserProfile | null; achievements: Achievement[] }>("/auth/me");
+  }
+
+  // ============== XP ==============
+
+  async awardXp(amount: number): Promise<{ profile: UserProfile; achievements: Achievement[] }> {
+    return this.request<{ profile: UserProfile; achievements: Achievement[] }>("/users/me/xp", {
+      method: "POST",
+      body: JSON.stringify({ amount }),
+    });
   }
 
   // ============== Applets ==============
