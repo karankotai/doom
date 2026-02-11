@@ -135,7 +135,29 @@ export async function getProfile(userId: string): Promise<UserProfile | null> {
     FROM user_profiles
     WHERE user_id = ${userId}
   `;
-  return profile || null;
+  if (!profile) return null;
+
+  // Adjust streak and daily XP based on last activity date
+  const today = new Date().toISOString().split("T")[0];
+  const lastDate = profile.lastActivityDate
+    ? new Date(profile.lastActivityDate).toISOString().split("T")[0]
+    : null;
+
+  if (lastDate && lastDate !== today) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+    // Daily XP resets if not today
+    profile.dailyXp = 0;
+
+    // Streak breaks if last activity was before yesterday
+    if (lastDate !== yesterdayStr) {
+      profile.currentStreak = 0;
+    }
+  }
+
+  return profile;
 }
 
 export async function updateProfile(
