@@ -19,7 +19,14 @@
       "Bash(./node_modules/.bin/next build:*)",
       "Bash(ls:*)",
       "Bash(cat:*)",
-      "Bash(bun -e:*)"
+      "Bash(bun -e:*)",
+      "WebFetch(domain:lichess.org)",
+      "WebFetch(domain:database.lichess.org)",
+      "WebFetch(domain:mcognetta.github.io)",
+      "WebFetch(domain:thomastonk.jimdofree.com)",
+      "WebFetch(domain:bkamins.github.io)",
+      "Bash(python3:*)",
+      "Bash(echo:*)"
     ]
   }
 }

@@ -2,9 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useAuth } from "@/lib/context/auth-context";
-import { Logo } from "@/components/ui/logo";
 
 export default function AuthLayout({
   children,

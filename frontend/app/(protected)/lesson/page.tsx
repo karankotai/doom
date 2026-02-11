@@ -230,6 +230,7 @@ export default function LessonPage() {
               hint={currentPuzzle.hint}
               initialPosition={(currentPuzzle as ChessApplet).content.initialPosition}
               correctMove={(currentPuzzle as ChessApplet).content.correctMove}
+              correctMoves={(currentPuzzle as ChessApplet).content.correctMoves}
               onComplete={handlePuzzleComplete}
             />
           ) : currentPuzzle.type === "slope-graph" ? (

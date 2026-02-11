@@ -44,6 +44,10 @@ const INCORRECT_COLOR = "#FF4B4B";
 const MISSED_COLOR = "#FFC800";
 const HOVER_COLOR = "#D0D0D0";
 
+// Default viewBox: crops empty southern ocean while keeping all land with padding
+// Land spans y≈18 (north) to y≈405 (south). We add padding above and below.
+const DEFAULT_VIEWBOX = "0 0 1000 450";
+
 // --- Component ---
 
 export function MapSelect({
@@ -64,12 +68,6 @@ export function MapSelect({
     "correct" | "incorrect" | "missed"
   > | null>(null);
 
-  // Build a set of selectable region IDs
-  const selectableIds = useMemo(
-    () => new Set(regions.map((r) => r.id)),
-    [regions]
-  );
-
   // Map region ID -> label override
   const labelMap = useMemo(() => {
     const m = new Map<string, string>();
@@ -82,13 +80,13 @@ export function MapSelect({
   // Determine the viewBox
   const viewBox = mapView
     ? `${mapView.x} ${mapView.y} ${mapView.width} ${mapView.height}`
-    : "0 0 1000 500";
+    : DEFAULT_VIEWBOX;
 
   // --- Actions ---
 
   const toggleCountry = useCallback(
     (countryId: string) => {
-      if (isComplete || !selectableIds.has(countryId)) return;
+      if (isComplete) return;
       setSelected((prev) => {
         const next = new Set(prev);
         if (next.has(countryId)) {
@@ -101,7 +99,7 @@ export function MapSelect({
       setFeedback(null);
       setValidationResults(null);
     },
-    [isComplete, selectableIds]
+    [isComplete]
   );
 
   const checkAnswer = useCallback(() => {
@@ -148,7 +146,7 @@ export function MapSelect({
     if (validation === "incorrect") return INCORRECT_COLOR;
     if (validation === "missed") return MISSED_COLOR;
     if (selected.has(countryId)) return SELECTED_COLOR;
-    if (hoveredId === countryId && selectableIds.has(countryId)) return HOVER_COLOR;
+    if (hoveredId === countryId) return HOVER_COLOR;
     return LAND_COLOR;
   };
 
@@ -198,13 +196,13 @@ export function MapSelect({
         )}
 
         {/* Map */}
-        <div className="rounded-2xl border-2 border-border bg-[#AADAF2] overflow-hidden relative">
+        <div className="rounded-2xl border-2 border-border bg-[#AADAF2] overflow-hidden relative p-2 sm:p-3">
           <svg
             viewBox={viewBox}
             className="w-full h-auto"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Ocean background */}
+            {/* Ocean background — covers full projection area */}
             <rect x="0" y="0" width="1000" height="500" fill="#AADAF2" />
 
             {/* Equator and Tropics reference lines */}
@@ -212,29 +210,26 @@ export function MapSelect({
             <line x1="0" y1="185" x2="1000" y2="185" stroke="#90C8E0" strokeWidth="0.3" strokeDasharray="2,4" />
             <line x1="0" y1="315" x2="1000" y2="315" stroke="#90C8E0" strokeWidth="0.3" strokeDasharray="2,4" />
 
-            {/* All countries — same base color, differentiated only by borders */}
-            {COUNTRIES.map((country) => {
-              const isSelectable = selectableIds.has(country.id);
-              return (
-                <path
-                  key={country.id}
-                  d={country.path}
-                  fill={getCountryFill(country.id)}
-                  stroke={getCountryStroke(country.id)}
-                  strokeWidth={getStrokeWidth(country.id)}
-                  strokeLinejoin="round"
-                  className={cn(
-                    "transition-colors duration-150",
-                    isSelectable && !isComplete && "cursor-pointer"
-                  )}
-                  onClick={() => toggleCountry(country.id)}
-                  onMouseEnter={() => isSelectable && setHoveredId(country.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                >
-                  <title>{labelMap.get(country.id) ?? country.name}</title>
-                </path>
-              );
-            })}
+            {/* All countries — every country is clickable */}
+            {COUNTRIES.map((country) => (
+              <path
+                key={country.id}
+                d={country.path}
+                fill={getCountryFill(country.id)}
+                stroke={getCountryStroke(country.id)}
+                strokeWidth={getStrokeWidth(country.id)}
+                strokeLinejoin="round"
+                className={cn(
+                  "transition-colors duration-150",
+                  !isComplete && "cursor-pointer"
+                )}
+                onClick={() => toggleCountry(country.id)}
+                onMouseEnter={() => setHoveredId(country.id)}
+                onMouseLeave={() => setHoveredId(null)}
+              >
+                <title>{labelMap.get(country.id) ?? country.name}</title>
+              </path>
+            ))}
           </svg>
         </div>
 

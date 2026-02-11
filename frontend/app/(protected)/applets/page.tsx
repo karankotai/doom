@@ -108,6 +108,7 @@ export default function AppletsPage() {
             hint={applet.hint}
             initialPosition={(applet as ChessApplet).content.initialPosition}
             correctMove={(applet as ChessApplet).content.correctMove}
+            correctMoves={(applet as ChessApplet).content.correctMoves}
             onComplete={handleComplete}
           />
         );

@@ -67,7 +67,8 @@ export interface ChessMove {
 
 export interface ChessContent {
   initialPosition: string; // e.g., "wKe1,bKe8,wRa1"
-  correctMove: ChessMove;
+  correctMove?: ChessMove; // Legacy single-move (deprecated, use correctMoves)
+  correctMoves?: ChessMove[]; // Multi-step: [playerMove1, opponentResponse1, playerMove2, ...]
 }
 
 // --- MCQ specific types ---

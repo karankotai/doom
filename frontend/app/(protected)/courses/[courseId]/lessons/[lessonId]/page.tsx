@@ -68,7 +68,7 @@ function renderApplet(
 
   switch (applet.type) {
     case "chess":
-      return <ChessPuzzle key={key} question={q} hint={h} initialPosition={(applet as ChessApplet).content.initialPosition} correctMove={(applet as ChessApplet).content.correctMove} onComplete={onComplete} />;
+      return <ChessPuzzle key={key} question={q} hint={h} initialPosition={(applet as ChessApplet).content.initialPosition} correctMove={(applet as ChessApplet).content.correctMove} correctMoves={(applet as ChessApplet).content.correctMoves} onComplete={onComplete} />;
     case "slope-graph":
       return <SlopeGraph key={key} question={q} hint={h} startPoint={(applet as SlopeGraphApplet).content.startPoint} targetPoint={(applet as SlopeGraphApplet).content.targetPoint} gridSize={(applet as SlopeGraphApplet).content.gridSize} onComplete={onComplete} />;
     case "mcq":
