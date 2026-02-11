@@ -120,11 +120,11 @@ export function Mcq({
                   "active:translate-y-0.5 active:shadow-none",
                   "disabled:cursor-default disabled:hover:border-border disabled:hover:bg-transparent",
                   // Default state
-                  !isSelected && !showAsCorrect && "border-border bg-card shadow-cosmos",
+                  !isSelected && !showAsCorrect && "border-border bg-card shadow-3d",
                   // Selected state
-                  isSelected && !feedback && "border-accent bg-accent/10 shadow-cosmos-accent",
+                  isSelected && !feedback && "border-accent bg-accent/10 shadow-3d-accent",
                   // Correct state
-                  showAsCorrect && "border-primary bg-primary/10 shadow-cosmos-primary",
+                  showAsCorrect && "border-primary bg-primary/10 shadow-3d-primary",
                   // Incorrect state
                   showAsIncorrect && "border-destructive bg-destructive/10 animate-shake"
                 )}

@@ -66,24 +66,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--purple))",
           foreground: "hsl(var(--purple-foreground))",
         },
-        /* Space / Cosmos direct colors (light mode) */
-        cosmos: {
-          nebula: "#6C63FF",
-          "nebula-dark": "#5A52E0",
-          "nebula-light": "#8B85FF",
-          cyan: "#00C2D4",
-          "cyan-dark": "#00A3B3",
-          magenta: "#FF6AC1",
-          gold: "#FFD700",
-          red: "#FF3B5C",
-          purple: "#B388FF",
-          mist: "#F2EFF8",
-          cloud: "#EDEAF5",
-          edge: "#D6D2E4",
-          ink: "#1C1E30",
-          "ink-faded": "#6B6D87",
-          white: "#FFFFFF",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -93,18 +75,17 @@ const config: Config = {
         "3xl": "1.5rem",
       },
       boxShadow: {
-        /* Cosmos-style 3D button shadows */
-        "cosmos": "0 4px 0 0 rgba(108, 99, 255, 0.15)",
-        "cosmos-primary": "0 4px 0 0 #5A52E0",
-        "cosmos-accent": "0 4px 0 0 #D94FA0",
-        "cosmos-destructive": "0 4px 0 0 #CC2F4A",
-        "cosmos-secondary": "0 4px 0 0 #C5C1D4",
+        /* 3D button shadows via CSS vars */
+        "3d": "var(--shadow-3d)",
+        "3d-primary": "var(--shadow-3d-primary)",
+        "3d-accent": "var(--shadow-3d-accent)",
+        "3d-destructive": "var(--shadow-3d-destructive)",
+        "3d-secondary": "var(--shadow-3d-secondary)",
         /* Glow shadows */
-        "glow-sm": "0 0 10px rgba(108, 99, 255, 0.2)",
-        "glow-md": "0 0 20px rgba(108, 99, 255, 0.3)",
-        "glow-lg": "0 0 40px rgba(108, 99, 255, 0.3), 0 0 80px rgba(108, 99, 255, 0.1)",
-        "glow-cyan": "0 0 20px rgba(0, 229, 255, 0.3)",
-        "glow-magenta": "0 0 20px rgba(255, 106, 193, 0.3)",
+        "glow-sm": "0 0 10px rgba(217, 119, 6, 0.2)",
+        "glow-md": "0 0 20px rgba(217, 119, 6, 0.3)",
+        "glow-lg": "0 0 40px rgba(217, 119, 6, 0.3), 0 0 80px rgba(217, 119, 6, 0.1)",
+        "glow-cyan": "0 0 20px rgba(13, 148, 136, 0.3)",
       },
       keyframes: {
         "accordion-down": {
@@ -136,15 +117,15 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
-        "nebula-drift": {
+        "drift": {
           "0%": { transform: "translate(0, 0) scale(1)" },
           "33%": { transform: "translate(10px, -10px) scale(1.05)" },
           "66%": { transform: "translate(-5px, 5px) scale(0.95)" },
           "100%": { transform: "translate(0, 0) scale(1)" },
         },
         "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(108, 99, 255, 0.15)" },
-          "50%": { boxShadow: "0 0 40px rgba(108, 99, 255, 0.3)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(217, 119, 6, 0.15)" },
+          "50%": { boxShadow: "0 0 40px rgba(217, 119, 6, 0.3)" },
         },
       },
       animation: {
@@ -155,7 +136,7 @@ const config: Config = {
         "orbit-pulse": "orbit-pulse 2s ease-in-out infinite",
         "twinkle": "twinkle 3s ease-in-out infinite",
         "float": "float 6s ease-in-out infinite",
-        "nebula-drift": "nebula-drift 20s ease-in-out infinite",
+        "drift": "drift 20s ease-in-out infinite",
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
       },
     },

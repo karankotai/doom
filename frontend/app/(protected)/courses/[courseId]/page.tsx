@@ -19,14 +19,14 @@ import { cn } from "@/lib/utils";
 
 // Vibrant, distinct colors for each unit section
 const UNIT_COLORS = [
-  "#6C63FF", // Nebula Purple
-  "#00C2D4", // Electric Cyan
-  "#FF6AC1", // Cosmic Magenta
+  "#D97706", // Hazard Amber (primary)
+  "#0D9488", // Fallout Teal (secondary)
+  "#EA580C", // Ember Orange (accent)
   "#58CC02", // Feather Green
-  "#FF9500", // Solar Orange
-  "#FF3B5C", // Supernova Red
+  "#DC2626", // Danger Red (destructive)
+  "#9333EA", // Radiation Violet (purple)
   "#1CB0F6", // Dodger Blue
-  "#B388FF", // Aurora Violet
+  "#EAB308", // Caution Yellow (warning)
 ];
 
 // Zigzag: nodes snake in a sine-wave pattern

@@ -199,12 +199,12 @@ export function ThoughtTree({
                   style={{
                     background: `linear-gradient(to bottom, ${
                       isComplete && !allCorrect
-                        ? "rgba(255,75,75,0.4)"
-                        : "rgba(108,99,255,0.5)"
+                        ? "var(--rgba-destructive-50)"
+                        : "var(--rgba-primary-50)"
                     }, ${
                       isComplete && !allCorrect
-                        ? "rgba(255,75,75,0.15)"
-                        : "rgba(108,99,255,0.15)"
+                        ? "var(--rgba-destructive-15)"
+                        : "var(--rgba-primary-15)"
                     })`,
                   }}
                 />
@@ -235,10 +235,10 @@ export function ThoughtTree({
                     d="M140 0 Q140 20 55 38"
                     stroke={
                       !selected
-                        ? "#D6D2E4"
+                        ? "var(--hex-border)"
                         : isLeftSelected
-                        ? "#6C63FF"
-                        : "#EDEAF5"
+                        ? "var(--hex-primary)"
+                        : "var(--hex-muted)"
                     }
                     strokeWidth={
                       !selected ? 1.5 : isLeftSelected ? 2.5 : 1
@@ -254,10 +254,10 @@ export function ThoughtTree({
                     d="M140 0 Q140 20 225 38"
                     stroke={
                       !selected
-                        ? "#D6D2E4"
+                        ? "var(--hex-border)"
                         : !isLeftSelected
-                        ? "#6C63FF"
-                        : "#EDEAF5"
+                        ? "var(--hex-primary)"
+                        : "var(--hex-muted)"
                     }
                     strokeWidth={
                       !selected ? 1.5 : !isLeftSelected ? 2.5 : 1
@@ -275,10 +275,10 @@ export function ThoughtTree({
                     r="3.5"
                     fill={
                       !selected
-                        ? "#D6D2E4"
+                        ? "var(--hex-border)"
                         : isLeftSelected
-                        ? "#6C63FF"
-                        : "#EDEAF5"
+                        ? "var(--hex-primary)"
+                        : "var(--hex-muted)"
                     }
                     style={{
                       opacity: !selected ? 0.5 : isLeftSelected ? 1 : 0.2,
@@ -291,10 +291,10 @@ export function ThoughtTree({
                     r="3.5"
                     fill={
                       !selected
-                        ? "#D6D2E4"
+                        ? "var(--hex-border)"
                         : !isLeftSelected
-                        ? "#6C63FF"
-                        : "#EDEAF5"
+                        ? "var(--hex-primary)"
+                        : "var(--hex-muted)"
                     }
                     style={{
                       opacity: !selected ? 0.5 : !isLeftSelected ? 1 : 0.2,
@@ -348,8 +348,8 @@ export function ThoughtTree({
                 className="w-0.5 h-6"
                 style={{
                   background: allCorrect
-                    ? "linear-gradient(to bottom, rgba(108,99,255,0.5), rgba(108,99,255,0.2))"
-                    : "linear-gradient(to bottom, rgba(255,75,75,0.5), rgba(255,75,75,0.2))",
+                    ? "linear-gradient(to bottom, var(--rgba-primary-50), var(--rgba-primary-15))"
+                    : "linear-gradient(to bottom, var(--rgba-destructive-50), var(--rgba-destructive-15))",
                 }}
               />
 

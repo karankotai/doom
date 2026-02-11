@@ -376,7 +376,7 @@ export function FillBlanks({
                 onClick={() => handleBlockClick(block.id)}
                 className={cn(
                   "inline-flex items-center px-4 py-2 rounded-xl border-2 border-border bg-card text-sm font-semibold",
-                  "shadow-cosmos cursor-grab active:cursor-grabbing active:translate-y-1 active:shadow-none",
+                  "shadow-3d cursor-grab active:cursor-grabbing active:translate-y-1 active:shadow-none",
                   "transition-all duration-150 select-none",
                   "hover:brightness-105 hover:border-accent/50",
                   selectedBlockId === block.id &&

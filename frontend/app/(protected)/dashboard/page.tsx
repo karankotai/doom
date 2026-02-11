@@ -47,7 +47,7 @@ export default function DashboardPage() {
         <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-white shadow-cosmos-primary">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-white shadow-3d-primary">
                 <span className="text-2xl font-extrabold">{profile?.level ?? 1}</span>
               </div>
               <div>
@@ -115,7 +115,7 @@ export default function DashboardPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-xl shadow-cosmos-accent">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-xl shadow-3d-accent">
                     📚
                   </div>
                   <div>
@@ -140,7 +140,7 @@ export default function DashboardPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-xl shadow-cosmos-accent">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-xl shadow-3d-accent">
                     🎮
                   </div>
                   <div>
@@ -168,11 +168,11 @@ export default function DashboardPage() {
           </Card>
 
           {/* AI Generate Card */}
-          <Card className="bg-gradient-to-br from-purple/5 to-purple/10 border-purple/20">
+          <Card className="bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple text-xl shadow-lg">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-xl shadow-lg">
                     ✨
                   </div>
                   <div>
@@ -227,7 +227,7 @@ export default function DashboardPage() {
           </Card>
 
           {/* Daily goal */}
-          <Card className="bg-gradient-to-br from-purple/5 to-purple/10 border-purple/20">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span>🎯</span> Daily Goal
@@ -237,11 +237,11 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground font-medium">Progress</span>
-                  <span className="font-bold text-purple">{profile?.dailyXp ?? 0} / {profile?.dailyGoal ?? 50} XP</span>
+                  <span className="font-bold text-accent">{profile?.dailyXp ?? 0} / {profile?.dailyGoal ?? 50} XP</span>
                 </div>
                 <div className="h-3 w-full rounded-full bg-purple/20 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-purple transition-all duration-500"
+                    className="h-full rounded-full bg-accent transition-all duration-500"
                     style={{ width: `${profile ? Math.min(100, (profile.dailyXp / profile.dailyGoal) * 100) : 0}%` }}
                   />
                 </div>

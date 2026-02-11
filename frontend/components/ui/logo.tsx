@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface DolphinIconProps extends React.SVGProps<SVGSVGElement> {
   className?: string;
@@ -55,22 +56,23 @@ export function Logo({ size = "md", showText = true, className }: LogoProps) {
     <div className={cn("flex items-center gap-3", className)}>
       <div
         className={cn(
-          "flex items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-cosmos-primary transition-transform hover:scale-105",
+          "flex items-center justify-center rounded-xl transition-transform hover:scale-105",
           sizeClasses[size]
         )}
       >
-        <DolphinIcon className={iconSizeClasses[size]} />
+        <Image src="/doom.png" alt="Logo" width={100} height={100} />
       </div>
+      {/*
       {showText && (
         <span
           className={cn(
-            "font-extrabold tracking-tight text-gradient-cosmos",
+            "font-extrabold tracking-tight text-gradient-primary",
             textSizeClasses[size]
           )}
         >
           learn
         </span>
-      )}
+      )} */}
     </div>
   );
 }

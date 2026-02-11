@@ -345,7 +345,7 @@ export default function AppletsPage() {
           {APPLET_TYPES.map((appletType) => (
             <Card
               key={appletType.type}
-              className="cursor-pointer transition-all hover:border-primary hover:shadow-cosmos-primary"
+              className="cursor-pointer transition-all hover:border-primary hover:shadow-3d-primary"
               onClick={() => setSelectedType(appletType.type)}
             >
               <CardHeader className="text-center pb-2">

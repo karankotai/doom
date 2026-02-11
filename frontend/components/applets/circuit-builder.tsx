@@ -39,17 +39,17 @@ interface CircuitBuilderProps {
   onComplete?: (success: boolean) => void;
 }
 
-// --- Colors (Cosmos theme) ---
+// --- Colors (via CSS vars for theme centralization) ---
 
-const WIRE_COLOR = "#6B6D87";
-const WIRE_ACTIVE_COLOR = "#6C63FF";
-const BULB_ON_COLOR = "#FFD700";
-const BULB_OFF_COLOR = "#D6D2E4";
-const SWITCH_ON_COLOR = "#00C2D4";
+const WIRE_COLOR = "var(--hex-wire)";
+const WIRE_ACTIVE_COLOR = "var(--hex-wire-active)";
+const BULB_ON_COLOR = "var(--hex-bulb-on)";
+const BULB_OFF_COLOR = "var(--hex-bulb-off)";
+const SWITCH_ON_COLOR = "var(--hex-switch-on)";
 const SWITCH_OFF_COLOR = "#9CA3AF";
 const BATTERY_BODY = "#4B5563";
 const BATTERY_CAP = "#F59E0B";
-const COMPONENT_STROKE = "#1C1E30";
+const COMPONENT_STROKE = "var(--hex-foreground)";
 
 // --- Circuit Analysis ---
 
@@ -225,7 +225,7 @@ function renderBattery(node: CircuitNode) {
           textAnchor="middle"
           fontSize={10}
           fontWeight="600"
-          fill="#6B6D87"
+          fill="var(--hex-muted-foreground)"
         >
           {node.label}
         </text>
@@ -257,7 +257,7 @@ function renderBulb(
           height={52}
           rx={10}
           fill="none"
-          stroke={validationState === "correct" ? "#22C55E" : "#FF3B5C"}
+          stroke={validationState === "correct" ? "#22C55E" : "var(--hex-destructive)"}
           strokeWidth={2.5}
         />
       )}
@@ -325,7 +325,7 @@ function renderBulb(
           textAnchor="middle"
           fontSize={10}
           fontWeight="600"
-          fill="#6B6D87"
+          fill="var(--hex-muted-foreground)"
         >
           {node.label}
         </text>
@@ -403,7 +403,7 @@ function renderSwitch(
           textAnchor="middle"
           fontSize={10}
           fontWeight="600"
-          fill="#6B6D87"
+          fill="var(--hex-muted-foreground)"
         >
           {node.label}
         </text>
@@ -440,7 +440,7 @@ function renderAmmeter(node: CircuitNode, isActive: boolean) {
           textAnchor="middle"
           fontSize={10}
           fontWeight="600"
-          fill="#6B6D87"
+          fill="var(--hex-muted-foreground)"
         >
           {node.label}
         </text>
@@ -477,7 +477,7 @@ function renderVoltmeter(node: CircuitNode, isActive: boolean) {
           textAnchor="middle"
           fontSize={10}
           fontWeight="600"
-          fill="#6B6D87"
+          fill="var(--hex-muted-foreground)"
         >
           {node.label}
         </text>
@@ -518,7 +518,7 @@ function renderResistor(node: CircuitNode) {
           textAnchor="middle"
           fontSize={10}
           fontWeight="600"
-          fill="#6B6D87"
+          fill="var(--hex-muted-foreground)"
         >
           {node.label}
         </text>

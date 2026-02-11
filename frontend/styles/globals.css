@@ -4,49 +4,88 @@
 
 @layer base {
   :root {
-    /* Light Space / Cosmos color palette */
-    --background: 250 25% 96%; /* Cosmic Mist #F2EFF8 */
-    --foreground: 233 28% 15%; /* Deep Space Ink #1C1E30 */
+    /* Doom / Post-Apocalyptic light palette */
+    --background: 36 23% 94%; /* Bone Ash #F5F1EB */
+    --foreground: 20 10% 9%; /* Carbon #1C1917 */
 
-    --card: 0 0% 100%; /* Starlight White */
-    --card-foreground: 233 28% 15%;
+    --card: 40 50% 98%; /* Parchment #FDFAF5 */
+    --card-foreground: 20 10% 9%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 233 28% 15%;
+    --popover: 40 50% 98%;
+    --popover-foreground: 20 10% 9%;
 
-    /* Nebula Blue - Primary #6C63FF */
-    --primary: 245 100% 69%;
+    /* Hazard Amber - Primary #D97706 */
+    --primary: 38 93% 44%;
     --primary-foreground: 0 0% 100%;
 
-    /* Electric Cyan #00C2D4 (slightly deeper for light bg legibility) */
-    --secondary: 186 100% 42%;
+    /* Fallout Teal #0D9488 */
+    --secondary: 175 84% 32%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Soft Lavender Mist #EDEAF5 */
-    --muted: 248 25% 94%;
-    --muted-foreground: 239 10% 46%; /* Meteor Gray #6B6D87 */
+    /* Fallout Dust #EDE8DF */
+    --muted: 36 25% 90%;
+    --muted-foreground: 25 6% 46%; /* Smoke #78716C */
 
-    /* Cosmic Magenta #FF6AC1 */
-    --accent: 326 100% 71%;
+    /* Ember Orange #EA580C */
+    --accent: 21 90% 48%;
     --accent-foreground: 0 0% 100%;
 
-    /* Supernova Red #FF3B5C */
-    --destructive: 350 100% 62%;
+    /* Danger Red #DC2626 */
+    --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Star Gold #FFD700 */
-    --warning: 51 100% 50%;
-    --warning-foreground: 233 28% 15%;
+    /* Caution Yellow #EAB308 */
+    --warning: 48 96% 47%;
+    --warning-foreground: 20 10% 9%;
 
-    /* Aurora Purple #B388FF */
-    --purple: 262 100% 77%;
+    /* Radiation Violet #9333EA */
+    --purple: 271 81% 56%;
     --purple-foreground: 0 0% 100%;
 
-    --border: 250 18% 87%; /* Stardust Edge #D6D2E4 */
-    --input: 250 18% 87%;
-    --ring: 245 100% 69%; /* Nebula Blue */
+    --border: 36 15% 80%; /* Rust Edge #D6CFC3 */
+    --input: 36 15% 80%;
+    --ring: 38 93% 44%; /* Hazard Amber */
 
     --radius: 1rem;
+
+    /* Hex custom properties for SVG/inline use */
+    --hex-primary: #D97706;
+    --hex-primary-dark: #B45309;
+    --hex-primary-light: #F59E0B;
+    --hex-secondary: #0D9488;
+    --hex-accent: #EA580C;
+    --hex-destructive: #DC2626;
+    --hex-warning: #EAB308;
+    --hex-purple: #9333EA;
+    --hex-background: #F5F1EB;
+    --hex-card: #FDFAF5;
+    --hex-muted: #EDE8DF;
+    --hex-border: #D6CFC3;
+    --hex-foreground: #1C1917;
+    --hex-muted-foreground: #78716C;
+
+    /* Semantic component vars */
+    --hex-run: #0D9488;
+    --hex-rise: #DC2626;
+    --hex-correct: #16A34A;
+    --hex-wire: #78716C;
+    --hex-wire-active: #D97706;
+    --hex-bulb-on: #EAB308;
+    --hex-bulb-off: #D6CFC3;
+    --hex-switch-on: #0D9488;
+
+    /* Shadow CSS variables */
+    --shadow-3d: 0 4px 0 0 rgba(217, 119, 6, 0.15);
+    --shadow-3d-primary: 0 4px 0 0 #B45309;
+    --shadow-3d-accent: 0 4px 0 0 #C2410C;
+    --shadow-3d-destructive: 0 4px 0 0 #B91C1C;
+    --shadow-3d-secondary: 0 4px 0 0 #C0B8A8;
+
+    /* RGBA helpers for thought-tree inline opacity colors */
+    --rgba-primary-50: rgba(217, 119, 6, 0.5);
+    --rgba-primary-15: rgba(217, 119, 6, 0.15);
+    --rgba-destructive-50: rgba(220, 38, 38, 0.5);
+    --rgba-destructive-15: rgba(220, 38, 38, 0.15);
   }
 }
 
@@ -63,58 +102,58 @@
 }
 
 @layer components {
-  /* 3D button effect - space theme */
+  /* 3D button effect */
   .btn-3d {
     @apply relative transform transition-all duration-150 active:translate-y-1;
-    box-shadow: 0 4px 0 0 hsl(var(--primary) / 0.6);
+    box-shadow: var(--shadow-3d);
   }
   .btn-3d:active {
-    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.6);
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.15);
   }
 
   /* Success variant 3D button */
   .btn-3d-success {
-    box-shadow: 0 4px 0 0 hsl(245 100% 55%);
+    box-shadow: var(--shadow-3d-primary);
   }
   .btn-3d-success:active {
-    box-shadow: 0 0 0 0 hsl(245 100% 55%);
+    box-shadow: 0 0 0 0 var(--hex-primary-dark);
   }
 
-  /* Cyan variant 3D button */
+  /* Teal variant 3D button */
   .btn-3d-blue {
-    box-shadow: 0 4px 0 0 hsl(186 100% 32%);
+    box-shadow: 0 4px 0 0 #0F766E;
   }
   .btn-3d-blue:active {
-    box-shadow: 0 0 0 0 hsl(186 100% 32%);
+    box-shadow: 0 0 0 0 #0F766E;
   }
 
-  /* Cosmos-style progress bar */
-  .progress-cosmos {
+  /* Progress bar */
+  .progress-bar {
     @apply h-4 w-full rounded-full bg-muted overflow-hidden;
   }
-  .progress-cosmos-fill {
+  .progress-bar-fill {
     @apply h-full rounded-full bg-primary transition-all duration-500 ease-out;
   }
 
-  /* Cosmos-style card with subtle glow */
-  .card-cosmos {
+  /* Elevated card with subtle glow */
+  .card-elevated {
     @apply rounded-2xl border-2 border-border bg-card p-6;
-    box-shadow: 0 2px 12px rgba(108, 99, 255, 0.08);
+    box-shadow: 0 2px 12px rgba(217, 119, 6, 0.08);
   }
 
   /* Glow utility classes */
-  .glow-nebula {
-    box-shadow: 0 0 20px rgba(108, 99, 255, 0.2), 0 0 60px rgba(108, 99, 255, 0.08);
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.2), 0 0 60px rgba(217, 119, 6, 0.08);
   }
 
   /* Gradient text utilities */
-  .text-gradient-cosmos {
+  .text-gradient-primary {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #6C63FF, #00C2D4);
+    background-image: linear-gradient(135deg, var(--hex-primary), var(--hex-accent));
   }
 
-  .text-gradient-aurora {
+  .text-gradient-accent {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #B388FF, #FF6AC1);
+    background-image: linear-gradient(135deg, var(--hex-purple), var(--hex-accent));
   }
 }
