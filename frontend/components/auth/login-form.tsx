@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiClientError } from "@/lib/api";
+import { Logo } from "../ui/logo";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -48,8 +49,9 @@ export function LoginForm() {
 
   return (
     <Card className="border-2">
-      <CardHeader className="space-y-4 text-center pb-2">
-        <h1 className="text-2xl font-extrabold text-foreground">Log in</h1>
+      <CardHeader className="flex flex-row justify-center gap-4 items-center">
+        <Logo size="lg" />
+        <h1 className="text-2xl font-extrabold text-foreground">Log In</h1>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
@@ -99,9 +101,8 @@ export function LoginForm() {
           </div>
 
           <Button
-            variant="outline"
-            className="w-full"
-            size="lg"
+            variant="ghost"
+            size="icon"
             type="button"
             onClick={() => {
               window.location.href = `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001"}/auth/google`;
@@ -125,11 +126,10 @@ export function LoginForm() {
                 fill="#EA4335"
               />
             </svg>
-            Continue with Google
           </Button>
 
-          <Button variant="outline" className="w-full" size="lg" asChild>
-            <Link href="/register">Create an account</Link>
+          <Button variant="link" className="w-full normal-case underline" size="lg" asChild>
+            <Link className="text-lg" href="/register">Create an account</Link>
           </Button>
         </CardFooter>
       </form>

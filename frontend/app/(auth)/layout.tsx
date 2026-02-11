@@ -36,13 +36,6 @@ export default function AuthLayout({
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/* Header with logo */}
-      <header className="flex items-center justify-center py-8">
-        <Link href="/">
-          <Logo size="lg" />
-        </Link>
-      </header>
-
       {/* Main content */}
       <main className="flex flex-1 flex-col items-center justify-center px-4 pb-12">
         <div className="w-full max-w-md">{children}</div>
