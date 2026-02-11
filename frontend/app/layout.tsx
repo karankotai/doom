@@ -23,8 +23,12 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Learning Platform",
-  description: "Interactive learning platform",
+  title: "Doom",
+  description: "Every Move Delays the Doom.",
+  icons: {
+    icon: "/doom.png",
+    apple: "/doom.png",
+  },
 };
 
 export default function RootLayout({
