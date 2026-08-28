@@ -84,17 +84,3 @@ bun run dev
 - API calls go directly to backend service
 - Components organized by feature
 
-## Development Status
-
-This is a skeleton project. All endpoints return 501 Not Implemented.
-
-### TODO
-
-- [ ] Implement database migrations
-- [ ] Implement auth domain (sessions, tokens)
-- [ ] Implement users domain (CRUD)
-- [ ] Implement journeys domain (CRUD, modules, lessons)
-- [ ] Implement applets domain (evaluation logic)
-- [ ] Implement progression engine
-- [ ] Implement AI integration
-- [ ] Build frontend UI
