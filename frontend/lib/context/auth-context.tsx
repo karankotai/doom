@@ -29,6 +29,7 @@ interface AuthContextType extends AuthState {
   achievements: Achievement[];
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (credentials: RegisterCredentials) => Promise<void>;
+  demoLogin: () => Promise<void>;
   loginWithGoogle: (code: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -189,6 +190,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [scheduleRefresh]
   );
 
+  const demoLogin = useCallback(async () => {
+    const response = await api.demoLogin();
+    setUser(response.user);
+    setToken(response.accessToken);
+    setExpiresAt(response.expiresAt);
+    setAccessToken(response.accessToken, response.expiresAt);
+    scheduleRefresh(response.expiresAt);
+    try {
+      const { profile: p, achievements: a } = await api.getCurrentUser();
+      setProfile(p);
+      setAchievements(a ?? []);
+    } catch { /* ignore */ }
+  }, [scheduleRefresh]);
+
   const loginWithGoogle = useCallback(
     async (code: string) => {
       const response = await api.googleLogin(code);
@@ -233,6 +248,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated,
         login,
         register,
+        demoLogin,
         loginWithGoogle,
         logout,
         refreshProfile,

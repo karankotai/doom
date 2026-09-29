@@ -161,6 +161,12 @@ class ApiClient {
     });
   }
 
+  async demoLogin(): Promise<AuthResponse> {
+    return this.request<AuthResponse>("/auth/demo-login", {
+      method: "POST",
+    });
+  }
+
   async getCurrentUser(): Promise<{ user: User; profile: UserProfile | null; achievements: Achievement[] }> {
     return this.request<{ user: User; profile: UserProfile | null; achievements: Achievement[] }>("/auth/me");
   }

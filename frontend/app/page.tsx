@@ -1,21 +1,45 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { useToast } from "@/components/ui/use-toast";
+import { ApiClientError } from "@/lib/api";
 
 export default function HomePage() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, demoLogin } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
+  const [isTryingDemo, setIsTryingDemo] = useState(false);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       router.replace("/dashboard");
     }
   }, [isAuthenticated, isLoading, router]);
+
+  const handleTryDemo = async () => {
+    setIsTryingDemo(true);
+    try {
+      await demoLogin();
+      router.push("/dashboard");
+    } catch (error) {
+      const message =
+        error instanceof ApiClientError
+          ? error.message
+          : "An error occurred. Please try again.";
+      toast({
+        variant: "destructive",
+        title: "Couldn't start demo",
+        description: message,
+      });
+    } finally {
+      setIsTryingDemo(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -54,7 +78,16 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-center sm:flex-wrap">
+          <Button
+            size="lg"
+            variant="secondary"
+            className="min-w-[200px]"
+            onClick={handleTryDemo}
+            disabled={isTryingDemo}
+          >
+            {isTryingDemo ? "Starting demo..." : "Try it out"}
+          </Button>
           <Button asChild size="lg" className="min-w-[200px]">
             <Link href="/register">Get Started</Link>
           </Button>

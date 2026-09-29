@@ -157,6 +157,24 @@ authRoutes.get("/me", async (c) => {
   }
 });
 
+// POST /auth/demo-login - Auto-login as demo user (created if missing)
+authRoutes.post("/demo-login", async (c) => {
+  try {
+    const result = await authService.demoLogin();
+    const { _refreshToken, ...response } = result;
+
+    setCookie(c, REFRESH_TOKEN_COOKIE, _refreshToken, getRefreshTokenCookieOptions());
+
+    return c.json(response);
+  } catch (error) {
+    if (error instanceof AppError) {
+      return c.json({ error: error.message }, error.statusCode as 400 | 401 | 403 | 404 | 500);
+    }
+    console.error("Demo login error:", error);
+    return c.json({ error: "Demo login failed" }, 500);
+  }
+});
+
 // GET /auth/google - Redirect to Google OAuth consent screen
 authRoutes.get("/google", (c) => {
   if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {

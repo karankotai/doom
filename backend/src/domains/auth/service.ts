@@ -485,3 +485,36 @@ export async function loginWithGoogle(
     _refreshToken: refreshToken,
   };
 }
+
+// ============== Demo / Guest Login ==============
+
+export const DEMO_USER_EMAIL = "demo@doom.app";
+export const DEMO_USER_NAME = "Demo User";
+export const DEMO_USER_PASSWORD = "demo12345678";
+
+export async function demoLogin(): Promise<AuthResponse & { _refreshToken: string }> {
+  let user = await getUserByEmail(DEMO_USER_EMAIL);
+
+  if (!user) {
+    const passwordHash = await hashPassword(DEMO_USER_PASSWORD);
+    user = await createUserInDb(DEMO_USER_EMAIL, DEMO_USER_NAME, passwordHash);
+    await createUserProfile(user.id, DEMO_USER_NAME);
+  }
+
+  const { refreshToken } = await createSession(user.id);
+  const { token: accessToken, expiresAt } = await generateAccessToken({
+    id: user.id,
+    email: user.email,
+  });
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    },
+    accessToken,
+    expiresAt,
+    _refreshToken: refreshToken,
+  };
+}

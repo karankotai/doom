@@ -21,7 +21,8 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { login } = useAuth();
+  const [isTryingDemo, setIsTryingDemo] = useState(false);
+  const { login, demoLogin } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -44,6 +45,26 @@ export function LoginForm() {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleTryDemo = async () => {
+    setIsTryingDemo(true);
+    try {
+      await demoLogin();
+      router.push("/dashboard");
+    } catch (error) {
+      const message =
+        error instanceof ApiClientError
+          ? error.message
+          : "An error occurred. Please try again.";
+      toast({
+        variant: "destructive",
+        title: "Couldn't start demo",
+        description: message,
+      });
+    } finally {
+      setIsTryingDemo(false);
     }
   };
 
@@ -87,6 +108,17 @@ export function LoginForm() {
         <CardFooter className="flex flex-col space-y-4 pt-2">
           <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
             {isSubmitting ? "Signing in..." : "Log in"}
+          </Button>
+
+          <Button
+            type="button"
+            variant="secondary"
+            className="w-full"
+            size="lg"
+            onClick={handleTryDemo}
+            disabled={isTryingDemo}
+          >
+            {isTryingDemo ? "Starting demo..." : "Try it out (no sign up)"}
           </Button>
 
           <div className="relative w-full">
