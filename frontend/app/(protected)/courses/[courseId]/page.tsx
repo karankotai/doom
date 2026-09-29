@@ -7,6 +7,7 @@ import { api } from "@/lib/api";
 import type { CourseWithUnits, CourseLesson } from "@/lib/types/course";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Zap, Trophy } from "lucide-react";
 
 /**
  * Brilliant-style stepping-stone course path.
@@ -377,8 +378,9 @@ export default function CourseDetailPage() {
                       {lesson.description || "Complete this lesson to progress."}
                     </p>
                     <div className="flex items-center justify-between mt-3">
-                      <span className="text-xs font-bold text-warning flex items-center gap-1">
-                        ⚡ +{lesson.xpReward} XP
+                      <span className="text-xs font-bold text-warning inline-flex items-center gap-1">
+                        <Zap className="h-3 w-3" />
+                        <span>+{lesson.xpReward} XP</span>
                       </span>
                       <Link href={`/courses/${courseId}/lessons/${lesson.id}`}>
                         <Button
@@ -401,7 +403,7 @@ export default function CourseDetailPage() {
         <div className="flex flex-col items-center mt-4">
           <div
             className={cn(
-              "flex items-center justify-center rounded-full w-16 h-16 text-2xl",
+              "flex items-center justify-center rounded-full w-16 h-16",
               completedCount === totalLessons && totalLessons > 0
                 ? "animate-pop"
                 : "opacity-25",
@@ -416,9 +418,10 @@ export default function CourseDetailPage() {
                   ? courseColor
                   : "hsl(var(--border))"
               }`,
+              color: completedCount === totalLessons && totalLessons > 0 ? courseColor : undefined,
             }}
           >
-            🏆
+            <Trophy className="h-7 w-7" />
           </div>
           {completedCount === totalLessons && totalLessons > 0 && (
             <div className="text-center mt-4">

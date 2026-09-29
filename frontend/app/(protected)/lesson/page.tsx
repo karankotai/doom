@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/context/auth-context";
-import type { Applet, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet, ThoughtTreeApplet, CircuitBuilderApplet } from "@/lib/types/applet";
+import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet, ThoughtTreeApplet, CircuitBuilderApplet } from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -26,6 +26,38 @@ import { CircuitBuilder } from "@/components/applets/circuit-builder";
 import { ExplanationReveal } from "@/components/applets/explanation-reveal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { APPLET_ICON } from "@/lib/icons";
+import {
+  Zap,
+  Sparkles,
+  CircleHelp,
+  BookOpen,
+  type LucideIcon,
+} from "lucide-react";
+
+function getAppletLabel(type: AppletType): string {
+  const map: Record<AppletType, string> = {
+    chess: "Chess Tactics",
+    "slope-graph": "Slope Graph",
+    mcq: "Multiple Choice",
+    "fill-blanks": "Fill in the Blanks",
+    "venn-diagram": "Venn Diagram",
+    "highlight-text": "Highlight Text",
+    "comparative-advantage": "Comparative Advantage",
+    ordering: "Ordering",
+    "color-mixing": "Color Mixing",
+    "map-select": "Map Select",
+    "categorization-grid": "Categorization Grid",
+    "fraction-visualizer": "Fraction Visualizer",
+    "chart-reading": "Chart Reading",
+    "match-pairs": "Match Pairs",
+    "interactive-diagram": "Interactive Diagram",
+    "thought-tree": "Thought Tree",
+    "circuit-builder": "Circuit Builder",
+    "code-blocks": "Code Blocks",
+  };
+  return map[type];
+}
 
 export default function LessonPage() {
   const router = useRouter();
@@ -100,7 +132,9 @@ export default function LessonPage() {
       <div className="max-w-2xl mx-auto space-y-6">
         <Card className="text-center py-12">
           <CardContent className="space-y-4">
-            <div className="text-4xl">😕</div>
+            <div className="flex justify-center">
+              <CircleHelp className="h-10 w-10 text-muted-foreground" />
+            </div>
             <h2 className="text-xl font-bold text-foreground">Oops!</h2>
             <p className="text-muted-foreground">{error}</p>
             <Button onClick={() => router.push("/dashboard")}>
@@ -118,7 +152,9 @@ export default function LessonPage() {
       <div className="max-w-2xl mx-auto space-y-6">
         <Card className="text-center py-12">
           <CardContent className="space-y-4">
-            <div className="text-4xl">📚</div>
+            <div className="flex justify-center">
+              <BookOpen className="h-10 w-10 text-muted-foreground" />
+            </div>
             <h2 className="text-xl font-bold text-foreground">No puzzles available</h2>
             <p className="text-muted-foreground">Check back later for new content!</p>
             <Button onClick={() => router.push("/dashboard")}>
@@ -139,10 +175,10 @@ export default function LessonPage() {
         </Button>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-warning/10 text-warning">
-            <span className="text-lg">⚡</span>
+            <Zap className="h-4 w-4" />
             <span className="font-bold text-sm">+{xpEarned} XP</span>
           </div>
-          <span className="text-sm font-semibold text-muted-foreground">
+          <span className="text-sm font-semibold text-muted-foreground tabular-nums">
             {completedPuzzles.length} / {applets.length}
           </span>
         </div>
@@ -162,15 +198,17 @@ export default function LessonPage() {
       {isLessonComplete ? (
         <Card className="text-center py-12">
           <CardContent className="space-y-6">
-            <div className="text-6xl animate-pop">🎉</div>
+            <div className="flex justify-center animate-pop">
+              <Sparkles className="h-16 w-16 text-warning" />
+            </div>
             <div>
               <h2 className="text-2xl font-bold text-foreground">Lesson Complete!</h2>
               <p className="text-muted-foreground mt-2">
                 You&apos;ve mastered all the puzzles
               </p>
             </div>
-            <div className="flex items-center justify-center gap-2 text-2xl font-bold text-warning">
-              <span>⚡</span>
+            <div className="flex items-center justify-center gap-2 text-xl font-bold text-warning">
+              <Zap className="h-6 w-6" />
               <span>+{xpEarned} XP earned!</span>
             </div>
             <Button size="lg" onClick={() => { refreshProfile(); router.push("/dashboard"); }}>
@@ -182,44 +220,20 @@ export default function LessonPage() {
         <>
           {/* Puzzle type indicator */}
           <div className="flex items-center justify-center gap-2">
-            <span className="text-2xl">
-              {currentPuzzle.type === "chess" ? "♟️" :
-               currentPuzzle.type === "slope-graph" ? "📐" :
-               currentPuzzle.type === "mcq" ? "❓" :
-               currentPuzzle.type === "fill-blanks" ? "📝" :
-               currentPuzzle.type === "venn-diagram" ? "⭕" :
-               currentPuzzle.type === "highlight-text" ? "🖍️" :
-               currentPuzzle.type === "comparative-advantage" ? "⚖️" :
-               currentPuzzle.type === "ordering" ? "📊" :
-               currentPuzzle.type === "color-mixing" ? "🎨" :
-               currentPuzzle.type === "map-select" ? "🗺️" :
-               currentPuzzle.type === "categorization-grid" ? "📋" :
-               currentPuzzle.type === "fraction-visualizer" ? "🟦" :
-               currentPuzzle.type === "chart-reading" ? "📊" :
-               currentPuzzle.type === "match-pairs" ? "🔗" :
-               currentPuzzle.type === "interactive-diagram" ? "🔬" :
-               currentPuzzle.type === "thought-tree" ? "🌳" :
-               currentPuzzle.type === "circuit-builder" ? "⚡" : "🧩"}
-            </span>
-            <h1 className="text-lg font-bold text-foreground">
-              {currentPuzzle.type === "chess" ? "Chess Tactics" :
-               currentPuzzle.type === "slope-graph" ? "Slope Graph" :
-               currentPuzzle.type === "mcq" ? "Multiple Choice" :
-               currentPuzzle.type === "fill-blanks" ? "Fill in the Blanks" :
-               currentPuzzle.type === "venn-diagram" ? "Venn Diagram" :
-               currentPuzzle.type === "highlight-text" ? "Highlight Text" :
-               currentPuzzle.type === "comparative-advantage" ? "Comparative Advantage" :
-               currentPuzzle.type === "ordering" ? "Ordering" :
-               currentPuzzle.type === "color-mixing" ? "Color Mixing" :
-               currentPuzzle.type === "map-select" ? "Map Select" :
-               currentPuzzle.type === "categorization-grid" ? "Categorization Grid" :
-               currentPuzzle.type === "fraction-visualizer" ? "Fraction Visualizer" :
-               currentPuzzle.type === "chart-reading" ? "Chart Reading" :
-               currentPuzzle.type === "match-pairs" ? "Match Pairs" :
-               currentPuzzle.type === "interactive-diagram" ? "Interactive Diagram" :
-               currentPuzzle.type === "thought-tree" ? "Thought Tree" :
-               currentPuzzle.type === "circuit-builder" ? "Circuit Builder" : "Code Blocks"}
-            </h1>
+            {(() => {
+              const Icon = APPLET_ICON[currentPuzzle.type] as LucideIcon | undefined;
+              const Label = getAppletLabel(currentPuzzle.type as AppletType);
+              return (
+                <>
+                  {Icon ? (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                  ) : null}
+                  <h1 className="text-lg font-bold text-foreground">{Label}</h1>
+                </>
+              );
+            })()}
           </div>
 
           {/* Puzzle - render based on type */}

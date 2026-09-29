@@ -45,18 +45,13 @@ import { ThoughtTree } from "@/components/applets/thought-tree";
 import { ExplanationReveal } from "@/components/applets/explanation-reveal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
-function getAppletEmoji(type: string): string {
-  const map: Record<string, string> = {
-    chess: "♟️", "slope-graph": "📐", mcq: "❓", "fill-blanks": "📝",
-    "venn-diagram": "⭕", "highlight-text": "🖍️", "comparative-advantage": "⚖️",
-    ordering: "📊", "color-mixing": "🎨", "map-select": "🗺️",
-    "categorization-grid": "📋", "fraction-visualizer": "🟦", "chart-reading": "📊",
-    "match-pairs": "🔗", "interactive-diagram": "🔬", "thought-tree": "🌳",
-    "code-blocks": "🧩",
-  };
-  return map[type] ?? "🧩";
-}
+import { APPLET_ICON } from "@/lib/icons";
+import {
+  Zap,
+  Sparkles,
+  Inbox,
+  type LucideIcon,
+} from "lucide-react";
 
 function renderApplet(
   applet: Applet,
@@ -172,7 +167,9 @@ export default function CourseLessonPage() {
       <div className="max-w-2xl mx-auto space-y-6">
         <Card className="text-center py-12">
           <CardContent className="space-y-4">
-            <div className="text-4xl">📭</div>
+            <div className="flex justify-center">
+              <Inbox className="h-10 w-10 text-muted-foreground" />
+            </div>
             <h2 className="text-xl font-bold text-foreground">No exercises in this lesson</h2>
             <Button onClick={() => router.push(`/courses/${courseId}`)}>
               Back to Course
@@ -192,10 +189,10 @@ export default function CourseLessonPage() {
         </Button>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-warning/10 text-warning">
-            <span className="text-lg">⚡</span>
+            <Zap className="h-4 w-4" />
             <span className="font-bold text-sm">+{Math.round(xpEarned)} XP</span>
           </div>
-          <span className="text-sm font-semibold text-muted-foreground">
+          <span className="text-sm font-semibold text-muted-foreground tabular-nums">
             {completedIndices.length} / {applets.length}
           </span>
         </div>
@@ -226,15 +223,17 @@ export default function CourseLessonPage() {
       {isLessonDone ? (
         <Card className="text-center py-12">
           <CardContent className="space-y-6">
-            <div className="text-6xl animate-pop">🎉</div>
+            <div className="flex justify-center animate-pop">
+              <Sparkles className="h-16 w-16 text-warning" />
+            </div>
             <div>
               <h2 className="text-2xl font-bold text-foreground">
                 {lesson.isCheckpointReview ? "Checkpoint Passed!" : "Lesson Complete!"}
               </h2>
               <p className="text-muted-foreground mt-2">{lesson.title}</p>
             </div>
-            <div className="flex items-center justify-center gap-2 text-2xl font-bold text-warning">
-              <span>⚡</span>
+            <div className="flex items-center justify-center gap-2 text-xl font-bold text-warning">
+              <Zap className="h-6 w-6" />
               <span>+{Math.round(xpEarned)} XP earned!</span>
             </div>
             <Button
@@ -251,8 +250,16 @@ export default function CourseLessonPage() {
       ) : currentApplet ? (
         <>
           {/* Applet type label */}
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-2xl">{getAppletEmoji(currentApplet.type)}</span>
+          <div className="flex items-center justify-center">
+            {(() => {
+              const Icon = APPLET_ICON[currentApplet.type] as LucideIcon | undefined;
+              if (!Icon) return null;
+              return (
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                  <Icon className="h-5 w-5" />
+                </div>
+              );
+            })()}
           </div>
 
           {/* Render applet */}

@@ -6,13 +6,14 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1280px",
       },
     },
     extend: {
@@ -21,8 +22,14 @@ const config: Config = {
         display: ["var(--font-nunito)", "DIN Rounded", "system-ui", "sans-serif"],
       },
       fontSize: {
-        "hero": ["3.5rem", { lineHeight: "1.1", fontWeight: "800" }],
+        hero: ["4rem", { lineHeight: "1.05", fontWeight: "900", letterSpacing: "-0.02em" }],
+        "h1": ["2.5rem", { lineHeight: "1.15", fontWeight: "800", letterSpacing: "-0.01em" }],
+        "h2": ["1.75rem", { lineHeight: "1.25", fontWeight: "800" }],
+        "h3": ["1.25rem", { lineHeight: "1.3", fontWeight: "700" }],
         "title": ["1.75rem", { lineHeight: "1.2", fontWeight: "700" }],
+        "lg-body": ["1.125rem", { lineHeight: "1.55", fontWeight: "500" }],
+        label: ["0.875rem", { lineHeight: "1.4", fontWeight: "600" }],
+        caption: ["0.75rem", { lineHeight: "1.4", fontWeight: "500" }],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -66,26 +73,28 @@ const config: Config = {
           DEFAULT: "hsl(var(--purple))",
           foreground: "hsl(var(--purple-foreground))",
         },
+        surface: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 4px)",
-        sm: "calc(var(--radius) - 8px)",
-        "2xl": "1.25rem",
+        md: "calc(var(--radius) - 3px)",
+        sm: "calc(var(--radius) - 6px)",
+        "2xl": "1.125rem",
         "3xl": "1.5rem",
       },
       boxShadow: {
-        /* 3D button shadows via CSS vars */
-        "3d": "var(--shadow-3d)",
+        /* 3D button shadow — ONLY on primary CTA */
         "3d-primary": "var(--shadow-3d-primary)",
-        "3d-accent": "var(--shadow-3d-accent)",
-        "3d-destructive": "var(--shadow-3d-destructive)",
-        "3d-secondary": "var(--shadow-3d-secondary)",
-        /* Glow shadows */
-        "glow-sm": "0 0 10px rgba(217, 119, 6, 0.2)",
-        "glow-md": "0 0 20px rgba(217, 119, 6, 0.3)",
-        "glow-lg": "0 0 40px rgba(217, 119, 6, 0.3), 0 0 80px rgba(217, 119, 6, 0.1)",
-        "glow-cyan": "0 0 20px rgba(13, 148, 136, 0.3)",
+        /* Standard elevation — use instead of glow, sparingly */
+        sm: "0 1px 2px 0 rgb(0 0 0 / 0.4)",
+        DEFAULT: "0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.4)",
+        md: "0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4)",
+        lg: "0 10px 15px -3px rgb(0 0 0 / 0.55), 0 4px 6px -4px rgb(0 0 0 / 0.5)",
+        /* One soft glow for CTA-focus rings; NOT for card hovers */
+        "focus-ring": "0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary) / 0.4)",
       },
       keyframes: {
         "accordion-down": {
@@ -98,46 +107,29 @@ const config: Config = {
         },
         "bounce-small": {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-4px)" },
+          "50%": { transform: "translateY(-3px)" },
         },
         "pop": {
-          "0%": { transform: "scale(0.8)", opacity: "0" },
-          "50%": { transform: "scale(1.1)" },
+          "0%": { transform: "scale(0.9)", opacity: "0" },
+          "60%": { transform: "scale(1.04)" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
         "orbit-pulse": {
           "0%, 100%": { transform: "scale(1)", opacity: "1" },
-          "50%": { transform: "scale(1.15)", opacity: "0.8" },
+          "50%": { transform: "scale(1.1)", opacity: "0.85" },
         },
-        "twinkle": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.3" },
-        },
-        "float": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        "drift": {
-          "0%": { transform: "translate(0, 0) scale(1)" },
-          "33%": { transform: "translate(10px, -10px) scale(1.05)" },
-          "66%": { transform: "translate(-5px, 5px) scale(0.95)" },
-          "100%": { transform: "translate(0, 0) scale(1)" },
-        },
-        "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(217, 119, 6, 0.15)" },
-          "50%": { boxShadow: "0 0 40px rgba(217, 119, 6, 0.3)" },
+        "shimmer": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "100%": { backgroundPosition: "200% 50%" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "bounce-small": "bounce-small 0.5s ease-in-out",
-        "pop": "pop 0.3s ease-out",
+        "bounce-small": "bounce-small 0.6s ease-in-out",
+        "pop": "pop 0.25s ease-out",
         "orbit-pulse": "orbit-pulse 2s ease-in-out infinite",
-        "twinkle": "twinkle 3s ease-in-out infinite",
-        "float": "float 6s ease-in-out infinite",
-        "drift": "drift 20s ease-in-out infinite",
-        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        "shimmer": "shimmer 2.2s linear infinite",
       },
     },
   },

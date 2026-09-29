@@ -37,15 +37,15 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-11 w-11 rounded-2xl p-0 hover:bg-muted">
-          <Avatar className="h-11 w-11 rounded-2xl">
-            <AvatarFallback className="bg-primary text-primary-foreground font-bold text-base rounded-2xl">
+        <Button variant="ghost" className="relative h-8 w-8 rounded-lg p-0 hover:bg-muted">
+          <Avatar className="h-8 w-8 rounded-lg">
+            <AvatarFallback className="bg-primary text-primary-foreground font-bold text-[11px] rounded-lg">
               {initials}
             </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60 rounded-2xl border-2 p-2" align="end" forceMount>
+      <DropdownMenuContent className="w-60 rounded-xl border border-border/80 bg-card p-2 shadow-md" align="end" forceMount>
         <DropdownMenuLabel className="font-normal px-3 py-2">
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 rounded-xl">
@@ -53,28 +53,28 @@ export function UserMenu() {
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <div className="flex flex-col">
-              <p className="text-sm font-bold leading-none">{user.name}</p>
-              <p className="text-xs leading-none text-muted-foreground mt-1">
+            <div className="flex flex-col min-w-0">
+              <p className="text-sm font-bold leading-none truncate">{user.name}</p>
+              <p className="text-xs leading-none text-muted-foreground mt-1 truncate">
                 {user.email}
               </p>
             </div>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className="my-2" />
+        <DropdownMenuSeparator className="my-1 bg-border/60" />
         <DropdownMenuItem
           onClick={() => router.push("/profile")}
-          className="rounded-xl px-3 py-2.5 font-semibold cursor-pointer"
+          className="rounded-lg px-3 py-2 font-semibold cursor-pointer"
         >
-          <User className="mr-3 h-5 w-5" />
+          <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuSeparator className="my-2" />
+        <DropdownMenuSeparator className="my-1 bg-border/60" />
         <DropdownMenuItem
           onClick={handleLogout}
-          className="rounded-xl px-3 py-2.5 font-semibold cursor-pointer text-destructive focus:text-destructive"
+          className="rounded-lg px-3 py-2 font-semibold cursor-pointer text-destructive focus:text-destructive"
         >
-          <LogOut className="mr-3 h-5 w-5" />
+          <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

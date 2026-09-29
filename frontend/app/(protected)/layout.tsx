@@ -1,73 +1,90 @@
 "use client";
 
 import Link from "next/link";
+import { Zap, Flame } from "lucide-react";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { UserMenu } from "@/components/auth/user-menu";
 import { Logo } from "@/components/ui/logo";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/lib/context/auth-context";
+
+const NAV_ITEMS = [
+  { href: "/dashboard", label: "Learn" },
+  { href: "/courses", label: "Courses" },
+  { href: "/applets", label: "Applets" },
+  { href: "/generate", label: "Generate" },
+] as const;
 
 function ProtectedContent({ children }: { children: React.ReactNode }) {
   const { profile } = useAuth();
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      {/* Header - Duolingo style */}
-      <header className="sticky top-0 z-50 w-full border-b-2 border-border backdrop-blur-xl bg-background/80">
-        <div className="container flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/dashboard">
-            <Logo size="md" />
-          </Link>
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/95 backdrop-blur-sm">
+        <div className="container flex h-16 items-center justify-between gap-4">
+          <div className="flex items-center gap-10">
+            <Link href="/dashboard" className="shrink-0">
+              <Logo size="md" />
+            </Link>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="/dashboard"
-              className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
-            >
-              Learn
-            </Link>
-            <Link
-              href="/courses"
-              className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
-            >
-              Courses
-            </Link>
-            <Link
-              href="/applets"
-              className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
-            >
-              Applets
-            </Link>
-            <Link
-              href="/generate"
-              className="text-sm font-bold uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
-            >
-              Generate
-            </Link>
-          </nav>
+            <nav className="hidden md:flex items-center gap-1">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="relative rounded-lg px-3 py-2 text-sm font-bold text-muted-foreground/90 transition-colors hover:text-foreground hover:bg-muted/60"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-          {/* User section */}
-          <div className="flex items-center gap-4">
-            {/* XP indicator */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-warning/10 text-warning">
-              <span className="text-lg">⚡</span>
-              <span className="font-bold text-sm">{profile?.xp ?? 0} XP</span>
-            </div>
+          <div className="flex items-center gap-2">
+            <Badge
+              variant="warning"
+              size="sm"
+              className="hidden sm:inline-flex"
+              iconLeft={<Zap className="h-3 w-3" />}
+            >
+              <span className="inline-flex items-center gap-1">
+                <span className="tabular-nums">{profile?.xp ?? 0}</span>
+                <span className="text-muted-foreground/80 font-medium">XP</span>
+              </span>
+            </Badge>
 
-            {/* Streak indicator */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-destructive/10 text-destructive">
-              <span className="text-lg animate-orbit-pulse">🔥</span>
-              <span className="font-bold text-sm">{profile?.currentStreak ?? 0}</span>
-            </div>
+            <Badge
+              variant="destructive"
+              size="sm"
+              className="hidden sm:inline-flex"
+              iconLeft={<Flame className="h-3 w-3" />}
+            >
+              <span className="inline-flex items-center gap-1">
+                <span className="tabular-nums">{profile?.currentStreak ?? 0}</span>
+                <span className="text-destructive-foreground/90 font-medium hidden md:inline">
+                  day streak
+                </span>
+              </span>
+            </Badge>
 
             <UserMenu />
           </div>
         </div>
+
+        <nav className="md:hidden container flex items-center justify-between gap-1 pb-3 overflow-x-auto">
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="shrink-0 rounded-lg px-3 py-1.5 text-sm font-bold text-muted-foreground/90 hover:text-foreground hover:bg-muted/60"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
       </header>
 
-      {/* Main content */}
-      <main className="container py-8">{children}</main>
+      <main className="container py-8 md:py-10">{children}</main>
     </div>
   );
 }

@@ -2,7 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
-import type { Applet, AppletType, CodeBlocksApplet, SlopeGraphApplet, ChessApplet, McqApplet, FillBlanksApplet, VennDiagramApplet, HighlightTextApplet, ComparativeAdvantageApplet, OrderingApplet, ColorMixingApplet, MapSelectApplet, CategorizationGridApplet, FractionVisualizerApplet, ChartReadingApplet, MatchPairsApplet, InteractiveDiagramApplet, ThoughtTreeApplet, CircuitBuilderApplet } from "@/lib/types/applet";
+import type {
+  Applet,
+  AppletType,
+  CodeBlocksApplet,
+  SlopeGraphApplet,
+  ChessApplet,
+  McqApplet,
+  FillBlanksApplet,
+  VennDiagramApplet,
+  HighlightTextApplet,
+  ComparativeAdvantageApplet,
+  OrderingApplet,
+  ColorMixingApplet,
+  MapSelectApplet,
+  CategorizationGridApplet,
+  FractionVisualizerApplet,
+  ChartReadingApplet,
+  MatchPairsApplet,
+  InteractiveDiagramApplet,
+  ThoughtTreeApplet,
+  CircuitBuilderApplet,
+} from "@/lib/types/applet";
 import { ChessPuzzle } from "@/components/applets/chess-puzzle";
 import { CodeBlocks } from "@/components/applets/code-blocks";
 import { SlopeGraph } from "@/components/applets/slope-graph";
@@ -22,27 +43,34 @@ import { InteractiveDiagram } from "@/components/applets/interactive-diagram";
 import { ThoughtTree } from "@/components/applets/thought-tree";
 import { CircuitBuilder } from "@/components/applets/circuit-builder";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { APPLET_ICON, courseTintForIndex } from "@/lib/icons";
+import { ArrowLeft, type LucideIcon } from "lucide-react";
 
-const APPLET_TYPES: { type: AppletType; name: string; icon: string; description: string }[] = [
-  { type: "mcq", name: "Multiple Choice", icon: "❓", description: "Answer questions by selecting the correct option" },
-  { type: "fill-blanks", name: "Fill in the Blanks", icon: "📝", description: "Drag and drop words to complete sentences" },
-  { type: "code-blocks", name: "Code Blocks", icon: "🧩", description: "Complete code by placing blocks in the right slots" },
-  { type: "venn-diagram", name: "Venn Diagram", icon: "⭕", description: "Color regions to represent set operations" },
-  { type: "highlight-text", name: "Highlight Text", icon: "🖍️", description: "Identify parts of speech by highlighting words" },
-  { type: "slope-graph", name: "Slope Graph", icon: "📐", description: "Move points on a graph to learn about slopes" },
-  { type: "chess", name: "Chess Tactics", icon: "♟️", description: "Find the best move in chess puzzles" },
-  { type: "comparative-advantage", name: "Comparative Advantage", icon: "⚖️", description: "Use sliders to explore absolute and comparative advantage" },
-  { type: "ordering", name: "Ordering", icon: "📊", description: "Drag and drop items into the correct hierarchical order" },
-  { type: "color-mixing", name: "Color Mixing", icon: "🎨", description: "Mix colors to match a target — learn additive and subtractive color theory" },
-  { type: "map-select", name: "Map Select", icon: "🗺️", description: "Select countries on a world map to answer geography and history questions" },
-  { type: "categorization-grid", name: "Categorization Grid", icon: "📋", description: "Sort items into categories by dragging and dropping them into a grid" },
-  { type: "fraction-visualizer", name: "Fraction Visualizer", icon: "🟦", description: "Color sections of a shape to represent fractions visually" },
-  { type: "chart-reading", name: "Chart Reading", icon: "📊", description: "Read and interpret bar charts, pie charts, line graphs, scatter plots, and histograms" },
-  { type: "match-pairs", name: "Match Pairs", icon: "🔗", description: "Draw lines to match items between two columns — languages, science, history and more" },
-  { type: "interactive-diagram", name: "Interactive Diagram", icon: "🔬", description: "Click on diagram regions to answer questions about geometry, biology, anatomy, and more" },
-  { type: "thought-tree", name: "Thought Tree", icon: "🌳", description: "Navigate a branching decision tree — pick the right path through 5 questions to reach the answer" },
-  { type: "circuit-builder", name: "Circuit Builder", icon: "⚡", description: "Toggle switches to complete circuits — learn series and parallel circuits interactively" },
+const APPLET_TYPES: {
+  type: AppletType;
+  name: string;
+  description: string;
+}[] = [
+  { type: "mcq", name: "Multiple Choice", description: "Pick the correct answer from a short list." },
+  { type: "fill-blanks", name: "Fill in the Blanks", description: "Drop words into the gaps to complete sentences." },
+  { type: "code-blocks", name: "Code Blocks", description: "Slot code fragments into the right order." },
+  { type: "venn-diagram", name: "Venn Diagrams", description: "Shade the regions that match set operations." },
+  { type: "highlight-text", name: "Highlight Text", description: "Mark up parts of speech and key terms." },
+  { type: "slope-graph", name: "Slope Graphs", description: "Drag points on an axis to hit a target slope." },
+  { type: "chess", name: "Chess Tactics", description: "Find the best next move in each position." },
+  { type: "comparative-advantage", name: "Comparative Advantage", description: "Who should make what? The math behind trade." },
+  { type: "ordering", name: "Ordering", description: "Line up items into the correct sequence." },
+  { type: "color-mixing", name: "Color Mixing", description: "Combine color channels to match a target swatch." },
+  { type: "map-select", name: "Map Quizzes", description: "Point and click your way through geography and history." },
+  { type: "categorization-grid", name: "Categorization Grids", description: "Sort items into the right bucket." },
+  { type: "fraction-visualizer", name: "Fractions", description: "Color in slices to build target fractions." },
+  { type: "chart-reading", name: "Chart Reading", description: "Read the chart, answer the question." },
+  { type: "match-pairs", name: "Match Pairs", description: "Match items between two lists." },
+  { type: "interactive-diagram", name: "Interactive Diagrams", description: "Point to the right part of a labeled diagram." },
+  { type: "thought-tree", name: "Thought Trees", description: "Navigate a 5-step branch of sub-questions to the answer." },
+  { type: "circuit-builder", name: "Circuit Builder", description: "Toggle switches to turn a bulb on (or off)."},
 ];
 
 export default function AppletsPage() {
@@ -52,7 +80,6 @@ export default function AppletsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
 
-  // Fetch applets when type is selected
   useEffect(() => {
     if (!selectedType) {
       setApplets([]);
@@ -64,7 +91,10 @@ export default function AppletsPage() {
     async function fetchApplets() {
       setIsLoading(true);
       try {
-        const { applets: fetchedApplets } = await api.getApplets({ type: selectedType ?? undefined, limit: 10 });
+        const { applets: fetchedApplets } = await api.getApplets({
+          type: selectedType ?? undefined,
+          limit: 10,
+        });
         setApplets(fetchedApplets);
         setCurrentAppletIndex(0);
         setCompletedCount(0);
@@ -81,21 +111,16 @@ export default function AppletsPage() {
   const currentApplet = applets[currentAppletIndex];
 
   const handleComplete = (success: boolean) => {
-    if (success) {
-      setCompletedCount((prev) => prev + 1);
-    }
+    if (success) setCompletedCount((prev) => prev + 1);
   };
 
   const handleNext = () => {
-    if (currentAppletIndex < applets.length - 1) {
+    if (currentAppletIndex < applets.length - 1)
       setCurrentAppletIndex(currentAppletIndex + 1);
-    }
   };
-
   const handlePrev = () => {
-    if (currentAppletIndex > 0) {
+    if (currentAppletIndex > 0)
       setCurrentAppletIndex(currentAppletIndex - 1);
-    }
   };
 
   const renderApplet = (applet: Applet) => {
@@ -331,143 +356,159 @@ export default function AppletsPage() {
     }
   };
 
-  // Type selection view
   if (!selectedType) {
     return (
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground">Applet Gallery</h1>
-          <p className="text-muted-foreground mt-2">
-            Choose an applet type to practice
+      <div className="max-w-5xl mx-auto space-y-6">
+        <div className="space-y-2">
+          <div className="text-label text-muted-foreground">Applets</div>
+          <h1 className="text-h1 text-foreground">Pick a puzzle type.</h1>
+          <p className="text-sm text-muted-foreground max-w-2xl">
+            18 different practice formats. All short. All scorable. Pick the one
+            that matches how your brain feels today.
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {APPLET_TYPES.map((appletType) => (
-            <Card
-              key={appletType.type}
-              className="cursor-pointer transition-all hover:border-primary hover:shadow-3d-primary"
-              onClick={() => setSelectedType(appletType.type)}
-            >
-              <CardHeader className="text-center pb-2">
-                <div className="text-4xl mb-2">{appletType.icon}</div>
-                <CardTitle className="text-lg">{appletType.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-center">
-                  {appletType.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {APPLET_TYPES.map((appletType, idx) => {
+            const tint = courseTintForIndex(idx);
+            const Icon = (APPLET_ICON[appletType.type] ?? null) as
+              | LucideIcon
+              | null;
+            return (
+              <button
+                key={appletType.type}
+                type="button"
+                className={`group text-left rounded-xl border ${tint.border} bg-card p-5 transition-all hover:shadow-md hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring outline-none`}
+                onClick={() => setSelectedType(appletType.type)}
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border ${tint.border} ${tint.bg} ${tint.text}`}
+                  >
+                    {Icon ? <Icon className="h-5 w-5" /> : null}
+                  </div>
+                  <div className="min-w-0 space-y-1.5">
+                    <div className="text-sm font-bold text-foreground">
+                      {appletType.name}
+                    </div>
+                    <div className="text-caption leading-relaxed text-muted-foreground">
+                      {appletType.description}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     );
   }
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="max-w-2xl mx-auto flex items-center justify-center min-h-[400px]">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );
   }
 
-  // No applets found
   if (applets.length === 0) {
+    const typeName =
+      APPLET_TYPES.find((t) => t.type === selectedType)?.name ?? "applet";
     return (
       <div className="max-w-2xl mx-auto space-y-6">
-        <Button variant="ghost" onClick={() => setSelectedType(null)}>
-          ← Back to Gallery
+        <Button variant="ghost" size="sm" onClick={() => setSelectedType(null)}>
+          <ArrowLeft className="h-4 w-4" /> Back to gallery
         </Button>
-        <Card className="text-center py-12">
-          <CardContent className="space-y-4">
-            <div className="text-4xl">📭</div>
-            <h2 className="text-xl font-bold text-foreground">No applets found</h2>
-            <p className="text-muted-foreground">
-              There are no {APPLET_TYPES.find(t => t.type === selectedType)?.name} applets yet.
+        <Card className="text-center">
+          <CardContent className="space-y-3 pt-12 pb-12">
+            <h2 className="text-h3 font-bold text-foreground">No {typeName.toLowerCase()} applets yet</h2>
+            <p className="text-sm text-muted-foreground">
+              This type exists but the practice bank is empty for it. Try another format, or use the generator to make your own.
             </p>
-            <Button onClick={() => setSelectedType(null)}>
-              Try another type
-            </Button>
+            <div className="flex flex-wrap gap-2 pt-2 justify-center">
+              <Button onClick={() => setSelectedType(null)}>Try another type</Button>
+            </div>
           </CardContent>
         </Card>
       </div>
     );
   }
 
-  const selectedTypeInfo = APPLET_TYPES.find(t => t.type === selectedType);
+  const selectedTypeInfo = APPLET_TYPES.find((t) => t.type === selectedType);
+  const SelectedIcon = selectedTypeInfo
+    ? ((APPLET_ICON[selectedTypeInfo.type] ?? null) as LucideIcon | null)
+    : null;
 
-  // Applet view
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="max-w-2xl mx-auto space-y-5">
+      <div className="flex items-center justify-between gap-2">
         <Button variant="ghost" size="sm" onClick={() => setSelectedType(null)}>
-          ← Back
+          <ArrowLeft className="h-4 w-4" />
+          Back
         </Button>
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">{selectedTypeInfo?.icon}</span>
-          <span className="font-bold text-foreground">{selectedTypeInfo?.name}</span>
-        </div>
-        <div className="text-sm text-muted-foreground">
+        <Badge
+          variant="muted"
+          iconLeft={SelectedIcon ? <SelectedIcon className="h-3.5 w-3.5 text-primary" /> : undefined}
+        >
+          {selectedTypeInfo?.name ?? "Practice"}
+        </Badge>
+        <div className="text-caption text-muted-foreground tabular-nums">
           {currentAppletIndex + 1} / {applets.length}
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+      <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
         <div
           className="h-full rounded-full bg-primary transition-all duration-300"
           style={{ width: `${((currentAppletIndex + 1) / applets.length) * 100}%` }}
         />
       </div>
 
-      {/* Current applet */}
       {currentApplet && renderApplet(currentApplet)}
 
-      {/* Navigation */}
-      <div className="flex justify-between items-center pt-4">
+      <div className="flex items-center justify-between pt-2">
         <Button
           variant="outline"
+          size="sm"
           onClick={handlePrev}
           disabled={currentAppletIndex === 0}
         >
-          ← Previous
+          <ArrowLeft className="h-3.5 w-3.5" /> Previous
         </Button>
-
-        {/* Indicators */}
-        <div className="flex gap-2">
-          {applets.map((_, index) => (
+        <div className="flex gap-1.5">
+          {applets.map((_, idx) => (
             <button
-              key={index}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${
-                index === currentAppletIndex
-                  ? "bg-primary scale-125"
-                  : index < currentAppletIndex
+              key={idx}
+              type="button"
+              aria-label={`Go to applet ${idx + 1}`}
+              className={`h-2 w-2.5 rounded-full transition-all ${
+                idx === currentAppletIndex
+                  ? "bg-primary w-5"
+                  : idx < currentAppletIndex
                   ? "bg-primary/50"
                   : "bg-muted"
               }`}
-              onClick={() => setCurrentAppletIndex(index)}
+              onClick={() => setCurrentAppletIndex(idx)}
             />
           ))}
         </div>
-
         <Button
           variant="outline"
+          size="sm"
           onClick={handleNext}
           disabled={currentAppletIndex === applets.length - 1}
         >
-          Next →
+          Next
         </Button>
       </div>
 
-      {/* Completed count */}
       {completedCount > 0 && (
-        <p className="text-center text-sm text-muted-foreground">
-          Completed: {completedCount} / {applets.length}
-        </p>
+        <div className="flex justify-center">
+          <Badge variant="default" size="sm">
+            Completed: {completedCount} / {applets.length}
+          </Badge>
+        </div>
       )}
     </div>
   );

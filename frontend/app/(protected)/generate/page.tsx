@@ -2,21 +2,30 @@
 
 import { useState } from "react";
 import { api } from "@/lib/api";
-import type { GeneratedExercise, McqContent, FillBlanksContent, VennDiagramContent, HighlightTextContent } from "@/lib/types/applet";
+import type {
+  GeneratedExercise,
+  McqContent,
+  FillBlanksContent,
+  VennDiagramContent,
+  HighlightTextContent,
+} from "@/lib/types/applet";
 import { Mcq } from "@/components/applets/mcq";
 import { FillBlanks } from "@/components/applets/fill-blanks";
 import { VennDiagram } from "@/components/applets/venn-diagram";
 import { HighlightText } from "@/components/applets/highlight-text";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles, ArrowLeft, type LucideIcon } from "lucide-react";
+import { APPLET_ICON } from "@/lib/icons";
 
 const DIFFICULTY_OPTIONS = [
-  { value: 1, label: "Easy", description: "Basic concepts and simple questions" },
-  { value: 2, label: "Medium", description: "Requires understanding of the topic" },
-  { value: 3, label: "Hard", description: "Challenging questions for advanced learners" },
-];
+  { value: 1, label: "Easy", description: "First look at a topic" },
+  { value: 2, label: "Medium", description: "Concepts with some nuance" },
+  { value: 3, label: "Hard", description: "Requires real understanding" },
+] as const;
 
 export default function GeneratePage() {
   const [topic, setTopic] = useState("");
@@ -38,34 +47,30 @@ export default function GeneratePage() {
     setCompletedCount(0);
 
     try {
-      const { exercises: generated } = await api.generateExercises(topic.trim(), difficulty);
+      const { exercises: generated } = await api.generateExercises(
+        topic.trim(),
+        difficulty
+      );
       setExercises(generated);
     } catch (err) {
       console.error("Generation error:", err);
-      setError(err instanceof Error ? err.message : "Failed to generate exercises");
+      setError(
+        err instanceof Error ? err.message : "Failed to generate exercises"
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleComplete = (success: boolean) => {
-    if (success) {
-      setCompletedCount((prev) => prev + 1);
-    }
+    if (success) setCompletedCount((prev) => prev + 1);
   };
-
   const handleNext = () => {
-    if (currentIndex < exercises.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
+    if (currentIndex < exercises.length - 1) setCurrentIndex(currentIndex + 1);
   };
-
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
-
   const handleReset = () => {
     setExercises([]);
     setCurrentIndex(0);
@@ -116,15 +121,15 @@ export default function GeneratePage() {
         );
       }
       case "highlight-text": {
-        const highlightContent = exercise.content as unknown as HighlightTextContent;
+        const hl = exercise.content as unknown as HighlightTextContent;
         return (
           <HighlightText
             key={`${exercise.title}-${currentIndex}`}
             question={exercise.question}
             hint={exercise.hint}
-            text={highlightContent.text}
-            categories={highlightContent.categories}
-            correctHighlights={highlightContent.correctHighlights}
+            text={hl.text}
+            categories={hl.categories}
+            correctHighlights={hl.correctHighlights}
             onComplete={handleComplete}
           />
         );
@@ -134,74 +139,87 @@ export default function GeneratePage() {
     }
   };
 
-  // Form view (no exercises generated yet)
   if (exercises.length === 0) {
     return (
       <div className="max-w-2xl mx-auto space-y-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground">Generate Exercises</h1>
-          <p className="text-muted-foreground mt-2">
-            Enter a topic and let AI create interactive exercises for you
+        <div className="space-y-2">
+          <div className="text-label text-muted-foreground">Generate</div>
+          <h1 className="text-h1 text-foreground">Ask for what you need.</h1>
+          <p className="text-sm text-muted-foreground max-w-xl">
+            Type in any topic, pick a difficulty, and get five interactive exercises.
+            The generator makes MCQs, fill-in-blanks, Venn diagrams, and highlight-text problems.
           </p>
         </div>
 
         <Card>
-          <CardHeader>
-            <CardTitle>What would you like to learn?</CardTitle>
-            <CardDescription>
-              Enter any topic - history, science, programming, languages, and more!
+          <CardHeader className="pb-0">
+            <CardTitle className="text-h3">What do you want to practice?</CardTitle>
+            <CardDescription className="pt-1">
+              Be specific. "French Revolution causes" beats "history."
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-5 space-y-6">
             <form onSubmit={handleGenerate} className="space-y-6">
-              {/* Topic input */}
               <div className="space-y-2">
-                <Label htmlFor="topic">Learning Topic</Label>
+                <Label htmlFor="topic">Learning topic</Label>
                 <Input
                   id="topic"
                   type="text"
-                  placeholder="e.g., Photosynthesis, World War II, JavaScript arrays..."
+                  placeholder="e.g. Photosynthesis, World War II, JavaScript arrays…"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   maxLength={200}
                   disabled={isLoading}
                 />
-                <p className="text-xs text-muted-foreground">
-                  {topic.length}/200 characters
-                </p>
-              </div>
-
-              {/* Difficulty selector */}
-              <div className="space-y-3">
-                <Label>Difficulty Level</Label>
-                <div className="grid gap-3">
-                  {DIFFICULTY_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => setDifficulty(option.value)}
-                      disabled={isLoading}
-                      className={`p-4 rounded-xl border-2 text-left transition-all ${
-                        difficulty === option.value
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <div className="font-bold text-foreground">{option.label}</div>
-                      <div className="text-sm text-muted-foreground">{option.description}</div>
-                    </button>
-                  ))}
+                <div className="flex items-center justify-between text-caption">
+                  <span className="text-muted-foreground">
+                    {topic.length}/200 characters
+                  </span>
+                  {topic.length > 160 && (
+                    <span className="text-warning">Short topics work better.</span>
+                  )}
                 </div>
               </div>
 
-              {/* Error message */}
+              <div className="space-y-2.5">
+                <Label>Difficulty</Label>
+                <div
+                  role="tablist"
+                  aria-label="Difficulty selector"
+                  className="grid grid-cols-3 rounded-lg border border-border bg-muted/40 p-1"
+                >
+                  {DIFFICULTY_OPTIONS.map((opt) => {
+                    const active = difficulty === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        onClick={() => setDifficulty(opt.value)}
+                        disabled={isLoading}
+                        className={`group relative rounded-md px-2.5 py-2.5 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                          active
+                            ? "bg-card text-foreground shadow-sm border border-border"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <div className="text-sm font-bold">{opt.label}</div>
+                        <div className="text-[11px] leading-tight text-muted-foreground/90 mt-0.5 line-clamp-2">
+                          {opt.description}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {error && (
-                <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm">
+                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
                   {error}
                 </div>
               )}
 
-              {/* Submit button */}
               <Button
                 type="submit"
                 size="lg"
@@ -211,24 +229,29 @@ export default function GeneratePage() {
                 {isLoading ? (
                   <span className="flex items-center gap-2">
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    Generating exercises...
+                    Generating exercises…
                   </span>
                 ) : (
-                  "Generate Exercises"
+                  <>
+                    <Sparkles className="h-4 w-4" />
+                    Generate 5 exercises
+                  </>
                 )}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        {/* Tips */}
-        <Card className="bg-accent/5 border-accent/20">
-          <CardContent className="pt-6">
-            <h3 className="font-bold text-foreground mb-3">Tips for better results</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Be specific: "The French Revolution causes" works better than just "history"</li>
-              <li>Include context: "Python lists for beginners" helps set the right level</li>
-              <li>Try different topics: Science, math, languages, history, programming, and more!</li>
+        <Card className="border-accent/30 bg-accent/[0.04]">
+          <CardContent className="pt-5">
+            <div className="text-sm font-bold text-foreground mb-2.5 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-accent" />
+              Tips for better results
+            </div>
+            <ul className="space-y-1.5 text-sm text-muted-foreground leading-relaxed">
+              <li>· Be specific: "Causes of the 2008 financial crisis" works better than "economics."</li>
+              <li>· Include audience: "Python lists for total beginners" sets the right level.</li>
+              <li>· Narrow is good: "The Krebs cycle inputs and outputs" is the ideal prompt.</li>
             </ul>
           </CardContent>
         </Card>
@@ -236,77 +259,90 @@ export default function GeneratePage() {
     );
   }
 
-  // Exercises view
+  const diffMeta = DIFFICULTY_OPTIONS.find((d) => d.value === difficulty);
+  const exercise = currentExercise;
+  const TypeIcon = exercise
+    ? ((APPLET_ICON[exercise.type as keyof typeof APPLET_ICON] ?? null) as
+        | LucideIcon
+        | null)
+    : null;
+
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="max-w-2xl mx-auto space-y-5">
+      <div className="flex items-center justify-between gap-2">
         <Button variant="ghost" size="sm" onClick={handleReset}>
-          New Topic
+          <ArrowLeft className="h-4 w-4" />
+          New topic
         </Button>
-        <div className="text-center">
-          <h2 className="font-bold text-foreground">{topic}</h2>
-          <p className="text-xs text-muted-foreground">
-            Difficulty: {DIFFICULTY_OPTIONS[difficulty - 1]?.label}
-          </p>
+        <div className="text-center min-w-0">
+          <div className="text-sm font-bold text-foreground truncate max-w-[18rem] sm:max-w-xs">
+            {topic}
+          </div>
+          <div className="text-caption text-muted-foreground">
+            {diffMeta ? `Difficulty: ${diffMeta.label}` : null}
+          </div>
         </div>
-        <div className="text-sm text-muted-foreground">
+        <div className="text-caption text-muted-foreground tabular-nums">
           {currentIndex + 1} / {exercises.length}
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+      <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
         <div
           className="h-full rounded-full bg-primary transition-all duration-300"
-          style={{ width: `${((currentIndex + 1) / exercises.length) * 100}%` }}
+          style={{
+            width: `${((currentIndex + 1) / exercises.length) * 100}%`,
+          }}
         />
       </div>
 
-      {/* Exercise title */}
-      {currentExercise && (
-        <div className="text-center">
-          <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold uppercase">
-            {currentExercise.type === "mcq" && "Multiple Choice"}
-            {currentExercise.type === "fill-blanks" && "Fill in the Blanks"}
-            {currentExercise.type === "venn-diagram" && "Venn Diagram"}
-            {currentExercise.type === "highlight-text" && "Highlight Text"}
-          </span>
+      {exercise && (
+        <div className="flex justify-center">
+          <Badge
+            variant="purple"
+            size="sm"
+            iconLeft={TypeIcon ? <TypeIcon className="h-3.5 w-3.5" /> : undefined}
+          >
+            {exercise.type === "mcq" && "Multiple choice"}
+            {exercise.type === "fill-blanks" && "Fill in the blanks"}
+            {exercise.type === "venn-diagram" && "Venn diagram"}
+            {exercise.type === "highlight-text" && "Highlight text"}
+          </Badge>
         </div>
       )}
 
-      {/* Current exercise */}
-      {currentExercise && renderExercise(currentExercise)}
+      {exercise && renderExercise(exercise)}
 
-      {/* Navigation */}
-      <div className="flex justify-between items-center pt-4">
+      <div className="flex items-center justify-between pt-2">
         <Button
           variant="outline"
+          size="sm"
           onClick={handlePrev}
           disabled={currentIndex === 0}
         >
+          <ArrowLeft className="h-3.5 w-3.5" />
           Previous
         </Button>
-
-        {/* Indicators */}
-        <div className="flex gap-2">
-          {exercises.map((_, index) => (
+        <div className="flex gap-1.5">
+          {exercises.map((_, idx) => (
             <button
-              key={index}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${
-                index === currentIndex
-                  ? "bg-primary scale-125"
-                  : index < currentIndex
+              key={idx}
+              type="button"
+              aria-label={`Go to exercise ${idx + 1}`}
+              className={`h-2 w-2.5 rounded-full transition-all ${
+                idx === currentIndex
+                  ? "bg-primary w-5"
+                  : idx < currentIndex
                   ? "bg-primary/50"
                   : "bg-muted"
               }`}
-              onClick={() => setCurrentIndex(index)}
+              onClick={() => setCurrentIndex(idx)}
             />
           ))}
         </div>
-
         <Button
           variant="outline"
+          size="sm"
           onClick={handleNext}
           disabled={currentIndex === exercises.length - 1}
         >
@@ -314,18 +350,18 @@ export default function GeneratePage() {
         </Button>
       </div>
 
-      {/* Completed count */}
       {completedCount > 0 && (
-        <p className="text-center text-sm text-muted-foreground">
-          Completed: {completedCount} / {exercises.length}
-        </p>
+        <div className="flex justify-center">
+          <Badge variant="default" size="sm">
+            Completed: {completedCount} / {exercises.length}
+          </Badge>
+        </div>
       )}
 
-      {/* Finish button when all completed */}
       {currentIndex === exercises.length - 1 && (
-        <div className="text-center pt-4">
-          <Button onClick={handleReset} size="lg">
-            Generate More Exercises
+        <div className="pt-3 flex justify-center">
+          <Button onClick={handleReset} size="sm" variant="secondary">
+            Generate more exercises
           </Button>
         </div>
       )}

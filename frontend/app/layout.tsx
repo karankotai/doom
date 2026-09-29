@@ -37,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={nunito.variable}>
+    <html lang="en" className={`dark ${nunito.variable}`}>
       <body className="min-h-screen antialiased font-sans">
         <AuthProvider>
           {children}
